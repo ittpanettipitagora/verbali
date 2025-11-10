@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbale di Novembre (Serale)</title> <!-- Titolo modificato -->
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+	body, td, textarea, .textarea-print, p {
+  		text-align: justify;
+ 		text-justify: inter-word;
+	}
+
+        /* Stili di base e per i campi di input */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+        .form-input, .form-textarea, .form-input-table {
+            border: 1px solid #d1d5db; /* Bordo grigio chiaro */
+            border-radius: 0.375rem; /* angoli smussati */
+            padding: 0.5rem 0.75rem;
+            transition: border-color 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .form-input-table {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Stili per la tabella docenti */
+        #docenti-table tbody tr {
+            /* MODIFICA: Rimossa altezza fissa per permettere l'espansione della riga */
+            /* height: 48px; */ /* Altezza fissa per riga - RIMOSSA */
+        }
+        #docenti-table tbody td {
+            vertical-align: middle;
+            min-height: 30px; /* MODIFICA: Impostata altezza minima stabile (più piccola) */
+            padding: 2px 4px; /* Padding ridotto per celle tabella */
+            line-height: 1.4; /* Migliora leggibilità multilinea */
+        }
+
+        /* --- NUOVA REGOLA --- */
+        /* Stile per le textarea DENTRO la tabella docenti (le rende "invisibili") */
+        .form-input-table-dynamic {
+            width: 100%;
+            /* min-height: 1.5em; */ /* Altezza minima (circa 1 riga) */
+            
+            /* MODIFICA: Ripristino lo stile "boxed" */
+            border: 1px solid #d1d5db; /* Bordo grigio chiaro */
+            border-radius: 0.375rem; /* angoli smussati */
+            padding: 0.25rem 0.5rem;  /* Padding ridotto */
+            font-size: 0.875rem; /* Font ridotto */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #ffffff; /* Sfondo bianco */
+            transition: border-color 0.2s;
+            min-height: 30px; /* Altezza minima */
+            
+            /* Proprietà per auto-resize JS */
+            overflow-y: hidden;
+            resize: none;
+        }
+        /* --- FINE NUOVA REGOLA --- */
+
+        .form-input-table-dynamic:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blu al focus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+            /* Ripristina uno stile minimo QUANDO IN MODIFICA */
+             /* Rimosse regole duplicate, già presenti nella classe base ora */
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-input-table:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blu al focus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .form-textarea {
+            width: 100%;
+            min-height: 80px; /* Altezza minima di partenza */
+            overflow-y: hidden; /* Nascondi la scrollbar verticale */
+            resize: none;     /* Disabilita resize manuale */
+             border: 1px solid #d1d5db; /* Aggiunto bordo come altri input */
+             border-radius: 0.375rem;
+             padding: 0.5rem 0.75rem;
+             transition: border-color 0.2s;
+             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+         .form-textarea:focus {
+             outline: none;
+             border-color: #3b82f6; /* Blu al focus */
+             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+         }
+
+        .form-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            vertical-align: middle; /* Allinea checkbox verticalmente */
+        }
+        /* Gestione margini di stampa e rimozione header/footer browser */
+        @page {
+            size: A4; /* Imposta il formato pagina */
+            margin: 0.1 cm; /* Imposta i margini desiderati per il verbale */
+
+            /* Svuota le aree header/footer del browser per rimuovere data, titolo, URL */
+            @top-left { content: ""; }
+            @top-center { content: ""; }
+            @top-right { content: ""; }
+            @bottom-left { content: ""; }
+            @bottom-center { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        /* Stili per la stampa */
+        @media print {
+            body {
+                background-color: #ffffff;
+                font-size: 10pt; /* Riduci la dimensione del font per la stampa */
+            }
+            .no-print {
+                display: none!important;/* Nascondi i pulsanti e i controlli non necessari */
+            }
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none;
+                box-shadow: none;
+            }
+            /* Rimuovi bordi e sfondi dagli input per la stampa */
+            .form-input, .form-textarea, .form-input-table, .form-input-table-dynamic, select {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important; /* Rimosso padding */
+                margin: 0 !important; /* Rimosso margine */
+                background-color: transparent !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                
+                resize: none; /* No resize in stampa */
+                white-space: pre-wrap; /* Mantiene a-capo */
+                 line-height: normal; /* Line height normale per stampa */
+                 height: auto !important; 
+                 overflow: visible !important;
+                overflow-y: visible !important;/* Altezza automatica in stampa */
+                 /* MODIFICA: Rimossa regola 'overflow' da qui */
+            }
+
+            /* Stili specifici textarea in stampa */
+            .form-textarea, .form-input-table-dynamic {
+                min-height: auto !important; /* Altezza minima auto */
+                display: block; 
+                width: 100% !important;
+                resize: none !important;/* Assicura blocco per wrap */
+                overflow: visible !important; /* MODIFICA: Aggiunto qui per forzare visibilità */
+                height: auto !important;
+                max-height: none !important;
+            }
+            /* Aggiunta per forzare larghezza 100% anche su input e select */
+             .form-input, .form-input-table, select {
+                width: 100% !important; 
+            }
+
+            /* Assicura che i checkbox spuntati appaiano */
+            
+            /* --- INIZIO MODIFICA STAMPA CHECKBOX SAFARI --- */
+            
+            /* 1. Stile base per TUTTI i checkbox in stampa (checked e non) */
+            .form-checkbox {
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                border: 1px solid #000 !important; /* Bordo nero visibile per la casella */
+                background-color: transparent !important;
+                width: 1em !important;
+                height: 1em !important;
+                display: inline-block !important; /* Assicura che sia visibile */
+                vertical-align: middle !important; /* Allinea */
+                position: relative; /* Necessario per il pseudo-elemento */
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* 2. Stile per i checkbox SPUNTATI (il box stesso) */
+            .form-checkbox:checked {
+                /* Il box è già stilato dalla regola sopra, non serve altro */
+                /* L'importante è che il selettore esista per agganciare ::after */
+            }
+
+            /* 3. Aggiungi un carattere "spunta" FALSO dentro i box spuntati */
+            .form-checkbox:checked::after {
+                content: '\2714'; /* Carattere spunta (check mark) */
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.9em; /* Leggermente più piccolo del box */
+                line-height: 1;
+                font-weight: bold;
+                color: #000 !important; /* Colore nero */
+                
+                /* Forza Safari a stampare questo carattere */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            /* --- FINE MODIFICA STAMPA CHECKBOX SAFARI --- */
+             
+
+            /* Assicura che il valore selezionato del menu a discesa sia visibile */
+            select {
+                padding: 0;
+                border: none;
+                background-image: none; /* Rimuovi freccia */
+            }
+            /* Nascondi l'input "Altro" per il segretario se non è selezionato "Altro" */
+             #segretarioAltroNome {
+                 display: none !important; /* Nascondi sempre in stampa, il valore è nel select */
+             }
+             /* Gestione campo presidente nascosto */
+             #presidenteNomeInput {
+                 /* Se era nascosto (display=none), rimane nascosto */
+                 /* Se era visibile, verrà reso come gli altri input */
+             }
+
+
+            table {
+                page-break-inside: auto; /* Cerca di non spezzare le tabelle tra le pagine */
+                width: 100% !important; /* Forza larghezza tabella in stampa */
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            td, th {
+                 vertical-align: top; /* Allinea in alto celle stampa */
+                 padding: 2px 4px !important; /* Padding ridotto per stampa */
+            }
+             #firmaSegretario, #firmaCoordinatore { /* Assicura che la firma sia leggibile */
+                 min-height: 1.2em; /* Spazio minimo per nome o puntini */
+             }
+        }
+    </style>
+    <!-- Carica il font Inter da Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Pulsanti di controllo -->
+    <div class="no-print fixed top-4 right-4 z-50 flex space-x-2">
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Stampa / Salva PDF
+        </button>
+        <button onclick="resetForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Svuota Form
+        </button>
+    </div>
+
+    <!-- Contenitore principale del verbale -->
+    <div class="container max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-xl border border-gray-200">
+
+        <!-- INTESTAZIONE -->
+        <div class="text-center mb-6">
+            <h1 class="text-xl font-bold text-gray-800">I.T.T. “PANETTI - PITAGORA” – CORSO SERALE – BARI</h1>
+        </div>
+
+        <!-- SEZIONE 1: Dati principali -->
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <strong>VERBALE N°:</strong>
+                <select id="verbaleNumero" class="form-input w-20">
+                    <option value="-">-</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+            <div>
+                <strong>DATA:</strong> <input type="date" class="form-input">
+            </div>
+        </div>
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <!-- MODIFICA: Aggiunto id="orarioFine" e oninput -->
+                <strong>ORARIO:</strong> dalle <input type="time" class="form-input w-28"> alle ore <input type="time" class="form-input w-28" id="orarioFine" oninput="aggiornaOrarioChiusura()">
+            </div>
+            <div>
+                <!-- MODIFICA: Aggiunto onchange per popolare tabella docenti E RAPPRESENTANTI -->
+                <strong>Consiglio della classe:</strong>
+                <!-- MODIFICA: AGGIUNTE CLASSI SERALE (Es. 3A_S) -->
+                <select id="selectClasse" class="form-input w-32" onchange="aggiornaCodiceRiunione(); popolaTabellaDocenti(); popolaRappresentanti();">
+                    <option value="-">-</option>
+                    <option value="3ITETS">3ITETS</option>
+                    <option value="4ITETS">4ITETS</option>
+                    
+                </select>
+            </div>
+        </div>
+
+        <!-- SEZIONE 2: Composizione Docenti -->
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">Composizione C.d.C.</h2>
+
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-300 p-2 text-left w-1/5 align-top">Composizione</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Disciplina</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Cognome e Nome</th>
+                        <th class="border border-gray-300 p-2 text-center align-top">Assente</th>
+                        <th class="border border-gray-300 p-2 text-center no-print w-16 align-top"></th>
+                    </tr>
+                </thead>
+                <tbody id="docenti-tbody">
+                    <!-- Riga Coordinatore (Statica, popolata da JS) -->
+                    <tr id="coordinatore-row"> <!-- Aggiunto ID per riferimento facile -->
+                        <td class="border border-gray-300 p-2 font-semibold align-top">Docente coordinatore:</td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..." value="" id="coordinatoreDisciplina"></textarea></td>
+                                                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." value="" id="coordinatoreNome" oninput="aggiornaPresidente(); aggiornaOpzioniSegretario(); aggiornaOpzioniPresidenteDelegato(); "></textarea></td>
+                        <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                        <td class="border border-gray-300 p-1 text-center no-print"></td> <!-- Cella vuota, no rimozione -->
+                    </tr>
+
+                    <!-- Righe Docenti C.D.C (Dinamiche, popolate da JS) -->
+                    <!-- Verranno aggiunte qui dallo script -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="5" class="p-2">
+                            <button onclick="addDocenteManuale()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Docente Manuale
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- SEZIONE 3: O.d.g. -->
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">O.d.g.</h2>
+            <div class="text-sm space-y-1 text-gray-700">
+                <!-- MODIFICA: O.d.g. adattato per il serale (rimosso PFP) -->
+                <p>1. Analisi della situazione di partenza della classe (desunta dall'osservazione nel primo periodo e dei test di ingresso) e dei bisogni formativi degli studenti.</p>
+                <p>2. Condivisione e approvazione eventuali PPA (Piano Personalizzato di Accompagnamento – studente in arrivo da altro indirizzo/scuola);</p>
+                <p>3. Condivisione e approvazione PDP (Piano Didattico Personalizzato per studenti con DSA e BES).</p>
+                <p>4. Individuazione di ulteriori eventuali studentesse/studenti BES;</p>
+                <p>5. Segnalazione di studenti con assenze ripetute e/o non frequentanti;</p>
+                
+                <!-- Contenitore per i punti O.d.g. dinamici -->
+                <!-- MODIFICA: Aggiunto id dynamic-odg-list -->
+                <div id="dynamic-odg-list" class="space-y-1 mt-2">
+                    <!-- I nuovi punti O.d.g. appariranno qui (es. 6., 7., ...) -->
+                </div>
+                <!-- Bottone per aggiungere punti O.d.g. -->
+                <div class="mt-3 no-print">
+                    <button type="button" onclick="addDynamicOdgPoint()" class="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3 rounded-lg">
+                        + Aggiungi punto O.d.g.
+                    </button>
+                </div>
+
+                <p class="font-semibold mt-4">CON LA PARTECIPAZIONE DELLA COMPONENTE RAPPRESENTANTI STUDENTESSE/STUDENTI:</p>
+                <!-- MODIFICA: O.d.g. componenti adattato -->
+                <ol class="list-decimal list-inside ml-4">
+                    <li>Insediamento componente Studenti/studentesse;</li>
+                    <li>Presentazione della programmazione di classe;</li>
+                    <li>Andamento didattico - disciplinare della classe;</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- SEZIONE 4: Svolgimento -->
+        <div class="mb-6">
+             <!-- Modificato per aggiungere flex e ml-2, e onchange -->
+             <p class="mb-2 flex items-center flex-wrap">
+                Presiede la riunione
+                <select class="form-input w-auto ml-2" id="selectPresidente" onchange="aggiornaPresidente()">
+                    <option value="la Dirigente Scolastica prof.ssa Laura Castellana">la Dirigente Scolastica prof.ssa Laura Castellana</option>
+                    <option value="il delegato dalla Dirigente prof./prof.ssa">il delegato dalla Dirigente prof./prof.ssa</option>
+                </select>
+                
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectPresidenteDelegato" style="display:none;" onchange="checkPresidenteDelegatoAltro()">
+                    <option value="">Seleziona un docente...</option>
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="presidenteAltroNome" style="display:none;" oninput="aggiornaFirmaPresidente()">
+
+                <input type="text" class="form-input ml-2 flex-grow min-w-[16rem]" placeholder="Nome Coordinatore se delegato..." id="presidenteNomeInput" style="display:none;">
+            </p>
+            <p class="mb-2 flex items-center flex-wrap">
+                Funge da docente verbalizzante il prof/la prof.ssa
+                <!-- Modificato per aggiungere chiamata aggiornaFirmaSegretario -->
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectSegretario" onchange="checkSegretarioAltro(); aggiornaFirmaSegretario();">
+                    <option value="">Seleziona un docente...</option>
+                    <!-- Opzioni aggiunte da JS -->
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <!-- Modificato per aggiungere oninput -->
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="segretarioAltroNome" style="display:none;" oninput="aggiornaFirmaSegretario();">
+            </p>
+            <!-- Riga "Risultano presenti..." rimossa -->
+        </div>
+
+        <!-- Testo statico su invito e connessione -->
+        <div class="mb-6 text-sm text-gray-600 space-y-1 italic">
+             <p>L’invito alla piattaforma utilizzata è stato inviato a tutti i docenti con modalità mail il giorno XXX del mese di Novembre, comunicato n.XXX e che risulta essere consegnata a tutti, considerato che nessuno ha presentato reclamo relativamente alla mancata ricezione dello stesso. Contestualmente il nickname alla videoconferenza è stato allegato alla stessa. </p>
+            <p>Il codice riunione è il seguente: <input type="text" id="codiceRiunione" class="form-input w-32" placeholder="Codice..." value="cdc"></p>
+            <p>La stabilità di connessione e le misure di tutela dei dati personali sono garantite dal dominio “panettipitagora.edu.it"</p>
+            <p>Riconosciuta la validità della riunione, si passa alla discussione del punto all’ordine del giorno.</p>
+        </div>
+
+        <!-- PUNTI O.d.g. -->
+
+        <!-- PUNTO 1 -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">1. Analisi della situazione di partenza della classe...</h3>
+            <p class="mb-2">Risultati dei test d’ingresso/osservazioni effettuati per materie o per asse espressi in numero di alunni:</p>
+            <table class="w-full border-collapse mb-4 text-sm">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2">Materie</th>
+                        <th class="border border-gray-300 p-2">N. alunni livello Avanzato<br>(voti 9/10)</th>
+                        <th class="border border-gray-300 p-2">N. alunni livello Intermedio<br>(voti 7/8)</th>
+                        <th class="border border-gray-300 p-2">N. alunni livello Base<br>(voto 6)</th>
+                        <th class="border border-gray-300 p-2">N. alunni livello Non Raggiunto</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th> <!-- Nuova colonna header -->
+                    </tr>
+                </thead>
+                <tbody id="materie-tbody"> <!-- Aggiunto ID per la nuova funzione -->
+                    <!-- Righe per le materie -->
+                    <tr>
+                        <td class="border border-gray-300 p-2 font-semibold">Italiano</td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1 text-center no-print">
+                            <button onclick="removeMateria(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 p-2 font-semibold">Storia</td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1 text-center no-print">
+                            <button onclick="removeMateria(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 p-2 font-semibold">Matematica</td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1 text-center no-print">
+                            <button onclick="removeMateria(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 p-2 font-semibold">Inglese</td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center" value=""></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                        <td class="border border-gray-300 p-1 text-center no-print">
+                            <button onclick="removeMateria(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                        </td>
+                    </tr>
+                   
+                </tbody>
+                <tfoot class="no-print"> <!-- Nuovo tfoot -->
+                    <tr>
+                        <td colspan="6" class="p-2">
+                            <button onclick="addMateria()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Materia
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali interventi e criticità emerse"></textarea>
+            <p>Alla luce dei risultati e delle criticità emerse, si individuano gli alunni bisognosi di interventi mirati, che saranno contattati dal coordinatore di classe e proporrà azioni per il recupero.</p>
+        </div>
+
+        <!-- PUNTO 2 PPA (ex PFP) -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">2. condivisione ed approvazione del piano personalizzato di accompagnamento per studenti in arrivo da altro indirizzo/scuola</h3>
+            <p>Si procede alla condivisione del/dei PPA per i seguenti studenti (avendo in precedenza condiviso con gli studenti e, se studente minorenne, con le famiglie degli interessati) e vengono approvati:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">Nome Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left">Approvato</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="ppa-tbody"> <!-- FIX: ID corretto -->
+                    <!-- Righe PPA aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <!-- FIX: Corretto nome funzione -->
+                            <button onclick="addPPAStudente()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente con PPA
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+
+        </div>
+
+        <!-- PUNTO 3 DSA (ex 4 Diurno) -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">3. Condivisione ed approvazione del piano didattico personalizzato per gli eventuali alunni con DSA</h3>
+            <p>Si procede alla condivisione dei PDP per i seguenti studenti (avendo in precedenza condiviso con gli studenti e, se studente minorenne, con le famiglie degli interessati) e vengono approvati:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">Nome Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left">Approvato</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="dsa-tbody">
+                    <!-- Righe DSA aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addDSAStudente()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente DSA
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>	
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+        </div>
+
+        <!-- PUNTO 4 BES (ex 5 Diurno) -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">4. Individuazione eventuali studenti BES</h3>
+            <p class="mb-2">Il Consiglio di classe ritiene di dover individuare i seguenti studenti/esse come BES per i seguenti dati di osservazione già rilevati:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left w-2/5">Nome Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left w-3/5">Motivazioni</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="bes-individuati-tbody">
+                    <!-- Righe BES Individuati aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addBESIndividuato()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+
+            <p class="mb-2 mt-4">Il Consiglio di classe ritiene di dover procedere all’osservazione dei seguenti studenti/esse da individuare successivamente come BES per i seguenti dati da osservare:</p>
+
+             <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left w-2/5">Nome Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left w-3/5">Dati da Osservare</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="bes-osservare-tbody">
+                    <!-- Righe BES Osservare aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addBESOsservare()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <textarea class="form-textarea" placeholder="Inserire qui le eventuali decisioni e/o osservazioni del CdC"></textarea>
+        </div>
+
+        <!-- PUNTO 5 Assenze (ex 6 Diurno) -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">5. Segnalazione di studenti con assenze ripetute e/o non frequentanti</h3>
+            <p class="mb-2">Il coordinatore di classe, dopo aver analizzato il report estrapolato dal registro di classe sulle assenze dei singoli alunni, segnala al consiglio le seguenti criticità e propone le seguenti azioni:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">Dettagli Studente</th>
+                        <th class="border border-gray-300 p-2 text-left">Azioni</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="assenze-tbody">
+                    <!-- Righe Assenze aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addAssenzeStudente()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+	
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+        </div>
+
+        <!-- Contenitore per i punti Svolgimento dinamici -->
+        <div id="dynamic-svolgimento-points" class="space-y-6 mb-6"> <!-- Aggiunto mb-6 per spazio -->
+            <!-- Le nuove sezioni del verbale appariranno qui -->
+        </div>
+
+        <hr class="my-8 border-t-2 border-gray-300">
+
+        <!-- PARTE  STUDENTI -->
+        <!-- MODIFICA: Rimossa componente genitori -->
+        <div class="mb-6">
+            <p class="mb-4">Alle ore <input type="time" class="form-input w-28"> si collegano alla riunione i rappresentanti degli studenti eletti che ricevono il benvenuto di tutto il Consiglio di Classe.</p>
+
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">1. Insediamento componente studenti/esse</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Colonna Studenti -->
+                <div class="bg-gray-50 p-4 rounded-lg border">
+                    <h4 class="font-semibold mb-3">Componente Studenti</h4>
+                    <div class="space-y-3">
+                        <!-- Studente 1 -->
+                        <div class="flex items-center space-x-2">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="text" id="studenteNome1" class="form-input flex-grow" placeholder="Studente 1: Cognome e Nome">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="checkbox" id="studenteAssente1" class="form-checkbox">
+                            <label class="text-sm">Assente</label> <!-- MODIFICA: da Presente a Assente -->
+                        </div>
+                        <!-- Studente 2 -->
+                        <div class="flex items-center space-x-2">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="text" id="studenteNome2" class="form-input flex-grow" placeholder="Studente 2: Cognome e Nome">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="checkbox" id="studenteAssente2" class="form-checkbox">
+                            <label class="text-sm">Assente</label> <!-- MODIFICA: da Presente a Assente -->
+                        </div>
+			 <!-- Studente 3 -->
+                        <div class="flex items-center space-x-2">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="text" id="studenteNome3" class="form-input flex-grow" placeholder="Studente 3: Cognome e Nome">
+                            <!-- MODIFICA: Aggiunto ID -->
+                            <input type="checkbox" id="studenteAssente2" class="form-checkbox">
+                            <label class="text-sm">Assente</label> <!-- MODIFICA: da Presente a Assente -->
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Colonna vuota per mantenere il layout (o puoi rimuovere grid-cols-2) -->
+                 <div class="hidden md:block"></div>
+            </div>
+             <!-- MODIFICA: Aggiunto textarea osservazioni -->
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+        </div>
+
+        <!-- PUNTO 2 Rappresentanti -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">2. Presentazione della programmazione di classe</h3>
+            <p>Si procede all’esame della Progettazione coordinata del Consiglio di classe che è stata precedentemente condivisa con i docenti del consiglio di classe per cui, dopo la illustrazione alle studentesse/studenti e alle successive variazioni/integrazioni emerse dalla discussione viene approvata:
+                <select class="form-input w-auto">
+                    <option value="all'unanimità.">all'unanimità.</option>
+                    <option value="a maggioranza.">a maggioranza.</option>
+                    <option value="non approvata.">non approvata.</option>
+                </select>
+            </p>
+	</br>
+	
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+        </div>
+
+        <!-- PUNTO 3 Rappresentanti -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">3. Andamento didattico disciplinare</h3>
+            
+            <textarea class="form-textarea" placeholder="Descrivere l’andamento didattico-disciplinare e inserire gli eventuali interventi"></textarea>
+        </div>
+        
+        
+
+        <!-- CHIUSURA -->
+        <div class="mb-6">
+            <p>Terminata la discussione dell'ultimo punto all’ordine del giorno il Presidente ringrazia la componente studenti/studentesse.</p>
+            <!-- MODIFICA: Aggiunto id="orarioChiusura" -->
+            <p>Alle ore <input type="time" class="form-input w-28" id="orarioChiusura"> termina la seduta.</p>
+        </div>
+
+        <!-- FIRME -->
+        <div class="mt-12 pt-8 border-t">
+            <div class="flex justify-between">
+                <div class="text-center">
+                    <p class="mb-4">Il Docente verbalizzante</p>
+                    <!-- Aggiunto id -->
+                    <p id="firmaSegretario">...................................</p>
+                </div>
+                <div class="text-center">
+                    <p class="mb-4">La Dirigente scolastica/Presidente</p>
+                    <p id="firmaPresidente">Prof.ssa Laura Castellana</p>
+                </div>
+                 
+            </div>
+        </div>
+
+    </div> <!-- Fine container -->
+
+    <script>
+        // MODIFICA: Contatore O.d.g. parte da 6 (perché PFP è stato rimosso)
+        let nextOdgPoint = 6; 
+
+        // --- INIZIO DATI RAPPRESENTANTI (VUOTI PER SERALE) ---
+        // DA POPOLARE MANUALMENTE SE SERVE
+        const datiRappresentanti = {
+             "3ITETS": { "genitori": ["", ""], "studenti": ["CECINATI NAOMI", "LACRIOLA NICOLA","VENKETASAMY WENDA"] },
+   	 "4ITETS": { "genitori": ["", ""], "studenti": ["NOCELLA LUCA", "SCIACOVELLI GIUSEPPE"] }
+
+        };
+        // --- FINE DATI RAPPRESENTANTI ---
+
+        // --- INIZIO DATI DOCENTI (DA POPOLARE PER SERALE) ---
+         const classeMap = {
+            // Mappatura per il serale (se i dati usano nomi diversi)
+             "3A_S": "3A_S",
+             "4A_S": "4A_S",
+             "5A_S": "5A_S",
+             "3B_S": "3B_S",
+             "4B_S": "4B_S",
+             "5B_S": "5B_S",
+        };
+        const datiDocentiCDC = {
+               "3ITETS": [ // Mappato da 3ITETS
+                 { nome: "DENORA MARCO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "si" },
+                 { nome: "CANTALICE GABRIELLA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MARZOCCA MICHELE", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "PAPARELLA LUIGI", materia: "ITP ELETTROTECNICA ED ELETTRONICA, SISTEMI AUTOMATICI, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "QUINTAVALLE SILVANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "VERNONE DANIELA", materia: "ELETTROTECNICA ED ELETTRONICA, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                             ],
+             "4ITETS": [ // Mappato da 4ITETS
+                 { nome: "CANTALICE GABRIELLA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DENORA MARCO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "si" },
+		 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "GASSINO GIOVANNI", materia: "ELETTROTECNICA ED ELETTRONICA, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "PAPARELLA LUIGI", materia: "ITP SISTEMI AUTOMATICI, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "si" },
+                 { nome: "QUINTAVALLE SILVANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "VERNONE DANIELA", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 
+            ]
+
+        };
+        // --- FINE DATI DOCENTI ---
+
+        // Funzione per auto-ridimensionare le textarea
+        function autoResizeTextarea(textarea) {
+            if (!textarea) return;
+            textarea.style.height = 'auto'; // Resetta l'altezza
+            // Aggiungi 2px per evitare la scrollbar su una sola riga in alcuni browser
+            textarea.style.height = (textarea.scrollHeight + 2) + 'px';
+        }
+
+        // FIX: Handler per l'evento input, per poterlo rimuovere
+        function onTextareaInput() {
+            autoResizeTextarea(this);
+        }
+
+        // Funzione per applicare l'auto-resize a tutte le textarea esistenti
+        function initAutoResize() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                // Rimuovi listener precedenti in modo corretto
+                textarea.removeEventListener('input', onTextareaInput); 
+                // Aggiungi il nuovo listener
+                textarea.addEventListener('input', onTextareaInput);
+            });
+        }
+
+        // Funzione helper per rimuovere righe dinamiche
+        function removeDynamicRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        // Funzione per aggiungere un punto O.d.g. e la relativa sezione Svolgimento
+        function addDynamicOdgPoint() {
+            const odgList = document.getElementById('dynamic-odg-list');
+            const svolgimentoPoints = document.getElementById('dynamic-svolgimento-points');
+            
+            const pointNumber = nextOdgPoint; // Usa il numero corrente
+            
+            // 1. Crea la riga nell'O.d.g.
+            const odgDiv = document.createElement('div');
+            odgDiv.id = `odg-item-${pointNumber}`;
+            odgDiv.className = 'flex items-center space-x-2';
+            odgDiv.innerHTML = `
+                <label class="font-semibold">${pointNumber}.</label>
+                <input type="text" 
+                       class="form-input flex-grow text-sm" 
+                       placeholder="Titolo del nuovo punto O.d.g..."
+                       oninput="updateSvolgimentoTitle(${pointNumber}, this.value)">
+                <button type="button" 
+                        onclick="removeDynamicOdgPoint(${pointNumber})" 
+                        class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg no-print">
+                    Rimuovi
+                </button>
+            `;
+            odgList.appendChild(odgDiv);
+
+            // 2. Crea la sezione nello Svolgimento
+            const svolgimentoDiv = document.createElement('div');
+            svolgimentoDiv.id = `svolgimento-point-${pointNumber}`;
+            svolgimentoDiv.innerHTML = ` 
+                <h3 id="svolgimento-title-${pointNumber}" class="text-md font-semibold text-gray-800 mb-2 uppercase">${pointNumber}. ...</h3>
+                <textarea class="form-textarea" placeholder="Discussione punto ${pointNumber}..."></textarea>
+            `;
+            svolgimentoPoints.appendChild(svolgimentoDiv);
+            
+            // 3. Inizializza l'auto-resize sulla nuova textarea
+            const newTextarea = svolgimentoDiv.querySelector('textarea');
+            if (newTextarea) {
+                newTextarea.removeEventListener('input', onTextareaInput);
+                newTextarea.addEventListener('input', onTextareaInput);
+            }
+
+            nextOdgPoint++; // Incrementa per il prossimo click
+        }
+
+        // Funzione per aggiornare il titolo nello Svolgimento
+        function updateSvolgimentoTitle(pointNumber, newTitle) {
+            const titleElement = document.getElementById(`svolgimento-title-${pointNumber}`);
+            if (titleElement) {
+                titleElement.textContent = `${pointNumber}. ${newTitle || '...'}`;
+            }
+        }
+
+        // Funzione per rimuovere un punto O.d.g. dinamico
+        function removeDynamicOdgPoint(pointNumber) {
+            const odgItem = document.getElementById(`odg-item-${pointNumber}`);
+            if (odgItem) {
+                odgItem.remove();
+            }
+            
+            const svolgimentoItem = document.getElementById(`svolgimento-point-${pointNumber}`);
+            if (svolgimentoItem) {
+                svolgimentoItem.remove();
+            }
+            // Non decrementiamo nextOdgPoint per semplicità
+        }
+
+
+        // --- INIZIO NUOVA FUNZIONE POPOLA RAPPRESENTANTI ---
+        function popolaRappresentanti() {
+            let classeSelezionata = document.getElementById('selectClasse').value;
+            // Usa la mappatura se necessaria
+            const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+            
+            const reps = datiRappresentanti[classeEffettiva];
+
+            // Seleziona gli input
+            // MODIFICA: Rimossi ID genitori
+            // const genitore1 = document.getElementById('genitoreNome1');
+            // const genitore2 = document.getElementById('genitoreNome2');
+            const studente1 = document.getElementById('studenteNome1');
+            const studente2 = document.getElementById('studenteNome2');
+            const studente3 = document.getElementById('studenteNome3');
+
+            // Seleziona i checkbox per resettarli
+            // const genitoreAss1 = document.getElementById('genitoreAssente1');
+            // const genitoreAss2 = document.getElementById('genitoreAssente2');
+            const studenteAss1 = document.getElementById('studenteAssente1');
+            const studenteAss2 = document.getElementById('studenteAssente2');
+	    const studenteAss3 = document.getElementById('studenteAssente3');
+
+
+            if (reps) {
+                // Popola i nomi
+                // if (genitore1) genitore1.value = reps.genitori[0] || '';
+                // if (genitore2) genitore2.value = reps.genitori[1] || '';
+                if (studente1) studente1.value = reps.studenti[0] || '';
+                if (studente2) studente2.value = reps.studenti[1] || '';
+		if (studente3) studente3.value = reps.studenti[2] || '';
+
+            } else {
+                // Svuota i campi se non ci sono dati per la classe
+                // if (genitore1) genitore1.value = '';
+                // if (genitore2) genitore2.value = '';
+                if (studente1) studente1.value = '';
+                if (studente2) studente2.value = '';
+		if (studente3) studente3.value = '';
+
+
+            }
+            
+            // Resetta i checkbox
+            // if (genitoreAss1) genitoreAss1.checked = false;
+            // if (genitoreAss2) genitoreAss2.checked = false;
+            if (studenteAss1) studenteAss1.checked = false;
+            if (studenteAss2) studenteAss2.checked = false;
+	    if (studenteAss3) studenteAss3.checked = false;
+
+        }
+        // --- FINE NUOVA FUNZIONE POPOLA RAPPRESENTANTI ---
+
+
+        // Aggiunto listener per popolare il menu all'avvio
+        window.addEventListener('DOMContentLoaded', () => {
+             popolaTabellaDocenti(); // Popola per la classe iniziale
+             popolaRappresentanti(); // NUOVO: Popola rappresentanti per la classe iniziale
+             
+             // Popola le tabelle dinamiche con una riga vuota all'avvio
+             // MODIFICA: RIMOSSO PFP
+             /*
+             if (document.getElementById('pfp-tbody') && document.getElementById('pfp-tbody').rows.length === 0) {
+                 addPFPStudente();
+             }
+             */
+             
+             // FIX: Aggiungi riga PPA
+              if (document.getElementById('ppa-tbody') && document.getElementById('ppa-tbody').rows.length === 0) {
+                 addPPAStudente();
+              }
+             if (document.getElementById('dsa-tbody') && document.getElementById('dsa-tbody').rows.length === 0) {
+                 addDSAStudente();
+             }
+             if (document.getElementById('bes-individuati-tbody') && document.getElementById('bes-individuati-tbody').rows.length === 0) {
+                 addBESIndividuato();
+             }
+             if (document.getElementById('bes-osservare-tbody') && document.getElementById('bes-osservare-tbody').rows.length === 0) {
+                 addBESOsservare();
+             }
+             // Popola tabella Assenze
+             if (document.getElementById('assenze-tbody') && document.getElementById('assenze-tbody').rows.length === 0) {
+                 addAssenzeStudente();
+             }
+
+             // Inizializza auto-resize per tutte le textarea (solo listener)
+             initAutoResize();
+
+             // MODIFICA: Rimandato con setTimeout(0) per permettere il rendering
+             // Applica il resize a TUTTE le textarea dopo che il browser ha "disegnato" la pagina
+             setTimeout(() => {
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+             }, 0); // Il '0' sposta questo alla fine della coda di esecuzione
+
+             // Aggiorna subito il nome presidente e forza controllo visibilità
+             aggiornaPresidente();
+             // Simula evento change per applicare la logica mostra/nascondi all'avvio
+             const selectPresidente = document.getElementById('selectPresidente');
+             if(selectPresidente) selectPresidente.dispatchEvent(new Event('change'));
+
+
+             // Inizializza auto-resize per tutte le textarea
+             initAutoResize();
+        });
+
+        // --- INIZIO NUOVA LOGICA POPOLAMENTO DOCENTI ---
+        function popolaTabellaDocenti() {
+            let classeSelezionata = document.getElementById('selectClasse').value;
+            // Usa la mappatura se necessario
+            const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+
+            const tbody = document.getElementById('docenti-tbody');
+            const rigaCoordinatore = document.getElementById('coordinatore-row');
+
+            // Trova i dati per la classe selezionata
+            const docentiClasse = datiDocentiCDC[classeEffettiva] || [];
+
+            // Pulisci le righe esistenti dei docenti C.d.C
+            const righeDocentiAttuali = tbody.querySelectorAll('tr:not(#coordinatore-row)');
+            righeDocentiAttuali.forEach(row => row.remove());
+
+            // Trova il coordinatore e gli altri docenti
+            let coordinatore = null;
+            const altriDocenti = [];
+            docentiClasse.forEach(doc => {
+                 // Pulisce spazi extra e controlla esistenza proprietà
+                 let cleanMateria = doc.materia ? doc.materia.trim() : 'N/D';
+                 let cleanNome = doc.nome ? doc.nome.trim() : 'N/D';
+                 let isCoord = doc.coordinatore ? doc.coordinatore.trim().toLowerCase() === 'si' : false;
+
+                if (isCoord && !coordinatore) { // Prende solo il primo coordinatore trovato
+                    coordinatore = { nome: cleanNome, materia: cleanMateria };
+                } else {
+                    altriDocenti.push({ nome: cleanNome, materia: cleanMateria });
+                }
+            });
+
+             // Ordina gli altri docenti per cognome
+             altriDocenti.sort((a, b) => a.nome.localeCompare(b.nome));
+
+
+            // Popola la riga del coordinatore
+            const coordDisciplinaTextarea = document.getElementById('coordinatoreDisciplina');
+            const coordNomeTextarea = document.getElementById('coordinatoreNome');
+            if (coordinatore) {
+                coordDisciplinaTextarea.value = coordinatore.materia;
+                coordNomeTextarea.value = coordinatore.nome;
+            } else {
+                // Se non c'è coordinatore, svuota i campi e metti placeholder
+                coordDisciplinaTextarea.value = '';
+                coordNomeTextarea.value = '';
+                coordDisciplinaTextarea.placeholder = 'Disciplina...';
+                coordNomeTextarea.placeholder = 'Cognome e Nome...';
+                 if (classeSelezionata !== '-') {
+                    console.warn(`Coordinatore non trovato per la classe ${classeEffettiva}`);
+                 }
+            }
+            // Svuota il checkbox assente del coordinatore
+            const coordCheckbox = rigaCoordinatore.querySelector('.form-checkbox');
+             if(coordCheckbox) coordCheckbox.checked = false;
+
+             // FIX: Applica auto-resize al coordinatore
+             if(coordDisciplinaTextarea) {
+                 coordDisciplinaTextarea.removeEventListener('input', onTextareaInput);
+                 coordDisciplinaTextarea.addEventListener('input', onTextareaInput);
+             }
+             if(coordNomeTextarea) {
+                 coordNomeTextarea.removeEventListener('input', onTextareaInput);
+                 coordNomeTextarea.addEventListener('input', onTextareaInput);
+             }
+
+
+            // Popola le righe degli altri docenti
+            let primaRigaDocente = true;
+            altriDocenti.forEach((doc, index) => {
+                const newRow = document.createElement('tr');
+                let htmlRiga = '';
+
+                if (primaRigaDocente) {
+                    // Aggiungi la cella "DOCENTI C.D.C" con rowspan
+                    htmlRiga += `<td id="docenti-cdc-label" class="border border-gray-300 p-2 font-semibold align-top" rowspan="${altriDocenti.length}">DOCENTI C.D.C</td>`;
+                }
+
+                htmlRiga += `
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic">${doc.materia}</textarea></td>
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" oninput="aggiornaOpzioniSegretario();">${doc.nome}</textarea></td>
+                    <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                    <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                        <button onclick="removeDocente(this, ${primaRigaDocente})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                    </td>
+                `;
+                newRow.innerHTML = htmlRiga;
+                tbody.appendChild(newRow);
+
+                 // FIX: Applica auto-resize alla nuova riga popolata
+                newRow.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.removeEventListener('input', onTextareaInput);
+                    textarea.addEventListener('input', onTextareaInput);
+                });
+
+                primaRigaDocente = false;
+            });
+
+             // Se non ci sono 'altriDocenti' dopo il popolamento, rimuovi eventuale label orfana
+             if (altriDocenti.length === 0) {
+                 const labelCella = document.getElementById('docenti-cdc-label');
+                 if (labelCella) {
+                      labelCella.closest('tr')?.remove(); // Rimuove la riga se esiste ed è rimasta sola
+                 }
+             }
+
+
+            // Aggiorna presidente, segretario e firme
+            aggiornaPresidente();
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+	aggiornaOpzioniPresidenteDelegato();
+             // Aggiunto per firma coordinatore
+
+            // --- NUOVA MODIFICA ---
+            // Forza il resize di TUTTE le textarea nella tabella docenti
+            // dopo che sono state popolate.
+            setTimeout(() => {
+                document.querySelectorAll('#docenti-tbody .form-input-table-dynamic').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+            }, 0);
+            // --- FINE NUOVA MODIFICA ---
+        }
+
+        // Funzione per aggiungere MANUALE una riga docente (MODIFICATA)
+        function addDocenteManuale(isFirst = false) { // Aggiunto parametro opzionale
+            const tbody = document.getElementById('docenti-tbody');
+            const righeDocenti = tbody.querySelectorAll('tr:not(#coordinatore-row)'); // Tutte le righe tranne quella del coordinatore
+
+            const newRow = document.createElement('tr');
+            let htmlRiga = '';
+            let labelPresente = document.getElementById('docenti-cdc-label');
+            let isPrimaRigaManuale = !labelPresente && righeDocenti.length === 0; // Vera se non c'è label e non ci sono altre righe docenti
+
+            // Gestisci l'etichetta "DOCENTI C.D.C" e il rowspan
+            if (isPrimaRigaManuale || isFirst) { // Se è la prima riga in assoluto dei docenti C.d.C
+                 htmlRiga += `<td id="docenti-cdc-label" class="border border-gray-300 p-2 font-semibold align-top" rowspan="1">DOCENTI C.D.C</td>`;
+            } else if (labelPresente) {
+                 // Assicura che rowspan sia un numero prima di incrementare
+                 let currentSpan = parseInt(labelPresente.getAttribute('rowspan') || '1', 10);
+                 labelPresente.setAttribute('rowspan', currentSpan + 1);
+            }
+
+            htmlRiga += `
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..."></textarea></td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." oninput="aggiornaOpzioniSegretario();"></textarea></td>
+                <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDocente(this, ${isPrimaRigaManuale || isFirst})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            newRow.innerHTML = htmlRiga;
+            tbody.appendChild(newRow); // Aggiunge sempre in fondo
+
+             // FIX: Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput); // Rimuovi vecchio
+                 textarea.addEventListener('input', onTextareaInput);
+            });
+
+
+            // Aggiorna menu segretario
+            aggiornaOpzioniSegretario();
+		aggiornaOpzioniPresidenteDelegato();
+        }
+
+        // Funzione per rimuovere una riga docente (leggermente modificata per sicurezza)
+        function removeDocente(button, isFirstDocenteRow) {
+            const rowToRemove = button.closest('tr');
+            if (!rowToRemove) return; // Sicurezza aggiuntiva
+
+            const label = document.getElementById('docenti-cdc-label');
+            let currentSpan = label ? parseInt(label.getAttribute('rowspan') || '1', 10) : 0;
+
+
+            if (isFirstDocenteRow && label) {
+                // Questa è la riga che contiene l'etichetta "DOCENTI C.D.C"
+                const nextRow = rowToRemove.nextElementSibling;
+
+                // Controlla che nextRow esista e sia una riga valida di docente (non la riga coordinatore o altro)
+                 if (nextRow && nextRow.cells.length > 2 && !nextRow.querySelector('#coordinatoreNome')) {
+                     // Se c'è una riga successiva valida, sposta l'etichetta lì
+                    const newLabel = label.cloneNode(true);
+                    newLabel.setAttribute('rowspan', Math.max(1, currentSpan - 1)); // Non scendere sotto 1
+                    nextRow.prepend(newLabel); // Aggiungi la label clonata all'inizio della riga successiva
+
+                    // Aggiorna il pulsante "Rimuovi" della riga successiva per marcarlo come "first"
+                    const nextButton = nextRow.querySelector('button');
+                    if (nextButton) {
+                        // Ricostruisci l'attributo onclick
+                         nextButton.setAttribute('onclick', `removeDocente(this, true)`);
+
+                    }
+                }
+                // Rimuovi la riga corrente (che conteneva l'etichetta originale)
+                 rowToRemove.remove();
+
+            } else {
+                 // Questa è una riga normale (non la prima o l'etichetta non esiste più)
+                 // Basta decrementare il rowspan e rimuoverla
+                if (label && currentSpan > 1) { // Decrementa solo se rowspan > 1
+                    label.setAttribute('rowspan', currentSpan - 1);
+                }
+                rowToRemove.remove();
+            }
+
+            // Aggiorna menu segretario
+            aggiornaOpzioniSegretario();
+            // Aggiorna la firma se il segretario rimosso era selezionato
+            aggiornaFirmaSegretario();
+	aggiornaOpzioniPresidenteDelegato();
+        }
+        // --- FINE NUOVA LOGICA POPOLAMENTO DOCENTI ---
+
+
+        // Funzione per aggiungere una riga materia
+        function addMateria() {
+            const tbody = document.getElementById('materie-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-2 font-semibold"><input type="text" class="form-input-table w-full p-1" placeholder="Materia..."></td>
+                <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                <td class="border border-gray-300 p-1"><input type="text" class="form-input-table w-full p-1 text-center"></td>
+                <td class="border border-gray-300 p-1 text-center no-print">
+                    <button onclick="removeMateria(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">
+                        Rimuovi
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // Non serve auto-resize qui perché sono input
+        }
+
+        // Funzione per rimuovere una riga materia
+        function removeMateria(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        // --- FUNZIONI TABELLE DINAMICHE (PFP, DSA, BES, Assenze) ---
+
+        // MODIFICA: Funzione PFP rimossa (o commentata se si vuole tenere il codice)
+        /*
+        function addPFPStudente() {
+            // ... codice PFP ...
+        }
+        */
+
+        // FIX: Funzione per aggiungere una riga studente PPA (NUOVA)
+        function addPPAStudente() {
+            const tbody = document.getElementById('ppa-tbody');
+            if (!tbody) return; // Sicurezza
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Cognome e Nome..."></textarea></td>
+                <td class="border border-gray-300 p-1">
+                    <select class="form-input-table w-full">
+                        <option value="Unanimità">Unanimità</option>
+                        <option value="Maggioranza">A Maggioranza</option>
+                        <option value="Non approvato">Non approvato</option>
+                    </select>
+                </td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput);
+                 textarea.addEventListener('input', onTextareaInput);
+                 autoResizeTextarea(textarea); // Lasciato qui perché è un click utente
+            });
+        }
+
+        // Funzione per aggiungere una riga studente DSA
+        function addDSAStudente() {
+            const tbody = document.getElementById('dsa-tbody');
+            if (!tbody) return; // Sicurezza
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Cognome e Nome..."></textarea></td>
+                <td class="border border-gray-300 p-1">
+                    <select class="form-input-table w-full">
+                        <option value="Unanimità">Unanimità</option>
+                        <option value="Maggioranza">Maggioranza</option>
+                         <option value="Non approvato">Non approvato</option>
+                    </select>
+                </td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // FIX: Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput);
+                 textarea.addEventListener('input', onTextareaInput);
+                 autoResizeTextarea(textarea); // Lasciato qui perché è un click utente
+            });
+        }
+
+        // Funzione per aggiungere una riga BES Individuato
+        function addBESIndividuato() {
+            const tbody = document.getElementById('bes-individuati-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Cognome e Nome..."></textarea></td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Motivazioni..."></textarea></td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // FIX: Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput);
+                 textarea.addEventListener('input', onTextareaInput);
+                 autoResizeTextarea(textarea); // Lasciato qui perché è un click utente
+            });
+        }
+
+        // Funzione per aggiungere una riga BES da Osservare
+        function addBESOsservare() {
+            const tbody = document.getElementById('bes-osservare-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Cognome e Nome..."></textarea></td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Dati da osservare..."></textarea></td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // FIX: Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput);
+                 textarea.addEventListener('input', onTextareaInput);
+                 autoResizeTextarea(textarea); // Lasciato qui perché è un click utente
+            });
+        }
+
+        // Funzione per aggiungere una riga Assenze Studente
+        function addAssenzeStudente() {
+            const tbody = document.getElementById('assenze-tbody');
+            const newRow = document.createElement('tr');
+            // MODIFICA: Aggiunta checklist per Azioni
+            newRow.innerHTML = `
+                <!-- Colonna 1: Dettagli (verticali) -->
+                <td class="border border-gray-300 p-2 align-top">
+                    <div class="flex flex-col space-y-3">
+                        <!-- Nome -->
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                            <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Nome studente/essa:</label>
+                            <textarea class="form-input-table-dynamic" placeholder="Cognome e Nome..."></textarea>
+                        </div>
+                        <!-- Giorni/ore -->
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                            <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Giorni/ore di assenza:</label>
+                            <textarea class="form-input-table-dynamic" placeholder="gg/hh assenza..."></textarea>
+                        </div>
+                        <!-- Motivazioni -->
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                            <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Motivi/Certificati:</label>
+                            <textarea class="form-input-table-dynamic" placeholder="Motivazioni..."></textarea>
+                        </div>
+                    </div>
+                </td>
+                
+                <!-- Colonna 2: Azioni (checkbox) -->
+                <td class="border border-gray-300 p-2 align-top">
+                    <div class="space-y-2">
+                        <!-- Opzione 1: allineata in alto -->
+                        <div class="flex items-start"> 
+                            <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                            <label class="text-sm whitespace-nowrap">Contattare lo studente o, <br/>se studente minorenne, la famiglia</label>
+                        </div>
+                        <!-- Opzione 2: allineata in alto -->
+                        <div class="flex items-start">
+                            <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                            <label class="text-sm">Segnalazione ufficiale</label>
+                        </div>
+                        <!-- Opzione 3: Altro, con textarea a capo -->
+                        <div> 
+                            <div class="flex items-center"> <!-- Div solo per checkbox e label "Altro:" -->
+                                <input type="checkbox" class="form-checkbox mr-2">
+                                <label class="text-sm mr-1">Altro:</label>
+                            </div>
+                            <!-- Textarea messa a capo, con margine in alto -->
+                            <textarea class="form-input-table-dynamic w-full mt-1" placeholder="Specificare..." style="min-height: 30px;"></textarea>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Colonna 3: Rimuovi (verticalmente allineata al centro) -->
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+             // FIX: Applica auto-resize alla nuova riga
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput);
+                 textarea.addEventListener('input', onTextareaInput);
+                 autoResizeTextarea(textarea); // Lasciato qui perché è un click utente
+            });
+        }
+
+        // --- FINE FUNZIONI TABELLE DINAMICHE ---
+
+
+        // Funzione per aggiornare il nome del presidente delegato e la visibilità
+        // Funzione per aggiornare il nome del presidente delegato e la visibilità (MODIFICATA)
+        function aggiornaPresidente() {
+            const select = document.getElementById('selectPresidente');
+            const coordinatoreNomeInput = document.getElementById('coordinatoreNome');
+            
+            // I NUOVI elementi da mostrare/nascondere
+            const menuDelegato = document.getElementById('selectPresidenteDelegato');
+            const campoAltroDelegato = document.getElementById('presidenteAltroNome');
+            
+            // Il VECCHIO campo da nascondere sempre
+            const oldTargetInput = document.getElementById('presidenteNomeInput');
+
+            if (!select || !menuDelegato || !campoAltroDelegato || !oldTargetInput) return; // Sicurezza
+
+            const selectedValue = select.value;
+            // Testo già aggiornato
+            const triggerValue = "il delegato dalla Dirigente prof./prof.ssa"; 
+
+            if (selectedValue === triggerValue) {
+                // Mostra il NUOVO menu a tendina
+                menuDelegato.style.display = 'inline-block';
+                
+                // Nascondi il VECCHIO input
+                oldTargetInput.style.display = 'none';
+                oldTargetInput.value = ''; // Svuotalo per sicurezza
+
+                // Prova a preselezionare il coordinatore nel nuovo menu
+                const coordinatoreNome = coordinatoreNomeInput.value;
+                const opzioneCoordinatore = menuDelegato.querySelector(`option[value="${coordinatoreNome}"]`);
+                
+                if (coordinatoreNome && opzioneCoordinatore) {
+                    menuDelegato.value = coordinatoreNome;
+                } else if (menuDelegato.value === '_altro_') {
+                    // Se era selezionato "Altro", lascialo e mostra il campo
+                     campoAltroDelegato.style.display = 'inline-block';
+                } else {
+                    // Altrimenti resetta
+                    menuDelegato.value = '';
+                }
+                
+                // Assicurati che il campo "Altro" sia nascosto se non serve
+                if(menuDelegato.value !== '_altro_') {
+                    campoAltroDelegato.style.display = 'none';
+                }
+
+            } else {
+                // Nascondi i NUOVI controlli (menu e campo "Altro")
+                menuDelegato.style.display = 'none';
+                campoAltroDelegato.style.display = 'none';
+                // Nascondi il VECCHIO input
+                oldTargetInput.style.display = 'none';
+            }
+
+            // Alla fine, aggiorna sempre la firma
+            aggiornaFirmaPresidente();
+        }
+
+
+        // Funzione per aggiornare le opzioni del segretario
+        function aggiornaOpzioniSegretario() {
+            const select = document.getElementById('selectSegretario');
+            if (!select) return;
+
+            const selectedValue = select.value; // Salva il valore corrente
+
+            // Svuota le opzioni tranne "Seleziona..." e "Altro..."
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                const val = opzioni[i].value;
+                if (val !== "" && val !== "_altro_") {
+                    opzioni[i].remove();
+                }
+            }
+
+            const nomiDocenti = document.querySelectorAll('.docente-nome'); // Seleziona tutte le textarea con classe 'docente-nome'
+            const altroOption = select.querySelector('option[value="_altro_"]');
+
+            const nomiUnici = new Set(); // Per evitare duplicati nel menu
+
+            nomiDocenti.forEach(textarea => { // Modificato per textarea
+                const nome = textarea.value.trim(); // Usa trim per pulire
+                if (nome && !nomiUnici.has(nome)) { // Aggiungi solo se il nome non è vuoto e non è duplicato
+                    nomiUnici.add(nome);
+                    const option = document.createElement('option');
+                    option.value = nome;
+                    option.textContent = nome;
+                    select.insertBefore(option, altroOption); // Inserisci prima di "Altro..."
+                }
+            });
+
+            // Prova a ripristinare la selezione
+            // Verifica se il valore selezionato precedentemente è ancora tra le opzioni valide
+            let valoreValido = false;
+            select.querySelectorAll('option').forEach(opt => {
+                if (opt.value === selectedValue) {
+                    valoreValido = true;
+                }
+            });
+
+            if (valoreValido) {
+                select.value = selectedValue;
+            } else if (selectedValue === '_altro_') {
+                 select.value = '_altro_'; // Mantieni "Altro" se era selezionato
+            }
+             else {
+                select.value = ""; // Altrimenti resetta a "Seleziona..."
+            }
+
+
+            checkSegretarioAltro(); // Aggiorna la visibilità del campo "Altro"
+        }
+
+        // Funzione per mostrare/nascondere il campo "Altro" del segretario
+        function checkSegretarioAltro() {
+            const select = document.getElementById('selectSegretario');
+            const altroInput = document.getElementById('segretarioAltroNome');
+            if (!select || !altroInput) return;
+
+            if (select.value === '_altro_') {
+                altroInput.style.display = 'inline-block';
+            } else {
+                altroInput.style.display = 'none';
+                altroInput.value = ''; // Svuota se non selezionato
+            }
+            // Aggiunto per aggiornare la firma anche quando si nasconde "Altro"
+             aggiornaFirmaSegretario();
+        }
+
+         // Funzione per aggiornare la firma del segretario/verbalizzante
+         function aggiornaFirmaSegretario() {
+            const selectSegretario = document.getElementById('selectSegretario');
+            const altroNomeInput = document.getElementById('segretarioAltroNome');
+            const firmaP = document.getElementById('firmaSegretario');
+
+            if (!selectSegretario || !firmaP) return; // Sicurezza
+
+            let nomeSegretario = '';
+            if (selectSegretario.value === '_altro_') {
+                nomeSegretario = altroNomeInput ? altroNomeInput.value.trim() : '';
+            } else {
+                nomeSegretario = selectSegretario.value.trim();
+            }
+
+            if (nomeSegretario) {
+                // Sostituisce i puntini con il nome
+                firmaP.textContent = nomeSegretario;
+            } else {
+                // Ripristina i puntini se nessun segretario valido è selezionato
+                firmaP.textContent = '...................................';
+            }
+        }
+// NUOVA FUNZIONE: Popola il menu a tendina del presidente delegato
+        function aggiornaOpzioniPresidenteDelegato() {
+            const select = document.getElementById('selectPresidenteDelegato');
+            if (!select) return;
+
+            const selectedValue = select.value; // Salva il valore corrente
+
+            // Svuota le opzioni tranne "Seleziona..." e "Altro..."
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                const val = opzioni[i].value;
+                if (val !== "" && val !== "_altro_") {
+                    opzioni[i].remove();
+                }
+            }
+
+            const nomiDocenti = document.querySelectorAll('.docente-nome');
+            const altroOption = select.querySelector('option[value="_altro_"]');
+            const nomiUnici = new Set();
+
+            nomiDocenti.forEach(textarea => {
+                const nome = textarea.value.trim();
+                if (nome && !nomiUnici.has(nome)) {
+                    nomiUnici.add(nome);
+                    const option = document.createElement('option');
+                    option.value = nome;
+                    option.textContent = nome;
+                    select.insertBefore(option, altroOption);
+                }
+            });
+
+            // Prova a ripristinare la selezione precedente
+            let valoreValido = Array.from(select.options).some(opt => opt.value === selectedValue);
+            if (valoreValido) {
+                select.value = selectedValue;
+            } else {
+                select.value = ""; // Altrimenti resetta
+            }
+        }
+
+        // NUOVA FUNZIONE: Gestisce il campo "Altro" del presidente delegato
+        function checkPresidenteDelegatoAltro() {
+            const select = document.getElementById('selectPresidenteDelegato');
+            const altroInput = document.getElementById('presidenteAltroNome');
+            if (!select || !altroInput) return;
+
+            if (select.value === '_altro_') {
+                altroInput.style.display = 'inline-block';
+            } else {
+                altroInput.style.display = 'none';
+                altroInput.value = ''; // Svuota se non selezionato
+            }
+            aggiornaFirmaPresidente(); // Aggiorna la firma
+        }
+
+        // NUOVA FUNZIONE: Aggiorna la firma del presidente
+        function aggiornaFirmaPresidente() {
+            const selectPresidente = document.getElementById('selectPresidente');
+            const selectDelegato = document.getElementById('selectPresidenteDelegato');
+            const altroNomeInput = document.getElementById('presidenteAltroNome');
+            const firmaP = document.getElementById('firmaPresidente');
+
+            if (!selectPresidente || !firmaP) return; // Sicurezza
+
+            if (selectPresidente.value === 'la Dirigente Scolastica prof.ssa Laura Castellana') {
+                firmaP.textContent = 'Prof.ssa Laura Castellana';
+            } else {
+                // È selezionato "il delegato dalla Dirigente..."
+                let nomePresidente = '';
+                if (selectDelegato.value === '_altro_') {
+                    nomePresidente = altroNomeInput ? altroNomeInput.value.trim() : '';
+                } else {
+                    nomePresidente = selectDelegato.value.trim();
+                }
+
+                if (nomePresidente) {
+                    firmaP.textContent = nomePresidente;
+                } else {
+                    firmaP.textContent = '...................................'; // Fallback
+                }
+            }
+        }
+
+        // Funzione per aggiornare la firma del coordinatore delegato
+       
+
+        // Funzione per aggiornare il codice riunione
+        function aggiornaCodiceRiunione() {
+            const classeSeleziona = document.getElementById('selectClasse');
+            if (!classeSeleziona) return; // Controllo di sicurezza
+            const classeSelezionata = classeSeleziona.value;
+            // Se la classe è '-', non mostrare un codice
+            const codice = (classeSelezionata === '-') ? '---' : 'cdc' + classeSelezionata;
+            const codiceRiunioneInput = document.getElementById('codiceRiunione');
+            if (codiceRiunioneInput) {
+                 codiceRiunioneInput.value = codice;
+            }
+        }
+
+        <!-- NUOVA FUNZIONE -->
+        // Funzione per aggiornare l'orario di chiusura
+        function aggiornaOrarioChiusura() {
+            const orarioFineHeader = document.getElementById('orarioFine');
+            const orarioChiusuraSeduta = document.getElementById('orarioChiusura');
+
+            if (orarioFineHeader && orarioChiusuraSeduta) {
+                orarioChiusuraSeduta.value = orarioFineHeader.value;
+            }
+        }
+
+        // Funzione per resettare il form (MODIFICATA PER RESET DOCENTI e FIRMA)
+        function resetForm() {
+            // NON usare confirm() o alert() perché sono bloccati nell'iframe
+            console.log("Tentativo di Reset Form...");
+
+             // Resetta tutti gli input di testo, data, ora, textarea NON NELLE TABELLE DOCENTI O MATERIE
+             document.querySelectorAll('input[type="text"]:not(#coordinatoreDisciplina):not(#coordinatoreNome):not(.docente-nome):not(#materie-tbody input):not(#presidenteNomeInput):not(#segretarioAltroNome), input[type="date"], input[type="time"], textarea:not(#docenti-tbody textarea):not(#pfp-tbody textarea):not(#dsa-tbody textarea):not(#ppa-tbody textarea):not(#bes-individuati-tbody textarea):not(#bes-osservare-tbody textarea):not(#assenze-tbody textarea)').forEach(input => input.value = '');
+             // Resetta input tabella materie
+             document.querySelectorAll('#materie-tbody input[type="text"]').forEach(input => input.value = '');
+
+
+            // Resetta i campi numerici a 0 (se ne avessimo)
+            document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
+
+            // Deseleziona tutti i checkbox (anche quelli dei docenti)
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+
+            // Resetta i menu a discesa al primo valore (tranne classe)
+            document.querySelectorAll('select:not(#selectClasse)').forEach(select => select.selectedIndex = 0);
+            // Resetta classe al primo valore
+             const selectClasse = document.getElementById('selectClasse');
+             if (selectClasse) selectClasse.selectedIndex = 0;
+
+
+            // Richiama popolaTabellaDocenti per la classe selezionata (la prima, "-")
+            popolaTabellaDocenti();
+            popolaRappresentanti(); // NUOVO: Chiamata per resettare i rappresentanti
+
+
+            // Aggiorna i valori automatici dopo il reset
+            aggiornaCodiceRiunione(); // Aggiorna codice riunione per la prima classe
+            // aggiornaPresidente(); // Verrà chiamato da popolaTabellaDocenti
+            // aggiornaOpzioniSegretario(); // Verrà chiamato da popolaTabellaDocenti
+            checkSegretarioAltro(); // Assicura che campo altro sia nascosto
+
+            // Rimuovi righe dinamiche e aggiungi una vuota (PFP)
+            // MODIFICA: Rimosso PFP
+            /*
+            const pfpTbody = document.getElementById('pfp-tbody');
+            if (pfpTbody) {
+                while (pfpTbody.firstChild) { pfpTbody.removeChild(pfpTbody.firstChild); }
+                addPFPStudente(); // Aggiungi una riga vuota
+            }
+            */
+            
+            // FIX: Aggiunto Reset per PPA
+            const ppaTbody = document.getElementById('ppa-tbody');
+            if (ppaTbody) {
+                while (ppaTbody.firstChild) { ppaTbody.removeChild(ppaTbody.firstChild); }
+                addPPAStudente(); // Aggiungi una riga vuota
+            }
+
+            // Rimuovi righe dinamiche e aggiungi una vuota (DSA)
+            const dsaTbody = document.getElementById('dsa-tbody');
+            if (dsaTbody) {
+                 while (dsaTbody.firstChild) { dsaTbody.removeChild(dsaTbody.firstChild); }
+                addDSAStudente(); // Aggiungi una riga vuota
+            }
+
+            // Rimuovi righe dinamiche e aggiungi una vuota (BES)
+            const besIndTbody = document.getElementById('bes-individuati-tbody');
+            if (besIndTbody) {
+                 while (besIndTbody.firstChild) { besIndTbody.removeChild(besIndTbody.firstChild); }
+                addBESIndividuato();
+            }
+            const besOssTbody = document.getElementById('bes-osservare-tbody');
+            if (besOssTbody) {
+                 while (besOssTbody.firstChild) { besOssTbody.removeChild(besOssTbody.firstChild); }
+                addBESOsservare();
+            }
+
+            // Rimuovi righe dinamiche e aggiungi una vuota (Assenze)
+            const assenzeTbody = document.getElementById('assenze-tbody');
+            if (assenzeTbody) {
+                 while (assenzeTbody.firstChild) { assenzeTbody.removeChild(assenzeTbody.firstChild); }
+                addAssenzeStudente();
+            }
+
+            // Resetta i punti O.d.g. dinamici
+            nextOdgPoint = 6; // Resetta il contatore (6 per serale)
+            document.getElementById('dynamic-odg-list').innerHTML = '';
+            document.getElementById('dynamic-svolgimento-points').innerHTML = '';
+            
+            aggiornaFirmaSegretario(); // Resetta firma segretario
+             // Resetta firma coordinatore
+
+             // Applica auto-resize a tutte le textarea dopo il reset
+             
+             // MODIFICA: Rimandato con setTimeout(0) per permettere il rendering
+             setTimeout(() => {
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+             }, 0);
+             
+             // Forza controllo visibilità presidente
+             const selectPresidente = document.getElementById('selectPresidente');
+             if(selectPresidente) selectPresidente.dispatchEvent(new Event('change'));
+
+            console.log("Form resettato. Tabella docenti ripopolata. Righe dinamiche resettate.");
+        }
+        
+        
+    </script>
+
+<style>
+/* Stili aggiuntivi per la gestione della stampa delle textarea */
+@media print {
+  /* Nasconde la textarea originale */
+  textarea {
+    display: none !important;
+  }
+  /* Mostra il div clone per la stampa */
+  .textarea-print {
+    display: block !important;
+    white-space: pre-wrap; /* Mantiene a-capo e spazi */
+    word-break: break-word; /* Va a capo con parole lunghe */
+    min-height: 1em; /* Altezza minima */
+    padding: 0 !important; /* Coerenza con altri campi stampati */
+    margin: 0 !important;
+    font-family: inherit; /* Usa font del body */
+    font-size: inherit; /* Usa font del body */
+    line-height: normal; /* Line height normale per stampa */
+    border: none !important;
+    background: transparent !important;
+  }
+  /* Assicura che i bottoni siano nascosti */
+  .no-print,
+  .no-print * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  /* Resetta margini e padding del body in stampa */
+  body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+</style>
+
+<script>
+// Script per gestire la stampa delle textarea
+window.addEventListener("beforeprint", () => {
+  document.querySelectorAll("textarea").forEach(el => {
+    // Cerca se esiste già un clone
+    let clone = el.nextElementSibling;
+    // Se non esiste, o non è un clone, ne crea uno nuovo
+    if (!clone || !clone.classList.contains("textarea-print")) {
+      clone = document.createElement("div");
+      clone.className = "textarea-print no-print"; // Aggiunto no-print
+      el.insertAdjacentElement("afterend", clone);
+    }
+    // Aggiorna il contenuto del clone
+    clone.textContent = el.value || ""; // Usa textContent per sicurezza (evita iniezione HTML)
+    
+    // Sincronizza lo stile (opzionale, ma aiuta)
+    clone.style.width = '100%'; // Assicura che prenda la larghezza
+    clone.style.fontFamily = window.getComputedStyle(el).fontFamily;
+    clone.style.fontSize = window.getComputedStyle(el).fontSize;
+    clone.style.lineHeight = window.getComputedStyle(el).lineHeight;
+    clone.style.padding = window.getComputedStyle(el).padding; // Usa il padding della textarea
+    clone.style.boxSizing = 'border-box'; // Importante se c'è padding
+    
+    // Rimuovi no-print per renderlo visibile solo in stampa
+    clone.classList.remove("no-print"); 
+  });
+});
+
+window.addEventListener("afterprint", () => {
+  // Rimuovi tutti i cloni di stampa dopo la stampa
+  document.querySelectorAll(".textarea-print").forEach(el => el.remove());
+});
+</script>
+
+
+</body>
+</html>
