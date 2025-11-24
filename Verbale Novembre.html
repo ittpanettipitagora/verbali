@@ -244,8 +244,7 @@
                  min-height: 1.2em; /* Spazio minimo per nome o puntini */
              }
         }
-    </style>
-    <!-- Carica il font Inter da Google Fonts -->
+    </style>    <!-- Carica il font Inter da Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -374,7 +373,7 @@
                         <td class="border border-gray-300 p-2 font-semibold align-top">Docente coordinatore:</td>
                         <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..." value="" id="coordinatoreDisciplina"></textarea></td>
                        
-                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." value="" id="coordinatoreNome" oninput="aggiornaPresidente(); aggiornaOpzioniSegretario(); aggiornaOpzioniPresidenteDelegato(); "></textarea></td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." value="" id="coordinatoreNome" oninput="aggiornaPresidente(); aggiornaOpzioniSegretario(); aggiornaOpzioniPresidenteDelegato();sincronizzaTutorScolasticoConCoordinatore(); "></textarea></td>
                         <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
                         <td class="border border-gray-300 p-1 text-center no-print"></td> <!-- Cella vuota, no rimozione -->
                     </tr>
@@ -404,6 +403,7 @@
                 <p>4. Condivisione e approvazione PDP (Piano Didattico Personalizzato per studenti con DSA e BES).</p>
                 <p>5. Individuazione di ulteriori eventuali studentesse/studenti BES;</p>
                 <p>6. Segnalazione di studenti con assenze ripetute e/o non frequentanti;</p>
+		<p>7. Valutazione dell’adesione alla sperimentazione sull’Intelligenza Artificiale – a.s. 2025/2026</p>
                 
                 <!-- Contenitore per i punti O.d.g. dinamici -->
                 <div id="dynamic-odg-list" class="space-y-1 mt-2">
@@ -594,7 +594,10 @@
             </table>
              <!-- MODIFICA: Aggiunto textarea osservazioni e testo finale PFP -->
              <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
-            <p>Il/I PFP così elaborato/i sarà/anno di seguito inviato/i alla Prof.ssa Teresa Resta, Tutor Scolastico dello/degli studente/ssa atleta, per procedere entro il 20 dicembre c.a. con l’istruttoria all’Ufficio per le Politiche sportive scolastiche della Direzione generale per il Sistema Educativo di Istruzione e di Formazione del Ministero dell'Istruzione. L’Istituzione scolastica può dare comunque dare avvio al Progetto Formativo Personalizzato approvato, pur in attesa della comunicazione di validazione, come da suddetto avviso.</p>
+		<p class="mb-2 mt-4">
+                Viene designato come Tutor scolastico il prof/la prof.ssa <strong id="tutorScolasticoNome">...</strong>
+            </p>
+            <p>Il/I PFP così elaborato/i sarà/anno di seguito inviato/i alla Prof.ssa Teresa Resta per procedere entro il 20 dicembre c.a. con l’istruttoria all’Ufficio per le Politiche sportive scolastiche della Direzione generale per il Sistema Educativo di Istruzione e di Formazione del Ministero dell'Istruzione. L’Istituzione scolastica può dare comunque dare avvio al Progetto Formativo Personalizzato approvato, pur in attesa della comunicazione di validazione, come da suddetto avviso.</p>
         </div>
 
         <!-- PUNTO 3 PPA (Piano Personalizzato Accompagnamento) -->
@@ -751,6 +754,20 @@
         <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
 
         </div>
+	<!-- Punto 7-->
+	 <div class="mb-6">
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">7. Valutazione dell’adesione alla sperimentazione sull’Intelligenza Artificiale – a.s. 2025/2026</h3>
+            <p>Il Consiglio di Classe delibera che: </p>
+		<select class="form-input w-auto">
+                    <option value="aderisce all'unanimità.">aderisce all'unanimità.</option>
+                    <option value="non aderisce.">non aderisce.</option>
+			
+                </select>
+		
+            <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+		
+        </div>
+        
 
         <!-- Contenitore per i punti Svolgimento dinamici -->
         <div id="dynamic-svolgimento-points" class="space-y-6 mb-6"> <!-- Aggiunto mb-6 per spazio -->
@@ -876,7 +893,7 @@
 
     <script>
         // MODIFICA: Contatore O.d.g. parte da 7
-        let nextOdgPoint = 7; 
+        let nextOdgPoint = 8; 
 
         // --- INIZIO DATI RAPPRESENTANTI (NUOVO) ---
         // Dati popolati dai CSV forniti
@@ -1935,6 +1952,7 @@
             aggiornaOpzioniSegretario();
             aggiornaFirmaSegretario();
 aggiornaOpzioniPresidenteDelegato();
+sincronizzaTutorScolasticoConCoordinatore();
              // Aggiunto per firma coordinatore
 
             // --- NUOVA MODIFICA ---
@@ -2631,7 +2649,7 @@ aggiornaOpzioniPresidenteDelegato();
             }
 
             // Resetta i punti O.d.g. dinamici
-            nextOdgPoint = 7; // Resetta il contatore
+            nextOdgPoint = 8; // Resetta il contatore
             document.getElementById('dynamic-odg-list').innerHTML = '';
             document.getElementById('dynamic-svolgimento-points').innerHTML = '';
             
@@ -2654,7 +2672,23 @@ aggiornaOpzioniPresidenteDelegato();
 
             console.log("Form resettato. Tabella docenti ripopolata. Righe dinamiche resettate.");
         }
-        
+       // Funzione per sincronizzare il nome del Coordinatore con il campo Tutor Scolastico
+function sincronizzaTutorScolasticoConCoordinatore() {
+    // ID corretto per la textarea del nome del Coordinatore
+    const coordinatoreNomeInput = document.getElementById('coordinatoreNome'); 
+    // ID dell'elemento dove mostrare il Tutor Scolastico
+    const tutorContainer = document.getElementById('tutorScolasticoNome');
+    
+    // Controlla che entrambi gli elementi esistano
+    if (!coordinatoreNomeInput || !tutorContainer) return;
+
+    // Leggi il nome dal campo del coordinatore
+    const nomeCoordinatore = coordinatoreNomeInput.value.trim(); 
+    
+    // Aggiorna il nome del Tutor Scolastico nel Punto 2
+    // Se il nome è vuoto, usa la linea tratteggiata per coerenza
+    tutorContainer.textContent = nomeCoordinatore ? nomeCoordinatore : '___________________'; 
+}
         
     </script>
 
@@ -2707,9 +2741,6 @@ window.addEventListener("afterprint", () => {
 
 </body>
 </html>
-
-
-
 
 
 
