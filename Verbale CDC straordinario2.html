@@ -265,6 +265,9 @@ p .form-input-table {
         <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
             Stampa / Salva PDF
         </button>
+		<button onclick="downloadHTML()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+        Salva Modifiche (Editabile)
+    </button>
         <button onclick="resetForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
             Svuota Form
         </button>
@@ -2198,10 +2201,71 @@ window.addEventListener("afterprint", () => {
   }
   
 });
+	// --- FUNZIONE SALVATAGGIO FILE HTML EDITABILE ---
+function downloadHTML() {
+    // 1. Fissa i valori degli INPUT (testo, data, ora)
+    document.querySelectorAll('input').forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) {
+                input.setAttribute('checked', 'checked');
+            } else {
+                input.removeAttribute('checked');
+            }
+        } else {
+            // Per testo, data, time, ecc.
+            input.setAttribute('value', input.value);
+        }
+    });
+
+    // 2. Fissa i valori delle TEXTAREA (importante: scrive dentro il tag)
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.innerHTML = textarea.value;
+    });
+
+    // 3. Fissa i valori delle SELECT (Opzioni selezionate)
+    document.querySelectorAll('select').forEach(select => {
+        const options = select.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.selected) {
+                option.setAttribute('selected', 'selected');
+            } else {
+                option.removeAttribute('selected');
+            }
+        });
+    });
+
+    // 4. Prepara il nome del file con Data e Ora
+    const now = new Date();
+    const dataFormatted = now.toISOString().slice(0, 10); // YYYY-MM-DD
+    const oraFormatted = now.getHours().toString().padStart(2, '0') + "-" + now.getMinutes().toString().padStart(2, '0');
+    
+    // Cerca di prendere la classe selezionata per il nome file
+    const classeSelect = document.getElementById('selectClasse');
+    const classeNome = (classeSelect && classeSelect.value !== '-') ? classeSelect.value : 'Verbale';
+    
+    const fileName = `Verbale_${classeNome}_${dataFormatted}_${oraFormatted}.html`;
+
+    // 5. Crea il file e scarica
+    const htmlContent = document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    
+    // Pulizia
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
+}
 </script>
 
 </body>
 </html>
+
 
 
 
