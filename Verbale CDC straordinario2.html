@@ -170,44 +170,38 @@
             
             /* --- INIZIO MODIFICA STAMPA CHECKBOX SAFARI --- */
             
-            /* 1. Stile base per TUTTI i checkbox in stampa (checked e non) */
+            /* --- INIZIO FIX STAMPA CHECKBOX FORZATO --- */
+            
+            /* 1. Disegna il quadrato vuoto */
             .form-checkbox {
                 appearance: none !important;
                 -webkit-appearance: none !important;
-                border: 1px solid #000 !important; /* Bordo nero visibile per la casella */
+                width: 14px !important;
+                height: 14px !important;
+                border: 1px solid #000 !important; /* Bordo nero evidente */
                 background-color: transparent !important;
-                width: 1em !important;
-                height: 1em !important;
-                display: inline-block !important; /* Assicura che sia visibile */
-                vertical-align: middle !important; /* Allinea */
-                position: relative; /* Necessario per il pseudo-elemento */
-                padding: 0 !important;
-                margin: 0 !important;
+                display: inline-block !important;
+                position: relative !important;
+                vertical-align: middle !important;
+                margin: 0 auto !important;
             }
 
-            /* 2. Stile per i checkbox SPUNTATI (il box stesso) */
-            .form-checkbox:checked {
-                /* Il box è già stilato dalla regola sopra, non serve altro */
-                /* L'importante è che il selettore esista per agganciare ::after */
-            }
-
-            /* 3. Aggiungi un carattere "spunta" FALSO dentro i box spuntati */
+            /* 2. Seleziona la casella SPUNTATA e disegna una "X" o una "V" nera */
             .form-checkbox:checked::after {
-                content: '\2714'; /* Carattere spunta (check mark) */
-                display: block;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 0.9em; /* Leggermente più piccolo del box */
-                line-height: 1;
-                font-weight: bold;
-                color: #000 !important; /* Colore nero */
-                
-                /* Forza Safari a stampare questo carattere */
-                -webkit-print-color-adjust: exact !important;
+                content: '\2714'; /* Codice per il carattere di spunta (✔) */
+                display: block !important;
+                position: absolute !important;
+                top: -2px !important; /* Aggiusta la posizione verticale */
+                left: 1px !important; /* Aggiusta la posizione orizzontale */
+                font-size: 14px !important;
+                font-weight: bold !important;
+                color: #000 !important; /* Nero puro */
+                line-height: 1 !important;
+                /* Forza la stampa del colore anche se le impostazioni browser sono diverse */
+                -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
             }
+            /* --- FINE FIX STAMPA CHECKBOX FORZATO --- */
             /* --- FINE MODIFICA STAMPA CHECKBOX SAFARI --- */
              
 
@@ -1440,44 +1434,31 @@ p .form-input-table {
 
 
         // Aggiunto listener per popolare il menu all'avvio
+      // Aggiunto listener per popolare il menu all'avvio
        window.addEventListener('DOMContentLoaded', () => {
-             popolaTabellaDocenti(); // Popola per la classe iniziale
-             
-             /* // --- INIZIO BLOCCO DA COMMENTARE ---
-             // Queste funzioni non sono definite e causano un errore che blocca lo script
-             if (document.getElementById('pfp-tbody').rows.length === 0) {
-                
+             // MODIFICA FONDAMENTALE: Controllo se è un file salvato
+             const tbody = document.getElementById('docenti-tbody');
+             // Contiamo le righe. C'è sempre la riga coordinatore (1). 
+             // Se ci sono più righe, significa che il file è stato salvato con dei dati.
+             const righeEsistenti = tbody.querySelectorAll('tr').length;
+
+             if (righeEsistenti > 1) {
+                 console.log("File salvato rilevato: Mantengo i dati inseriti manualmente.");
+                 // Non chiamiamo popolaTabellaDocenti() per non sovrascrivere i dati
+             } else {
+                 console.log("Nuovo verbale: Popolo la tabella predefinita.");
+                 popolaTabellaDocenti(); // Popola solo se la tabella è vuota (nuovo file)
              }
-             // FIX: Aggiungi riga PPA
-              if (document.getElementById('ppa-tbody') && document.getElementById('ppa-tbody').rows.length === 0) {
-                 addPPAStudente();
-              }
-             if (document.getElementById('dsa-tbody').rows.length === 0) {
-                 addDSAStudente();
-             }
-             if (document.getElementById('bes-individuati-tbody').rows.length === 0) {
-                 addBESIndividuato();
-             }
-             if (document.getElementById('bes-osservare-tbody').rows.length === 0) {
-                 addBESOsservare();
-             }
-             // Popola tabella Assenze
-             if (document.getElementById('assenze-tbody').rows.length === 0) {
-                 addAssenzeStudente();
-             }
-             // --- FINE BLOCCO DA COMMENTARE ---
-             */
 
              // Inizializza auto-resize per tutte le textarea (solo listener)
              initAutoResize();
 
              // MODIFICA: Rimandato con setTimeout(0) per permettere il rendering
-             // Applica il resize a TUTTE le textarea dopo che il browser ha "disegnato" la pagina
              setTimeout(() => {
                 document.querySelectorAll('textarea').forEach(textarea => {
                     autoResizeTextarea(textarea);
                 });
-             }, 0); // Il '0' sposta questo alla fine della coda di esecuzione
+             }, 0); 
 
              // Aggiorna subito il nome presidente e forza controllo visibilità
              aggiornaPresidente();
@@ -1485,9 +1466,7 @@ p .form-input-table {
              const selectPresidente = document.getElementById('selectPresidente');
              if(selectPresidente) selectPresidente.dispatchEvent(new Event('change'));
 
-
-             // Inizializza auto-resize per tutte le textarea
-             initAutoResize(); // Questa chiamata ora verrà eseguita correttamente
+             // Gestione modalità (presenza/online)
              gestisciModalita();
         });
         // --- INIZIO NUOVA LOGICA POPOLAMENTO DOCENTI ---
