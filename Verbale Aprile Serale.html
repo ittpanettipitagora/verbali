@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbale di Aprile Serale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, td, textarea, .textarea-print, p {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* Stili di base e per i campi di input */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+        .form-input, .form-textarea, .form-input-table {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            transition: border-color 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .form-input-table {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        #docenti-table tbody td {
+            vertical-align: middle;
+            min-height: 30px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            line-height: 1.4;
+        }
+
+        .form-input-table-dynamic {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+            min-height: 38px; 
+    	    height: auto;      
+            overflow-y: hidden; 
+            resize: none;      
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .form-input-table-dynamic:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-input-table:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .form-textarea {
+            width: 100%;
+            min-height: 80px;
+            overflow-y: hidden;
+            resize: none;
+             border: 1px solid #d1d5db;
+             border-radius: 0.375rem;
+             padding: 0.5rem 0.75rem;
+             transition: border-color 0.2s;
+             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+         
+
+        .form-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            vertical-align: middle;
+        }
+
+	/* Correzione specifica per i menu a tendina che tagliano il testo */
+select.form-input-table-dynamic {
+    height: auto !important;
+    min-height: 50px;      /* Aumentiamo il minimo per ospitare due righe comodamente */
+    line-height: 1.3;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    white-space: normal;   /* Forza il testo ad andare a capo */
+    display: block;
+    appearance: none;      /* Rende il design più pulito su alcuni browser */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1em;
+}
+/* Centra verticalmente il contenuto di tutte le celle della ratifica */
+#main-recupero-table td {
+    vertical-align: middle !important;
+    padding: 10px 5px !important;
+}
+
+/* Sistema il pulsante Aggiungi Materia per non creare troppo spazio vuoto */
+.group-studente .no-print {
+    margin-top: 5px !important;
+}
+
+/* Migliora la proporzione tra le colonne */
+#main-recupero-table th:nth-child(1), 
+#main-recupero-table td:nth-child(1) { 
+    width: 28% !important; 
+}
+
+#main-recupero-table th:nth-child(2), 
+#main-recupero-table td:nth-child(2) { 
+    width: 42% !important; 
+}
+
+/* Rendi il select dell'alunno più compatto a video */
+select.form-input-table-dynamic {
+    min-height: 38px !important; /* Ridotto leggermente per migliorare l'allineamento */
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* Allarghiamo la cella della materia nel monitoraggio Ed. Civica */
+#edcivica-tbody td:first-child {
+    width: 35% !important;
+}
+
+/* Assicuriamoci che le celle della tabella non blocchino l'altezza */
+.border-gray-300 {
+    height: auto !important;
+}
+
+#main-recupero-table td {
+    padding: 8px 4px !important;
+    vertical-align: middle !important;
+}
+
+        
+        @page {
+            size: A4;
+            margin: 1.5cm;
+            @top-left { content: ""; }
+            @top-center { content: ""; }
+            @top-right { content: ""; }
+            @bottom-left { content: ""; }
+            @bottom-center { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        /* --- STILI DI STAMPA CORRETTI --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                font-size: 11pt;
+            }
+            .no-print {
+                display: none!important;
+            }
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* CORREZIONE: Nascondi esplicitamente le textarea originali in stampa */
+            textarea, 
+            .form-input-table-dynamic, 
+            .form-textarea {
+                display: none !important;
+            }
+
+            /* Assicura che i cloni di stampa (generati via JS) siano visibili */
+            .textarea-print {
+                display: block !important;
+                white-space: pre-wrap;
+                font-family: inherit;
+                font-size: inherit;
+                width: 100%;
+            }
+
+            .form-input, .form-input-table, select {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: transparent !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                width: 100% !important;
+            }
+            
+            .form-checkbox {
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                border: 1px solid #000 !important;
+                background-color: transparent !important;
+                width: 1em !important;
+                height: 1em !important;
+                display: inline-block !important;
+                vertical-align: middle !important;
+                position: relative;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .form-checkbox:checked::after {
+                content: '\2714';
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.9em;
+                line-height: 1;
+                font-weight: bold;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+           select {
+        display: none !important;
+    }
+
+    /* MOSTRA IL TESTO GENERATO SOLO IN STAMPA */
+    .select-print {
+        display: block !important;
+        padding: 2px;
+        font-family: inherit;
+        font-size: inherit;
+        white-space: pre-wrap;
+    }
+             #segretarioAltroNome, #presidenteNomeInput, #presidenteAltroNome {
+                 display: none !important;
+             }
+           table {
+                page-break-inside: auto !important;
+                width: 100% !important;
+            }
+#docenti-table {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+            }
+            tr {
+                page-break-inside: avoid !important;
+                page-break-after: auto !important;
+            }
+thead {
+                display: table-header-group;
+            }
+            td, th {
+                 vertical-align: top;
+                 padding: 2px 4px !important;
+            }
+             #firmaSegretario, #firmaCoordinatore {
+                 min-height: 1.2em;
+             }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="no-print fixed top-4 right-4 z-50 flex space-x-2">
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Stampa / Salva PDF
+        </button>
+		<button onclick="downloadHTML()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+        Salva Modifiche (Editabile)
+    </button>
+        <button onclick="resetForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Svuota Form
+        </button>
+    </div>
+
+    <div class="container max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-xl border border-gray-200">
+
+        <div class="text-center mb-6">
+            <h1 class="text-xl font-bold text-gray-800">I.T.T. “PANETTI - PITAGORA” – BARI</h1>
+	    <h1 class="text-xl font-bold text-gray-800">CORSO SERALE</h1>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <strong>VERBALE N°:</strong>
+                <select id="verbaleNumero" class="form-input w-20">
+                    <option value="-">-</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+		    <option value="9">9</option>
+		    <option value="10">10</option>
+		    <option value="11">11</option>
+		    <option value="12">12</option>
+		    <option value="13">13</option>
+		    <option value="14">14</option>
+		    <option value="15">15</option>
+                </select>
+            </div>
+            <div>
+                <strong>DATA:</strong> <input type="date" class="form-input">
+            </div>
+        </div>
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <strong>ORARIO:</strong> dalle <input type="time" class="form-input w-28"> alle ore <input type="time" class="form-input w-28" id="orarioFine" oninput="aggiornaOrarioChiusura()">
+            </div>
+            <div>
+                <strong>Consiglio della classe:</strong>
+              <select id="selectClasse" class="form-input w-32" onchange="aggiornaCodiceRiunione(); popolaTabellaDocenti(); popolaRappresentanti(); aggiornaTabellaRecupero();  aggiornaTabellaEdCivica(); aggiornaTabellaPDP();aggiornaTabellaAssenze();">
+                     <option value="-">-</option>
+                    <option value="3ITETS">3ITETS</option>
+                    <option value="4ITETS">4ITETS</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">Composizione C.d.C.</h2>
+
+            <table class="w-full border-collapse" id="docenti-table">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-300 p-2 text-left w-1/5 align-top">Composizione</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Disciplina</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Cognome e Nome</th>
+                        <th class="border border-gray-300 p-2 text-center align-top">Assente</th>
+                        <th class="border border-gray-300 p-2 text-center no-print w-16 align-top"></th>
+                    </tr>
+                </thead>
+                <tbody id="docenti-tbody">
+                    <tr id="coordinatore-row">
+                        <td class="border border-gray-300 p-2 font-semibold align-top">Docente coordinatore:</td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..." value="" id="coordinatoreDisciplina"></textarea></td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." value="" id="coordinatoreNome" 
+    oninput="aggiornaPresidente(); aggiornaOpzioniSegretario(); aggiornaOpzioniPresidenteDelegato(); sincronizzaCoordinatoreEdCivica();">
+</textarea>
+                        <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                        <td class="border border-gray-300 p-1 text-center no-print"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="5" class="p-2">
+                            <button onclick="addDocenteManuale()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Docente Manuale
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">O.d.g.</h2>
+            <div class="text-sm space-y-1 text-gray-700">
+                <p><strong>PRIMA PARTE(20 MINUTI)</strong></p>
+                <p><strong>ALLA SOLA PRESENZA DEI DOCENTI</strong></p>
+		<p>1. Andamento didattico disciplinare, verifica della programmazione didattica e monitoraggio delle assenze degli studenti;</p>
+
+                <p>2. Ratifica degli esiti delle verifiche del recupero delle insufficienze certificate nello scrutinio del 1° quadrimestre;</p>
+                <p>3. Verifica ed eventuale revisione e/o nuova stesura di PDP;</p>
+                <p>4. Stato di avanzamento delle attività di Educazione civica e verifica della coerenza con la programmazione di classe;</p>
+                
+                
+
+                <div id="dynamic-odg-list" class="space-y-1 mt-2"></div>
+                <div class="mt-3 no-print">
+                    <button type="button" onclick="addDynamicOdgPoint()" class="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3 rounded-lg">
+                        + Aggiungi punto O.d.g.
+                    </button>
+                </div>
+            
+<br>
+		<p><strong>SECONDA PARTE(10 minuti)</strong></p>
+		<p><strong>CON RAPPRESENTANTI DI STUDENTESSE/STUDENTI </strong></p>
+               <p><span id="odg-num-andamento">5</span>. Informativa sull’andamento didattico-disciplinare della classe;</p>
+<p><span id="odg-num-libri">6</span>. Proposta adozione e/o riconferma libri di testo a.s. 2026/27;</p>
+                
+        </div>
+</div>
+
+        <div class="mb-6">
+            <p class="mb-2 flex items-center flex-wrap">
+                Presiede la riunione
+                <select class="form-input w-auto ml-2" id="selectPresidente" onchange="aggiornaPresidente()">
+                    <option value="la Dirigente Scolastica prof.ssa Laura Castellana">la Dirigente Scolastica prof.ssa Laura Castellana</option>
+                    <option value="il delegato dalla Dirigente prof./prof.ssa">il delegato dalla Dirigente prof./prof.ssa</option>
+                </select>
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectPresidenteDelegato" style="display:none;" onchange="checkPresidenteDelegatoAltro()">
+                    <option value="">Seleziona un docente...</option>
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="presidenteAltroNome" style="display:none;" oninput="aggiornaFirmaPresidente()">
+                <input type="text" class="form-input ml-2 flex-grow min-w-[16rem]" placeholder="Nome Coordinatore se delegato..." id="presidenteNomeInput" style="display:none;">
+            </p>
+            <p class="mb-2 flex items-center flex-wrap">
+                Funge da segretario/a il prof/la prof.ssa
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectSegretario" onchange="checkSegretarioAltro(); aggiornaFirmaSegretario();">
+                    <option value="">Seleziona un docente...</option>
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="segretarioAltroNome" style="display:none;" oninput="aggiornaFirmaSegretario();">
+            </p>
+        </div>
+
+        <div class="mb-6 text-sm text-gray-600 space-y-1 italic">
+             <p>La convocazione, inviata a tutti i docenti con modalità mail il giorno XXX del mese di Marzo c.a, comunicato n. XXX, risulta essere consegnata a tutti, considerato che nessuno ha presentato reclamo relativamente alla mancata ricezione dello stesso. Contestualmente il nickname alla videoconferenza è stato allegato alla stessa.</p>
+		<p>Il codice riunione è il seguente: <input type="text" id="codiceRiunione" class="form-input w-32" placeholder="Codice..." value="cdc"></p>
+            <p>La stabilità di connessione e le misure di tutela dei dati personali sono garantite dal dominio “panettipitagora.edu.it"</p>
+
+            <p>Riconosciuta la validità della riunione, si passa alla discussione del punto all’ordine del giorno.</p>
+        </div>
+
+        
+
+        <hr class="my-8 border-t-2 border-gray-300">
+ <div class="mb-6">
+            <!-- MODIFICA: Numerazione aggiornata a 6 -->
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">1. Andamento didattico disciplinare, verifica della programmazione didattica e monitoraggio delle assenze degli studenti</h3>
+<textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+            <p class="mb-2">Il coordinatore di classe, dopo aver analizzato il report estrapolato dal registro di classe sulle assenze dei singoli alunni, segnala al consiglio le seguenti criticità e propone le seguenti azioni:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">Dettagli Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left">Azioni</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="assenze-tbody">
+                    <!-- Righe Assenze aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addAssenzeStudente()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+	
+        
+
+        </div>
+     <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">2. Ratifica degli esiti delle verifiche del recupero delle insufficienze (1° Quadrimestre)</h3>
+    <p class="mb-2">Si procede con la ratifica degli esiti delle verifiche del recupero per ogni alunno nelle discipline in cui l’attività di recupero si è conclusa:</p>
+
+  <table class="w-full border-collapse mb-4 text-sm table-fixed border border-gray-300" id="main-recupero-table">
+    <thead>
+        <tr class="bg-gray-100 border-b border-gray-300">
+            <th class="border-r border-gray-300 p-2 text-left w-[25%]">Studente</th>
+            <th class="border-r border-gray-300 p-2 text-left w-[35%]">Disciplina da recuperare</th>
+            <th class="border-r border-gray-300 p-2 text-center w-[15%]">Recuperato<br>(SI/NO)</th>
+            <th class="border-r border-gray-300 p-2 text-center w-[10%]">Voto</th>
+            <th class="p-2 text-center no-print w-[15%]">Azioni</th>
+        </tr>
+    </thead>
+    
+    <tfoot class="no-print bg-gray-50 border-t border-gray-300">
+        <tr>
+            <td colspan="5" class="p-3 text-center">
+                <button onclick="addStudenteBlock()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow-md flex items-center justify-center mx-auto">
+                    <span class="text-xl mr-2 font-bold">+</span> Aggiungi Nuovo Studente
+                </button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+    <textarea class="form-textarea mt-4" placeholder="Specificare per quali discipline la ratifica è rimandata al prossimo consiglio (attività non terminate)..."></textarea>
+</div>
+        <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">3. Verifica ed eventuale revisione e/o nuova stesura di PDP</h3>
+    <p class="mb-2">Il consiglio di classe elabora o revisiona i PDP per i seguenti alunni:</p>
+
+    <table class="w-full border-collapse mb-4 text-sm mt-4">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 p-2 text-left w-1/3">Studente</th>
+                <th class="border border-gray-300 p-2 text-left">Tipo Intervento (Nuovo PDP / Revisione)</th>
+                <th class="border border-gray-300 p-2 text-center w-40">Approvato</th>
+                <th class="border border-gray-300 p-2 no-print w-16"></th>
+            </tr>
+        </thead>
+        <tbody id="pdp-tbody">
+        </tbody>
+        <tfoot class="no-print">
+            <tr>
+                <td colspan="4" class="p-2">
+                    <button onclick="addPDPRow()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                        + Aggiungi Studente PDP
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+</div>
+
+       <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">4. Stato di avanzamento delle attività di Educazione civica e verifica della coerenza con la programmazione di classe;</h3>
+    
+    <div class="mb-4 p-4 bg-gray-50 border rounded">
+        
+
+        <p class="mb-2">Nel primo quadrimestre sono state svolte in totale n. <input type="number" class="form-input w-20 text-center" value="0" min="0"> ore.</p>
+        <p class="mb-2">Per il secondo quadrimestre le materie coinvolte saranno:</p>
+        
+        <table class="w-full border-collapse mb-2 text-sm bg-white">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 p-2 text-left w-1/4">Materia</th>
+                    <th class="border border-gray-300 p-2 text-center w-20">Ore</th>
+                    <th class="border border-gray-300 p-2 text-left">Attività da svolgere</th>
+                    <th class="border border-gray-300 p-2 no-print w-16"></th>
+                </tr>
+            </thead>
+            <tbody id="edcivica-tbody">
+                </tbody>
+            <tfoot class="no-print">
+                <tr>
+                    <td colspan="4" class="p-2">
+                        <button onclick="addEdCivicaRow()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                            + Aggiungi Materia Ed. Civica
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+     <div class="p-4 border rounded mt-4">
+         <h4 class="font-semibold text-sm mb-2">Verifica attività Orientamento (se pertinente in questo punto):</h4>
+         <textarea class="form-textarea" placeholder="Il Consiglio verifica le attività svolte (eventualmente comprese nelle UDA di Ed. Civica)..."></textarea>
+     </div>
+</div>
+
+       
+
+      
+
+        <div id="dynamic-svolgimento-points" class="space-y-6 mb-6"></div>
+<div class="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <p class="mb-4">All’incontro, nell'ora prevista nel suddetto comunicato (Ultimi 10 minuti), sono presenti:</p>
+
+           <div class="bg-white p-4 rounded-lg border">
+    <h4 class="font-semibold mb-3">Rappresentanti Studentesse/Studenti </h4>
+    <div class="space-y-3">
+        <div class="flex items-center space-x-2">
+            <input type="text" id="studenteNome1" class="form-input flex-grow" placeholder="Studente 1">
+            <input type="checkbox" id="studenteAssente1" class="form-checkbox">
+            <label class="text-sm">Assente</label>
+        </div>
+        <div class="flex items-center space-x-2">
+            <input type="text" id="studenteNome2" class="form-input flex-grow" placeholder="Studente 2">
+            <input type="checkbox" id="studenteAssente2" class="form-checkbox">
+            <label class="text-sm">Assente</label>
+        </div>
+        <div class="flex items-center space-x-2">
+            <input type="text" id="studenteNome3" class="form-input flex-grow" placeholder="Studente 3">
+            <input type="checkbox" id="studenteAssente3" class="form-checkbox">
+            <label class="text-sm">Assente</label>
+        </div>
+    </div>
+</div>
+            
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700">Inserire qui eventuali interventi dei Rappresentanti Studenti</label>
+                <textarea class="form-textarea mt-1" placeholder="Argomentazioni studenti"></textarea>
+            </div>
+            
+        </div>
+
+        <div class="mb-6">
+           <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase"><span id="titolo-num-andamento">5</span>. Informativa sull’andamento didattico-disciplinare della classe;</h3>
+            <textarea class="form-textarea" placeholder="Inserire qui la discussione sull'andamento didattico, UDA e progetti in corso..."></textarea>
+        </div>
+
+        <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase"><span id="titolo-num-libri">6</span>. Proposta adozione e/o riconferma libri di testo a.s. 2026/27</h3>
+    
+    
+       <textarea class="form-textarea" placeholder="Riportare qui eventuali nuove adozioni e/o riconferma dei libri di testo"></textarea>
+    
+    </div>
+        <div class="mb-6 mt-8 border-t pt-4">
+            <p>Alle ore <input type="time" class="form-input w-28" id="orarioChiusura"> terminata la trattazione degli argomenti, il Presidente dichiara sciolta la seduta.</p>
+        </div>
+
+        <div class="mt-12 pt-8 border-t">
+            <div class="flex justify-between">
+                <div class="text-center">
+                    <p class="mb-4">Il/la Docente verbalizzante</p>
+                    <p id="firmaSegretario">...................................</p>
+                </div>
+                <div class="text-center">
+                    <p class="mb-4">La Dirigente scolastica/Presidente</p>
+                   <p id="firmaPresidente">Prof.ssa Laura Castellana</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- CONFIGURAZIONE E DATI ---
+        let nextOdgPoint = 5; // I punti statici sono 7
+
+        const datiRappresentanti = {
+             "3ITETS": { "genitori": ["", ""], "studenti": ["CECINATI NAOMI", "LACRIOLA NICOLA","VENKETASAMY WENDA"] },
+   	 "4ITETS": { "genitori": ["", ""], "studenti": ["NOCELLA LUCA", "SCIACOVELLI GIUSEPPE"] }
+
+        };
+        // --- FINE DATI RAPPRESENTANTI -
+const datiAlunni = {
+        
+"3ITETS": [
+    "AHMAD RAHEEL", "ARDEI FRANCESCO", "BADJIE MUNIRU", "BRATTA CARMINE",
+    "CALO' ALESSIO", "CARONE NICOLAS", "CECINATI NAOMI", "CHTIWI ABDOULAZIZ SEBASTIANO",
+    "CICCARONE MARCELLA", "DAMMICCO FABIO", "DE TULLIO SAVERIO", "DEL BUONO GIOVANNI",
+    "DELL'AQUILA ANTONIO", "ELKATOURY HUSSEIN AHMED AHMED MOHAMED", "GALLO LUCA", "GATTA PASQUALE",
+    "GERNONE FRANCESCO", "IUSCO VINCENZO", "LA PERA ALESSANDRO", "LACRIOLA NICOLA",
+    "LANDOLFI FABIO", "LUCARELLA VINCENZO", "MAGNO VINCENZO", "MARRA CLAUDIO",
+    "MONNO SERGIO ROSARIO", "PASCULLI GAETANO", "PIACENTE FRANCESCO", "PIPERIS GIOVANNI",
+    "PROFETA VITO", "ROMITO DOMENICO", "SANCHEZ TEJADA LIBIA ESTHER", "SCANNICCHIO GIANLUCA",
+    "SGOBBA GIANLUCA", "SIMBRE BOUREIMA", "TAHIROU CHERIF DINE", "VENKETASAMY TANUJA",
+    "VENKETASAMY WENDA", "WANDA ABDOULRAMAN E MUSTAFA"
+],"4ITETS": [
+    "ARMENISE GIUSEPPE", "BALDASSARRE MICHELE", "BORDA LUIS MOISES", "BUSCO LUIGI",
+    "CATACCHIO NICOLA", "CIRILLO LUCA", "DIALLO ABDOURAHAMANE OURY", "FORNARELLI FABRIZIO",
+    "GRANDOLFO WALTER", "HOYOS CASTANO JEINS", "KONE DAOUDA", "LOCORRIERE GABRIELE",
+    "LOCORRIERE MARCO", "LOSACCO NICOLA", "MELE MAURIZIO", "MITOLA GIOVANNI",
+    "MUCIACCIA FRANCESCO", "SAPONARO ANNAMARIA", "SCIACOVELLI GIUSEPPE"
+]};
+
+        // DATI DOCENTI CDC (Invariati - Inseriti nel codice HTML precedente)
+        // Mappatura classi
+        const classeMap = {
+            "3A": "3AG", "3B": "3BG", "4A": "4AG", "4B": "4BG", "5A": "5AG", "5B": "5BG",
+            "3ITIA": "3ITIAA", "3ITIB": "3ITIAB", "3ITIC": "3ITIAC",
+            "4ITIA": "4ITIAA", "4ITIB": "4ITIAB", "4ITIC": "4ITIAC",
+            "5ITIA": "5ITIAA", "5ITIB": "5ITIAB", "5ITIC": "5ITIAC",
+             "3AG": "3AG", "3BG": "3BG", "4AG": "4AG", "4BG": "4BG", "5AG": "5AG", "5BG": "5BG",
+             "1A": "1A", "1B": "1B", "1C": "1C", "1D": "1D", "1E": "1E", "1F": "1F", "1G": "1G", "1H": "1H", "1I": "1I", "1L": "1L",
+             "2A": "2A", "2B": "2B", "2C": "2C", "2D": "2D", "2E": "2E", "2F": "2F", "2G": "2G", "2H": "2H", "2I": "2I",
+             "3ITIAA": "3ITIAA", "3ITIAB": "3ITIAB", "3ITIAC": "3ITIAC",
+             "4ITIAA": "4ITIAA", "4ITIAB": "4ITIAB", "4ITIAC": "4ITIAC",
+             "5ITIAA": "5ITIAA", "5ITIAB": "5ITIAB", "5ITIAC": "5ITIAC",
+             "3ITCM": "3ITCM", "3ITEC": "3ITEC", "3ITET": "3ITET",
+             "4ITCM": "4ITCM", "4ITEC": "4ITEC", "4ITET": "4ITET",
+             "5ITCM": "5ITCM", "5ITEC": "5ITEC", "5ITET": "5ITET"
+        };
+        // Per brevità nel codice visualizzato qui, assumiamo che l'oggetto datiDocentiCDC sia identico a quello del file precedente.
+        // Se necessario, copiare l'intero oggetto const datiDocentiCDC = { ... } dal file HTML di Novembre.
+        // Qui includo un placeholder vuoto che deve essere sostituito con i dati reali se si vuole la funzionalità completa offline.
+        // NOTA: Nell'uso pratico, incolla qui il blocco "const datiDocentiCDC = { ... }" dal file precedente.
+         const datiDocentiCDC = {
+               "3ITETS": [ // Mappato da 3ITETS
+                 { nome: "DENORA MARCO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "si" },
+                 { nome: "CANTALICE GABRIELLA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MARZOCCA MICHELE", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "PAPARELLA LUIGI", materia: "ITP ELETTROTECNICA ED ELETTRONICA, SISTEMI AUTOMATICI, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "QUINTAVALLE SILVANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "VERNONE DANIELA", materia: "ELETTROTECNICA ED ELETTRONICA, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                             ],
+             "4ITETS": [ // Mappato da 4ITETS
+                 { nome: "CANTALICE GABRIELLA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DENORA MARCO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "si" },
+		 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "GASSINO GIOVANNI", materia: "ELETTROTECNICA ED ELETTRONICA, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "PAPARELLA LUIGI", materia: "ITP SISTEMI AUTOMATICI, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "si" },
+                 { nome: "QUINTAVALLE SILVANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "VERNONE DANIELA", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 
+            ]
+
+        };
+        // --- FINE DATI DOCENTI ---
+
+
+// Funzione per sincronizzare il nome del Coordinatore nel punto 5 (Ed. Civica)
+function sincronizzaCoordinatoreEdCivica() {
+    const coordInput = document.getElementById('coordinatoreNome');
+    const targetSpan = document.getElementById('coordEdCivicaNome');
+    
+    if (coordInput && targetSpan) {
+        // Se c'è un nome, usalo, altrimenti metti la linea
+        targetSpan.textContent = coordInput.value.trim() || '_________________';
+    }
+}
+function getSelectAlunniHTML() {
+        const selectClasse = document.getElementById('selectClasse');
+        const classe = selectClasse ? selectClasse.value : "";
+        const listaAlunni = datiAlunni[classe] || []; 
+
+        if (listaAlunni.length > 0) {
+            let options = `<option value="">Seleziona studente...</option>`;
+            listaAlunni.forEach(alunno => {
+                options += `<option value="${alunno}">${alunno}</option>`;
+            });
+            return `<select class="form-input-table-dynamic w-full font-bold" style="background-color: white;">${options}</select>`;
+        } else {
+            // Se non ci sono alunni nel DB per questa classe, mostra la casella di testo normale
+            return `<textarea class="form-input-table-dynamic font-bold" placeholder="Cognome e Nome studente..."></textarea>`;
+        }
+    }
+function aggiornaTabellaAssenze() {
+    const tbody = document.getElementById('assenze-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = ''; // Svuota la tabella
+    addAssenzeStudente(); // Aggiunge la prima riga con il nuovo menu alunni
+}
+// Funzione per popolare i Tutor nel Punto 7
+function popolaTutorOrientamento() {
+    const selectClasse = document.getElementById('selectClasse');
+    const container = document.getElementById('tutor-orientamento-container');
+    const sezioneAnalisi = document.getElementById('box-attivita-orientamento'); 
+    
+    if (!selectClasse || !container) return;
+
+    const classeSelezionata = selectClasse.value;
+    const anno = classeSelezionata.charAt(0);
+    
+    container.innerHTML = ''; 
+
+    // Se è biennio nasconde e mette la frase standard
+    if (anno === "1" || anno === "2") {
+        container.style.display = 'block';
+        container.className = "mb-4 p-4 bg-gray-100 border rounded italic text-gray-600";
+        container.innerHTML = `<p>Il punto non viene discusso in quanto non sono previste attività di orientamento specifiche per le classi del biennio.</p>`;
+        if (sezioneAnalisi) sezioneAnalisi.style.display = 'none';
+        return;
+    }
+
+    // Se è triennio mostra i tutor
+    if (sezioneAnalisi) sezioneAnalisi.style.display = 'block';
+    
+    const tutors = datiTutorOrientamento[classeSelezionata];
+
+    if (tutors && tutors.length > 0) {
+        container.style.display = 'block';
+        container.className = "mb-4 space-y-2 bg-yellow-50 p-3 rounded border border-yellow-200";
+        
+        const header = document.createElement('div');
+        header.className = "text-sm font-bold text-gray-700 mb-2";
+        header.innerText = "Docenti Tutor Orientamento:";
+        container.appendChild(header);
+
+        tutors.forEach((tutorObj, index) => {
+            // Gestisce anche se per sbaglio il formato è rimasto a stringa nel file
+            const isOldFormat = typeof tutorObj === 'string';
+            const nomeTutor = isOldFormat ? tutorObj : tutorObj.nome;
+            const infoTutor = isOldFormat ? undefined : tutorObj.info;
+
+            const row = document.createElement('div');
+            row.className = "flex flex-col mb-2 bg-white p-2 rounded border border-gray-200";
+            
+            // LA TUA MODIFICA: La label appare SOLO se ci sono 2 o più tutor e c'è l'informazione
+            let infoHtml = "";
+            if (tutors.length >= 2 && infoTutor) {
+                infoHtml = `<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase mb-1 w-fit border border-blue-200 shadow-sm">
+                                ${infoTutor}
+                            </span>`;
+            }
+
+            // Struttura HTML della riga: prima la label (se esiste), poi l'input col nome
+            row.innerHTML = `
+                ${infoHtml}
+                <div class="flex items-center space-x-2">
+                    <span class="font-semibold text-sm w-16">Tutor ${index + 1}:</span>
+                    <input type="text" class="form-input flex-grow font-semibold" value="${nomeTutor}">
+                    <div class="flex items-center ml-2 border-l pl-2">
+                        <input type="checkbox" class="form-checkbox h-5 w-5">
+                        <label class="text-sm ml-1 font-semibold">Assente</label>
+                    </div>
+                </div>`;
+            container.appendChild(row);
+        });
+    } else {
+        container.style.display = 'none';
+    }
+}   // --- FINE DATI DOCENTI ---
+
+        // --- FUNZIONI UTILITY ---
+
+        function autoResizeTextarea(textarea) {
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    // Usiamo Math.max per garantire un'altezza minima
+    textarea.style.height = Math.max(textarea.scrollHeight, 38) + 'px';
+}
+
+        function onTextareaInput() {
+            autoResizeTextarea(this);
+        }
+
+        function initAutoResize() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.removeEventListener('input', onTextareaInput); 
+                textarea.addEventListener('input', onTextareaInput);
+                autoResizeTextarea(textarea);
+            });
+        }
+
+        function removeDynamicRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        // --- FUNZIONI SPECIFICHE APRILE ---
+
+       
+        // Punto 2: Libri
+function addLibroRow() {
+    const tbody = document.getElementById('libri-tbody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Materia"></textarea></td>
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Autore / Titolo / ISBN"></textarea></td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    // Applica auto-resize
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+
+       // --- NUOVE FUNZIONI PER TABELLA RECUPERO (PUNTO 3) ---
+
+// --- NUOVE FUNZIONI PER TABELLA RECUPERO (PUNTO 3 - FIX ALLINEAMENTO) ---
+
+// --- CONFIGURAZIONE MATERIE PER ANNO E INDIRIZZO ---
+const materieRecuperoDB = {
+ 
+    "ITET": [ // TRIENNIO ITET (ELETTROTECNICA)
+        "Lingua e Letteratura italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica e complementi di Matematica",
+        "Elettrotecnica ed elettronica",
+        "Sistemi automatici per apparati elettronici",
+        "Tecnologie e progettazione di sistemi elettrici ed elettronici",
+        "Ed. Civica"
+    ]
+
+};
+
+// Funzione Helper per decidere se mostrare Select o Textarea
+function getCampoDisciplinaHTML() {
+    const selectClasse = document.getElementById('selectClasse');
+    const classe = selectClasse ? selectClasse.value : "";
+    const anno = classe.charAt(0); // Prende il primo carattere (es. "1" da "1A")
+    
+    let listaMaterie = null;
+
+    // Logica di selezione della lista in base alla priorità
+    if (anno === "1") {
+        listaMaterie = materieRecuperoDB["1"];
+    } else if (anno === "2") {
+        listaMaterie = materieRecuperoDB["2"];
+    } else if (classe.includes("ITCM")) {
+        listaMaterie = materieRecuperoDB["ITCM"];
+    } else if (classe.includes("ITEC")) {
+        listaMaterie = materieRecuperoDB["ITEC"];
+    } else if (classe.includes("ITET")) {
+        listaMaterie = materieRecuperoDB["ITET"];
+    } else if (classe.includes("ITCA")) {
+        listaMaterie = materieRecuperoDB["ITCA"]; // Nuova condizione per ITCA
+    } else if (classe.includes("ITIA")) {
+        // Controllo specifico per ITIA: distingue 5^ da 3^ e 4^
+        if (anno === "5") {
+            listaMaterie = materieRecuperoDB["ITIA_5"];
+        } else {
+            listaMaterie = materieRecuperoDB["ITIA_34"];
+        }
+    }
+
+    if (listaMaterie) {
+        // Se abbiamo trovato una lista, costruisce la SELECT
+        let options = `<option value="">Seleziona materia...</option>`;
+        listaMaterie.forEach(materia => {
+            options += `<option value="${materia}">${materia}</option>`;
+        });
+        return `<select class="form-input-table-dynamic w-full" style="background-color: white;">${options}</select>`;
+    } else {
+        // Altrimenti (es. classi non mappate) ritorna TEXTAREA libera
+        return `<textarea class="form-input-table-dynamic w-full" placeholder="Disciplina"></textarea>`;
+    }
+}
+
+// --- NUOVE FUNZIONI PER TABELLA RECUPERO ---
+
+// 1. Aggiunge un nuovo Alunno (AGGIORNATA CON MENU ALUNNI)
+function addStudenteBlock() {
+    const table = document.getElementById('main-recupero-table');
+    const tfoot = table.querySelector('tfoot');
+    
+    const campoDisciplina = getCampoDisciplinaHTML();
+    const campoAlunno = getSelectAlunniHTML();
+
+    const newTbody = document.createElement('tbody');
+    newTbody.className = "border-b-2 border-gray-400 group-studente bg-white"; 
+
+    newTbody.innerHTML = `
+        <tr>
+            <td class="border-r border-gray-300 p-2" rowspan="1">
+                ${campoAlunno}
+                <div class="mt-2 no-print">
+                    <button onclick="addMateriaToStudente(this)" class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded w-full mb-1 shadow-sm transition duration-150">
+                        + Aggiungi Materia
+                    </button>
+                </div>
+            </td>
+            
+            <td class="border-r border-gray-300 p-1">
+                ${campoDisciplina}
+            </td>
+            
+            <td class="border-r border-gray-300 p-1 text-center">
+                <select class="form-input-table w-full text-center bg-transparent">
+                    <option value="">-</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                </select>
+            </td>
+            
+            <td class="border-r border-gray-300 p-1 text-center">
+                <input type="text" class="form-input-table w-full text-center" maxlength="4">
+            </td>
+            
+            <td class="p-1 text-center no-print align-middle">
+                <button onclick="removeStudenteBlock(this)" class="bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-3 rounded shadow">
+                    Elimina Studente
+                </button>
+            </td>
+        </tr>
+    `;
+    
+    table.insertBefore(newTbody, tfoot);
+    
+    setTimeout(() => {
+        newTbody.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+// 2. Aggiunge una Materia allo stesso Alunno
+function addMateriaToStudente(btn) {
+    const tbody = btn.closest('tbody');
+    const firstRow = tbody.querySelector('tr');
+    const nameCell = firstRow.cells[0];
+    
+    const campoDisciplina = getCampoDisciplinaHTML();
+
+    let currentSpan = parseInt(nameCell.getAttribute('rowspan') || 1);
+    nameCell.setAttribute('rowspan', currentSpan + 1);
+    
+    const newRow = document.createElement('tr');
+    newRow.className = "border-t border-gray-200"; 
+    
+    newRow.innerHTML = `
+        <td class="border-r border-gray-300 p-1 align-top">
+            ${campoDisciplina}
+        </td>
+        
+        <td class="border-r border-gray-300 p-1 align-top text-center">
+            <select class="form-input-table w-full text-center bg-transparent">
+                <option value="">-</option>
+                <option value="SI">SI</option>
+                <option value="NO">NO</option>
+            </select>
+        </td>
+        
+        <td class="border-r border-gray-300 p-1 align-top text-center">
+            <input type="text" class="form-input-table w-full text-center" maxlength="4">
+        </td>
+        
+        <td class="p-1 text-center no-print align-middle">
+            <button onclick="removeMateriaRow(this)" class="bg-red-100 text-red-700 hover:bg-red-200 border border-red-300 text-xs py-1 px-2 rounded">
+                Rimuovi Materia
+            </button>
+        </td>
+    `;
+    
+    tbody.appendChild(newRow);
+    
+    newRow.querySelectorAll('textarea').forEach(t => {
+        t.addEventListener('input', onTextareaInput);
+        autoResizeTextarea(t);
+    });
+}
+
+// 3. Rimuove l'intero blocco studente
+function removeStudenteBlock(btn) {
+    if(confirm("Vuoi eliminare questo studente e tutte le sue materie?")) {
+        const tbody = btn.closest('tbody');
+        tbody.remove();
+    }
+}
+
+// 4. Rimuove solo una riga materia
+function removeMateriaRow(btn) {
+    const row = btn.closest('tr');
+    const tbody = row.closest('tbody');
+    const nameCell = tbody.querySelector('tr').cells[0]; 
+    
+    let currentSpan = parseInt(nameCell.getAttribute('rowspan'));
+    nameCell.setAttribute('rowspan', currentSpan - 1);
+    
+    row.remove();
+}
+// Punto 4: PDP (AGGIORNATA CON MENU ALUNNI)
+function addPDPRow() {
+    const tbody = document.getElementById('pdp-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Richiama il menu a tendina degli alunni basato sulla classe selezionata
+    const campoAlunno = getSelectAlunniHTML(); 
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1">
+            ${campoAlunno} 
+        </td>
+        <td class="border border-gray-300 p-1">
+            <textarea class="form-input-table-dynamic" placeholder="Es. Stesura Nuovo / Revisione..."></textarea>
+        </td>
+        <td class="border border-gray-300 p-1 text-center">
+            <select class="form-input-table w-full text-center bg-transparent">
+                <option value="">-</option>
+                <option value="Unanimità">Unanimità</option>
+                <option value="A maggioranza">A Maggioranza</option>
+		<option value="Non Approvato">Non Approvato</option>
+            </select>
+        </td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    // Attiva l'auto-ridimensionamento per le textarea appena create
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}        
+// Punto 5: Ed Civica (Materie 2° quad)
+       // --- NUOVE FUNZIONI PER ED. CIVICA (PUNTO 5) ---
+
+// 1. Funzione Helper per generare il menu materie di Ed. Civica
+function getCampoMateriaEdCivicaHTML() {
+    const selectClasse = document.getElementById('selectClasse');
+    const classe = selectClasse ? selectClasse.value : "";
+    const anno = classe.charAt(0); // Es. "1", "4", "5"
+
+    let listaMaterie = [];
+
+    // Recupera la lista base usando la stessa logica dei recuperi
+    if (anno === "1") listaMaterie = materieRecuperoDB["1"];
+    else if (anno === "2") listaMaterie = materieRecuperoDB["2"];
+    else if (classe.includes("ITCM")) listaMaterie = materieRecuperoDB["ITCM"];
+    else if (classe.includes("ITEC")) listaMaterie = materieRecuperoDB["ITEC"];
+    else if (classe.includes("ITET")) listaMaterie = materieRecuperoDB["ITET"];
+    else if (classe.includes("ITCA")) listaMaterie = materieRecuperoDB["ITCA"];
+    else if (classe.includes("ITIA")) {
+        if (anno === "5") listaMaterie = materieRecuperoDB["ITIA_5"];
+        else listaMaterie = materieRecuperoDB["ITIA_34"];
+    }
+
+    // Se abbiamo una lista, la filtriamo e modifichiamo
+    if (listaMaterie && listaMaterie.length > 0) {
+        // Clona la lista per non modificare l'originale
+        let opzioni = [...listaMaterie];
+
+        // 1. RIMUOVI "Ed. Civica"
+        opzioni = opzioni.filter(m => m !== "Ed. Civica");
+
+        // 2. AGGIUNGI "Diritto-Potenziamento" SOLO per Quarte e Quinte
+        if (anno === "4" || anno === "5") {
+            opzioni.push("Diritto-Potenziamento");
+        }
+
+        // Costruisci il menu a tendina
+        let htmlOptions = `<option value="">Seleziona materia...</option>`;
+        opzioni.forEach(m => {
+            htmlOptions += `<option value="${m}">${m}</option>`;
+        });
+        return `<select class="form-input-table-dynamic w-full" style="background-color: white;">${htmlOptions}</select>`;
+    } else {
+        // Fallback: casella di testo se nessuna classe è selezionata
+        return `<textarea class="form-input-table-dynamic" placeholder="Materia"></textarea>`;
+    }
+}
+
+// 2. Funzione per aggiungere una riga (Aggiornata con il menu)
+function addEdCivicaRow() {
+    const tbody = document.getElementById('edcivica-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Genera il campo corretto (Menu o Textarea)
+    const campoMateria = getCampoMateriaEdCivicaHTML();
+
+    newRow.innerHTML = `
+    <td class="border border-gray-300 p-1">
+        ${campoMateria}
+    </td>
+    <td class="border border-gray-300 p-1">
+        <input type="number" class="form-input-table w-full text-center" value="0" min="0">
+    </td>
+    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Attività prevista"></textarea></td>
+    <td class="border border-gray-300 p-1 text-center no-print align-middle">
+        <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+    </td>
+`;
+    tbody.appendChild(newRow);
+    
+    // Applica auto-resize solo alle textarea (non al select)
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+
+// 3. Funzione per aggiornare la tabella quando cambi classe
+function aggiornaTabellaEdCivica() {
+    const tbody = document.getElementById('edcivica-tbody');
+    if (!tbody) return;
+    
+    // Svuota la tabella e aggiunge una nuova riga con le opzioni corrette
+    tbody.innerHTML = '';
+    addEdCivicaRow();
+}
+
+
+function aggiornaTabellaPDP() {
+    const tbody = document.getElementById('pdp-tbody');
+    if (!tbody) return;
+    // Svuota la tabella e ricrea la prima riga (che ora leggerà la classe e metterà il menu)
+    tbody.innerHTML = '';
+    addPDPRow();
+}
+
+function aggiornaTabellaDisciplinare() {
+    const tbody = document.getElementById('disciplinari-tbody');
+    if (!tbody) return;
+    // Svuota la tabella e ricrea la prima riga
+    tbody.innerHTML = '';
+    addDisciplinareRow();
+}
+
+        // Punto 6: Disciplinare (AGGIORNATA CON MENU ALUNNI)
+function addDisciplinareRow() {
+    const tbody = document.getElementById('disciplinari-tbody');
+    const newRow = document.createElement('tr');
+    
+    // QUI RICHIAMIAMO IL MENU A TENDINA DEGLI ALUNNI
+    const campoAlunno = getSelectAlunniHTML();
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1">
+            ${campoAlunno}
+        </td>
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Provvedimento adottato..."></textarea></td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+        // --- FUNZIONI CORE (ODG Dinamico, Rappresentanti, Docenti) ---
+// --- FUNZIONI CORE (ODG Dinamico, Rappresentanti, Docenti) ---
+
+function updateAllNumbering() {
+    const dynamicList = document.getElementById('dynamic-odg-list');
+    let currentNum = 5; // I primi 4 punti sono fissi
+    
+    // 1. Ricalcola i numeri dei punti dinamici
+    if (dynamicList) {
+        Array.from(dynamicList.children).forEach(odgDiv => {
+            const pointId = odgDiv.id.replace('odg-item-', '');
+            
+            // Aggiorna l'etichetta numerica nell'elenco O.d.g.
+            const label = odgDiv.querySelector('label');
+            if (label) label.textContent = currentNum + '.';
+            
+            // Aggiorna l'etichetta nello svolgimento
+            const titleElement = document.getElementById(`svolgimento-title-${pointId}`);
+            const inputElement = odgDiv.querySelector('input');
+            if (titleElement && inputElement) {
+                titleElement.textContent = `${currentNum}. ${inputElement.value || '...'}`;
+            }
+            
+            // Aggiorna il placeholder della textarea per coerenza
+            const svolgimentoDiv = document.getElementById(`svolgimento-point-${pointId}`);
+            if (svolgimentoDiv) {
+                const textarea = svolgimentoDiv.querySelector('textarea');
+                if (textarea) textarea.placeholder = `Discussione punto ${currentNum}...`;
+            }
+            
+            currentNum++;
+        });
+    }
+
+    // 2. Aggiorna in tempo reale i punti statici finali (Genitori e Libri)
+    const elOdgAndamento = document.getElementById('odg-num-andamento');
+    if (elOdgAndamento) elOdgAndamento.textContent = currentNum;
+    const elTitoloAndamento = document.getElementById('titolo-num-andamento');
+    if (elTitoloAndamento) elTitoloAndamento.textContent = currentNum;
+    
+    const elOdgLibri = document.getElementById('odg-num-libri');
+    if (elOdgLibri) elOdgLibri.textContent = currentNum + 1;
+    const elTitoloLibri = document.getElementById('titolo-num-libri');
+    if (elTitoloLibri) elTitoloLibri.textContent = currentNum + 1;
+}
+
+function addDynamicOdgPoint() {
+    const odgList = document.getElementById('dynamic-odg-list');
+    const svolgimentoPoints = document.getElementById('dynamic-svolgimento-points');
+    const uniqueId = nextOdgPoint++; 
+    
+    const odgDiv = document.createElement('div');
+    odgDiv.id = `odg-item-${uniqueId}`;
+    odgDiv.className = 'flex items-center space-x-2';
+    odgDiv.innerHTML = `
+        <label class="font-semibold"></label>
+        <input type="text" class="form-input flex-grow text-sm" placeholder="Titolo punto O.d.g..." oninput="updateAllNumbering()">
+        <button type="button" onclick="removeDynamicOdgPoint(${uniqueId})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg no-print">Rimuovi</button>
+    `;
+    odgList.appendChild(odgDiv);
+
+    const svolgimentoDiv = document.createElement('div');
+    svolgimentoDiv.id = `svolgimento-point-${uniqueId}`;
+    svolgimentoDiv.innerHTML = ` 
+        <h3 id="svolgimento-title-${uniqueId}" class="text-md font-semibold text-gray-800 mb-2 uppercase"></h3>
+        <textarea class="form-textarea"></textarea>
+    `;
+    svolgimentoPoints.appendChild(svolgimentoDiv);
+    
+    initAutoResize();
+    updateAllNumbering(); // Ricalcola tutto subito
+}
+
+function removeDynamicOdgPoint(uniqueId) {
+    document.getElementById(`odg-item-${uniqueId}`)?.remove();
+    document.getElementById(`svolgimento-point-${uniqueId}`)?.remove();
+    updateAllNumbering(); // Ricalcola tutto stringendo i buchi
+}
+       
+function popolaRappresentanti() {
+    let classeSelezionata = document.getElementById('selectClasse').value;
+    const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+    const reps = datiRappresentanti[classeEffettiva];
+
+    const campiStudenti = ['studenteNome1', 'studenteNome2', 'studenteNome3'];
+    const checkboxStudenti = ['studenteAssente1', 'studenteAssente2', 'studenteAssente3'];
+
+    campiStudenti.forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (el) {
+            // Prende il nome dall'array studenti se esiste, altrimenti svuota
+            el.value = (reps && reps.studenti && reps.studenti[idx]) ? reps.studenti[idx] : '';
+        }
+    });
+
+    checkboxStudenti.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = false;
+    });
+}
+        // --- FINE NUOVA FUNZIONE POPOLA RAPPRESENTANTI ---
+
+// Funzione per aggiornare la tabella recupero quando cambia la classe
+function aggiornaTabellaRecupero() {
+    const table = document.getElementById('main-recupero-table');
+    if (!table) return;
+
+    // Rimuove tutti i blocchi studenti esistenti
+    table.querySelectorAll('tbody').forEach(tbody => tbody.remove());
+    
+    // Aggiunge un nuovo blocco vuoto che ora leggerà la classe corretta
+    addStudenteBlock();
+}
+        // --- INIZIO NUOVA LOGICA POPOLAMENTO DOCENTI (SENZA ROWSPAN PER FIX STAMPA) ---
+        function popolaTabellaDocenti() {
+            let classeSelezionata = document.getElementById('selectClasse').value;
+            const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+
+            const tbody = document.getElementById('docenti-tbody');
+            const rigaCoordinatore = document.getElementById('coordinatore-row');
+
+            // 1. Pulisci le righe esistenti dei docenti C.d.C (tranne coordinatore)
+            const righeDocentiAttuali = tbody.querySelectorAll('tr:not(#coordinatore-row)');
+            righeDocentiAttuali.forEach(row => row.remove());
+
+            // 2. Recupera dati docenti
+            const docentiClasse = datiDocentiCDC[classeEffettiva] || [];
+            
+            let coordinatore = null;
+            const altriDocenti = [];
+            
+            docentiClasse.forEach(doc => {
+                 let cleanMateria = doc.materia ? doc.materia.trim() : 'N/D';
+                 let cleanNome = doc.nome ? doc.nome.trim() : 'N/D';
+                 let isCoord = doc.coordinatore ? doc.coordinatore.trim().toLowerCase() === 'si' : false;
+
+                if (isCoord && !coordinatore) {
+                    coordinatore = { nome: cleanNome, materia: cleanMateria };
+                } else {
+                    altriDocenti.push({ nome: cleanNome, materia: cleanMateria });
+                }
+            });
+
+             // Ordina per cognome
+             altriDocenti.sort((a, b) => a.nome.localeCompare(b.nome));
+
+            // 3. Popola Coordinatore
+            const coordDisciplinaTextarea = document.getElementById('coordinatoreDisciplina');
+            const coordNomeTextarea = document.getElementById('coordinatoreNome');
+            if (coordinatore) {
+                coordDisciplinaTextarea.value = coordinatore.materia;
+                coordNomeTextarea.value = coordinatore.nome;
+            } else {
+                coordDisciplinaTextarea.value = '';
+                coordNomeTextarea.value = '';
+                coordDisciplinaTextarea.placeholder = 'Disciplina...';
+                coordNomeTextarea.placeholder = 'Cognome e Nome...';
+            }
+            // Reset checkbox coordinatore
+            const coordCheckbox = rigaCoordinatore.querySelector('.form-checkbox');
+            if(coordCheckbox) coordCheckbox.checked = false;
+
+            // 4. Popola gli altri docenti (SENZA ROWSPAN)
+            altriDocenti.forEach((doc, index) => {
+                const newRow = document.createElement('tr');
+                
+                // Determina cosa scrivere nella prima colonna
+                // Scriviamo "DOCENTI C.D.C" solo nella prima riga, ma la cella esiste fisicamente in tutte
+                let labelCella = (index === 0) ? '<strong>DOCENTI C.D.C</strong>' : '';
+                
+                // Nota: Usiamo border-t-0 sulle righe successive per simulare visivamente l'unione, 
+                // ma manteniamo l'integrità strutturale per la stampa.
+                // Tuttavia, per semplicità e robustezza in stampa, usiamo bordi standard.
+                
+                newRow.innerHTML = `
+                    <td class="border border-gray-300 p-2 align-top text-xs">${labelCella}</td>
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic">${doc.materia}</textarea></td>
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" oninput="aggiornaOpzioniSegretario();">${doc.nome}</textarea></td>
+                    <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                    <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                        <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+
+                // Auto-resize
+                newRow.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.removeEventListener('input', onTextareaInput);
+                    textarea.addEventListener('input', onTextareaInput);
+                });
+            });
+
+            // Aggiornamenti finali
+            aggiornaPresidente();
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+            aggiornaOpzioniPresidenteDelegato();
+            sincronizzaCoordinatoreEdCivica();
+
+            setTimeout(() => {
+                document.querySelectorAll('#docenti-tbody .form-input-table-dynamic').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+            }, 0);
+        }
+
+        // Funzione per aggiungere MANUALE una riga docente (SEMPLIFICATA)
+        function addDocenteManuale() { 
+            const tbody = document.getElementById('docenti-tbody');
+            // Conta quante righe docenti ci sono già (escluso coordinatore)
+            const righeDocenti = tbody.querySelectorAll('tr:not(#coordinatore-row)');
+            
+            const newRow = document.createElement('tr');
+            
+            // Se è la prima riga aggiunta, metti l'etichetta
+            let labelCella = (righeDocenti.length === 0) ? '<strong>DOCENTI C.D.C</strong>' : '';
+
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-2 align-top text-xs">${labelCella}</td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..."></textarea></td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." oninput="aggiornaOpzioniSegretario();"></textarea></td>
+                <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput); 
+                 textarea.addEventListener('input', onTextareaInput);
+            });
+
+            aggiornaOpzioniSegretario();
+        }
+
+        // Funzione per rimuovere una riga docente (SEMPLIFICATA)
+        function removeDocente(button) {
+            const rowToRemove = button.closest('tr');
+            const tbody = document.getElementById('docenti-tbody');
+            
+            // Controlla se stiamo rimuovendo la PRIMA riga che contiene l'etichetta
+            const primaCella = rowToRemove.cells[0];
+            const haEtichetta = primaCella.innerHTML.includes('DOCENTI C.D.C');
+            
+            const nextRow = rowToRemove.nextElementSibling;
+            
+            // Rimuovi la riga
+            rowToRemove.remove();
+
+            // Se abbiamo rimosso la riga con l'etichetta, e c'è una riga successiva,
+            // spostiamo l'etichetta su quella successiva
+            if (haEtichetta && nextRow && nextRow.id !== 'coordinatore-row') {
+                nextRow.cells[0].innerHTML = '<strong>DOCENTI C.D.C</strong>';
+            }
+
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+            aggiornaOpzioniPresidenteDelegato();
+        }
+        // --- FINE NUOVA LOGICA POPOLAMENTO DOCENTI ---
+
+        // LOGICA FIRME E NOMI
+        function aggiornaPresidente() {
+            const select = document.getElementById('selectPresidente');
+            const menuDelegato = document.getElementById('selectPresidenteDelegato');
+            const campoAltro = document.getElementById('presidenteAltroNome');
+            const oldInput = document.getElementById('presidenteNomeInput');
+
+            if (select.value.includes("delegato")) {
+                menuDelegato.style.display = 'inline-block';
+                oldInput.style.display = 'none';
+                if(menuDelegato.value === '_altro_') campoAltro.style.display = 'inline-block';
+                else campoAltro.style.display = 'none';
+            } else {
+                menuDelegato.style.display = 'none';
+                campoAltro.style.display = 'none';
+                oldInput.style.display = 'none';
+            }
+            aggiornaFirmaPresidente();
+        }
+
+        function aggiornaOpzioniSegretario() {
+            const select = document.getElementById('selectSegretario');
+            const selectedValue = select.value;
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                if (opzioni[i].value !== "" && opzioni[i].value !== "_altro_") opzioni[i].remove();
+            }
+            const nomiDocenti = document.querySelectorAll('.docente-nome');
+            const altroOption = select.querySelector('option[value="_altro_"]');
+            const nomiUnici = new Set();
+            nomiDocenti.forEach(t => {
+                const nome = t.value.trim();
+                if (nome && !nomiUnici.has(nome)) {
+                    nomiUnici.add(nome);
+                    const opt = document.createElement('option');
+                    opt.value = nome; opt.textContent = nome;
+                    select.insertBefore(opt, altroOption);
+                }
+            });
+            select.value = selectedValue || "";
+            checkSegretarioAltro();
+        }
+
+        function checkSegretarioAltro() {
+            const select = document.getElementById('selectSegretario');
+            const input = document.getElementById('segretarioAltroNome');
+            input.style.display = select.value === '_altro_' ? 'inline-block' : 'none';
+            aggiornaFirmaSegretario();
+        }
+
+        function aggiornaFirmaSegretario() {
+            const select = document.getElementById('selectSegretario');
+            const input = document.getElementById('segretarioAltroNome');
+            const firma = document.getElementById('firmaSegretario');
+            let nome = select.value === '_altro_' ? input.value : select.value;
+            firma.textContent = nome.trim() || '...................................';
+        }
+
+        function aggiornaOpzioniPresidenteDelegato() {
+            const select = document.getElementById('selectPresidenteDelegato');
+            const selectedValue = select.value;
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                if (opzioni[i].value !== "" && opzioni[i].value !== "_altro_") opzioni[i].remove();
+            }
+            const nomiDocenti = document.querySelectorAll('.docente-nome');
+            const altroOption = select.querySelector('option[value="_altro_"]');
+            const nomiUnici = new Set();
+            nomiDocenti.forEach(t => {
+                const nome = t.value.trim();
+                if (nome && !nomiUnici.has(nome)) {
+                    nomiUnici.add(nome);
+                    const opt = document.createElement('option');
+                    opt.value = nome; opt.textContent = nome;
+                    select.insertBefore(opt, altroOption);
+                }
+            });
+            select.value = selectedValue || "";
+        }
+
+        function checkPresidenteDelegatoAltro() {
+             const select = document.getElementById('selectPresidenteDelegato');
+             const input = document.getElementById('presidenteAltroNome');
+             input.style.display = select.value === '_altro_' ? 'inline-block' : 'none';
+             aggiornaFirmaPresidente();
+        }
+
+        function aggiornaFirmaPresidente() {
+            const selectP = document.getElementById('selectPresidente');
+            const selectD = document.getElementById('selectPresidenteDelegato');
+            const input = document.getElementById('presidenteAltroNome');
+            const firma = document.getElementById('firmaPresidente');
+
+            if (selectP.value.includes("Castellana")) {
+                firma.textContent = "Prof.ssa Laura Castellana";
+            } else {
+                let nome = selectD.value === '_altro_' ? input.value : selectD.value;
+                firma.textContent = nome.trim() || '...................................';
+            }
+        }
+
+        function aggiornaCodiceRiunione() {
+             const classeSeleziona = document.getElementById('selectClasse');
+            if (!classeSeleziona) return; // Controllo di sicurezza
+            const classeSelezionata = classeSeleziona.value;
+            // Se la classe è '-', non mostrare un codice
+            const codice = (classeSelezionata === '-') ? '---' : 'cdc' + classeSelezionata;
+            const codiceRiunioneInput = document.getElementById('codiceRiunione');
+            if (codiceRiunioneInput) {
+                 codiceRiunioneInput.value = codice;
+            }
+        }
+
+        
+
+        function aggiornaOrarioChiusura() {
+            document.getElementById('orarioChiusura').value = document.getElementById('orarioFine').value;
+        }
+
+       function resetForm() {
+    document.querySelectorAll('input:not([type="button"]), textarea, select:not(#selectClasse)').forEach(el => {
+        if(el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+    });
+    
+    // Svuota le tabelle standard
+    document.getElementById('libri-tbody').innerHTML = '';
+    document.getElementById('pdp-tbody').innerHTML = '';
+    document.getElementById('edcivica-tbody').innerHTML = '';
+    document.getElementById('disciplinari-tbody').innerHTML = '';
+    
+    // FIX: Svuota correttamente la tabella recupero (che ora usa tbody multipli)
+    const tableRecupero = document.getElementById('main-recupero-table');
+    if (tableRecupero) {
+        tableRecupero.querySelectorAll('tbody').forEach(tbody => tbody.remove());
+    }
+    
+    // Reinizializza righe vuote
+    //addLibroRow();
+	addAssenzeStudente();
+    addStudenteBlock(); // FIX: Prima c'era addRecuperoRow() che non esiste più!
+    addPDPRow();
+    addEdCivicaRow();
+    //addDisciplinareRow();
+    
+    popolaTabellaDocenti();
+    popolaRappresentanti();
+}
+function addAssenzeStudente() {
+    const tbody = document.getElementById('assenze-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Recupera il menu a tendina degli alunni in base alla classe selezionata
+    const campoAlunno = getSelectAlunniHTML();
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-2 align-top">
+            <div class="flex flex-col space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Nome Studente</label>
+                    <div class="w-full">${campoAlunno}</div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Giorni/ore di assenza:</label>
+    <div class="flex items-center space-x-2">
+        <input type="number" class="form-input w-24 text-center" value="0" min="0">
+            </div>
+</div>
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Motivi/Certificati:</label>
+    <textarea class="form-input-table-dynamic" placeholder="Motivazioni..."></textarea>
+</div>
+            </div>
+        </td>
+        
+        <td class="border border-gray-300 p-2 align-top">
+            <div class="space-y-2">
+                <div class="flex items-start"> 
+                    <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                    <label class="text-sm whitespace-nowrap">Contattare lo studente <br/>o,se studente minorenne, la famiglia</label>
+                </div>
+                <div class="flex items-start">
+                    <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                    <label class="text-sm">Segnalazione ufficiale</label>
+                </div>
+                <div> 
+                    <div class="flex items-center">
+                        <input type="checkbox" class="form-checkbox mr-2">
+                        <label class="text-sm mr-1">Altro:</label>
+                    </div>
+                    <textarea class="form-input-table-dynamic w-full mt-1" placeholder="Specificare..." style="min-height: 30px;"></textarea>
+                </div>
+            </div>
+        </td>
+
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+
+    // Attiva il ridimensionamento automatico delle textarea
+    newRow.querySelectorAll('textarea').forEach(textarea => {
+         textarea.addEventListener('input', onTextareaInput);
+         autoResizeTextarea(textarea);
+    });
+}
+
+
+   // 1. FUNZIONE DI SALVATAGGIO POTENZIATA
+        function downloadHTML() {
+            const cloneDoc = document.documentElement.cloneNode(true);
+
+            // Sincronizza INPUT e CHECKBOX nel clone
+            const originalInputs = document.querySelectorAll('input');
+            const clonedInputs = cloneDoc.querySelectorAll('input');
+            originalInputs.forEach((orig, i) => {
+                if (orig.type === 'checkbox') {
+                    if (orig.checked) clonedInputs[i].setAttribute('checked', 'checked');
+                    else clonedInputs[i].removeAttribute('checked');
+                } else {
+                    clonedInputs[i].setAttribute('value', orig.value);
+                }
+            });
+
+            // Sincronizza TEXTAREA
+            const originalTextareas = document.querySelectorAll('textarea');
+            const clonedTextareas = cloneDoc.querySelectorAll('textarea');
+            originalTextareas.forEach((orig, i) => {
+                clonedTextareas[i].textContent = orig.value;
+            });
+
+            // Sincronizza SELECT
+            const originalSelects = document.querySelectorAll('select');
+            const clonedSelects = cloneDoc.querySelectorAll('select');
+            originalSelects.forEach((orig, i) => {
+                const selectedIndex = orig.selectedIndex;
+                const options = clonedSelects[i].querySelectorAll('option');
+                options.forEach((opt, j) => {
+                    if (j === selectedIndex) opt.setAttribute('selected', 'selected');
+                    else opt.removeAttribute('selected');
+                });
+            });
+
+            const htmlContent = '<!DOCTYPE html>\n' + cloneDoc.outerHTML;
+            const now = new Date();
+            const classeVal = document.getElementById('selectClasse').value || "Classe";
+            const fileName = `Verbale_Aprile_${classeVal}_${now.toISOString().slice(0, 10)}.html`;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            
+            setTimeout(() => URL.revokeObjectURL(link.href), 100);
+        }
+
+        // 2. INIT INTELLIGENTE (FIXATO)
+       // 2. INIT INTELLIGENTE (FIXATO PER IL SERALE)
+        window.addEventListener('DOMContentLoaded', () => {
+            const corpoDocenti = document.getElementById('docenti-tbody');
+            
+            // Popolamento Docenti e Rappresentanti
+            if (corpoDocenti && corpoDocenti.querySelectorAll('tr').length <= 1) {
+                popolaTabellaDocenti();
+                popolaRappresentanti();
+            }
+
+            // Inizializzazione Tabelle (Messa in sicurezza per evitare crash)
+            const pdpTbody = document.getElementById('pdp-tbody');
+            if (pdpTbody && pdpTbody.rows.length === 0) addPDPRow();
+
+            const edcivicaTbody = document.getElementById('edcivica-tbody');
+            if (edcivicaTbody && edcivicaTbody.rows.length === 0) addEdCivicaRow();
+
+            // Commentate perché nel Serale queste sezioni usano textarea libere, non tabelle
+            // const corpoLibri = document.getElementById('libri-tbody');
+            // if (corpoLibri && corpoLibri.querySelectorAll('tr').length === 0) addLibroRow();
+            // const disciplinariTbody = document.getElementById('disciplinari-tbody');
+            // if (disciplinariTbody && disciplinariTbody.rows.length === 0) addDisciplinareRow();
+            
+            // Forza l'apparizione della riga iniziale della Ratifica
+            const tabellaRecupero = document.getElementById('main-recupero-table');
+            if (tabellaRecupero && tabellaRecupero.querySelectorAll('tbody').length === 0) {
+                addStudenteBlock();
+            }
+            
+            const assenzeTbody = document.getElementById('assenze-tbody');
+            if (assenzeTbody && assenzeTbody.rows.length === 0) {
+                addAssenzeStudente();
+            }
+
+            // ATTIVAZIONE RIDIMENSIONAMENTO TEXTAREA (Statiche)
+            document.querySelectorAll('textarea').forEach(t => t.addEventListener('input', onTextareaInput));
+            
+            // ATTIVAZIONE RIDIMENSIONAMENTO TEXTAREA (Dinamiche)
+            document.body.addEventListener('input', function(e) {
+                if (e.target.tagName.toLowerCase() === 'textarea' || 
+                    e.target.classList.contains('form-input-table-dynamic') || 
+                    e.target.classList.contains('form-textarea')) {
+                    autoResizeTextarea(e.target);
+                }
+            });    
+            
+            initAutoResize();
+            
+            const selectClasseMenu = document.getElementById('selectClasse');
+            if (selectClasseMenu) {
+                selectClasseMenu.addEventListener('change', popolaTutorOrientamento);
+            }
+        });
+        
+        // 3. PRINT HANDLERS
+        window.addEventListener("beforeprint", () => {
+            document.querySelectorAll("textarea").forEach(el => {
+                let clone = el.nextElementSibling;
+                if (!clone || !clone.classList.contains("textarea-print")) {
+                    clone = document.createElement("div");
+                    clone.className = "textarea-print";
+                    el.insertAdjacentElement("afterend", clone);
+                }
+                clone.textContent = el.value || "";
+            });
+
+            document.querySelectorAll("select").forEach(el => {
+                let clone = el.nextElementSibling;
+                if (!clone || !clone.classList.contains("select-print")) {
+                    clone = document.createElement("div");
+                    clone.className = "select-print";
+                    el.insertAdjacentElement("afterend", clone);
+                }
+                const testoSelezionato = el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
+                clone.textContent = (testoSelezionato === "-" || testoSelezionato.includes("Seleziona")) ? "" : testoSelezionato;
+            });
+        });
+
+        window.addEventListener("afterprint", () => {
+            document.querySelectorAll(".textarea-print").forEach(el => el.remove());
+            document.querySelectorAll(".select-print").forEach(el => el.remove());
+        });
+    </script>
+</body>
+</html>

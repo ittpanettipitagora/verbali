@@ -1,0 +1,3038 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbale di Aprile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, td, textarea, .textarea-print, p {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* Stili di base e per i campi di input */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+        .form-input, .form-textarea, .form-input-table {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            transition: border-color 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .form-input-table {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        #docenti-table tbody td {
+            vertical-align: middle;
+            min-height: 30px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            line-height: 1.4;
+        }
+
+        .form-input-table-dynamic {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+            min-height: 38px; 
+    	    height: auto;      
+            overflow-y: hidden; 
+            resize: none;      
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .form-input-table-dynamic:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-input-table:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .form-textarea {
+            width: 100%;
+            min-height: 80px;
+            overflow-y: hidden;
+            resize: none;
+height:auto;
+             border: 1px solid #d1d5db;
+             border-radius: 0.375rem;
+             padding: 0.5rem 0.75rem;
+             transition: border-color 0.2s;
+             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+         
+
+        .form-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            vertical-align: middle;
+        }
+
+	/* Correzione specifica per i menu a tendina che tagliano il testo */
+select.form-input-table-dynamic {
+    height: auto !important;
+    min-height: 50px;      /* Aumentiamo il minimo per ospitare due righe comodamente */
+    line-height: 1.3;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    white-space: normal;   /* Forza il testo ad andare a capo */
+    display: block;
+    appearance: none;      /* Rende il design più pulito su alcuni browser */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1em;
+}
+/* Centra verticalmente il contenuto di tutte le celle della ratifica */
+#main-recupero-table td {
+    vertical-align: middle !important;
+    padding: 10px 5px !important;
+}
+
+/* Sistema il pulsante Aggiungi Materia per non creare troppo spazio vuoto */
+.group-studente .no-print {
+    margin-top: 5px !important;
+}
+
+/* Migliora la proporzione tra le colonne */
+#main-recupero-table th:nth-child(1), 
+#main-recupero-table td:nth-child(1) { 
+    width: 28% !important; 
+}
+
+#main-recupero-table th:nth-child(2), 
+#main-recupero-table td:nth-child(2) { 
+    width: 42% !important; 
+}
+
+/* Rendi il select dell'alunno più compatto a video */
+select.form-input-table-dynamic {
+    min-height: 38px !important; /* Ridotto leggermente per migliorare l'allineamento */
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* Allarghiamo la cella della materia nel monitoraggio Ed. Civica */
+#edcivica-tbody td:first-child {
+    width: 35% !important;
+}
+
+/* Assicuriamoci che le celle della tabella non blocchino l'altezza */
+.border-gray-300 {
+    height: auto;
+}
+
+#main-recupero-table td {
+    padding: 8px 4px !important;
+    vertical-align: middle !important;
+}
+
+        
+        @page {
+            size: A4;
+            margin: 1.5cm;
+            @top-left { content: ""; }
+            @top-center { content: ""; }
+            @top-right { content: ""; }
+            @bottom-left { content: ""; }
+            @bottom-center { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        /* --- STILI DI STAMPA CORRETTI --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                font-size: 11pt;
+            }
+            .no-print {
+                display: none!important;
+            }
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* CORREZIONE: Nascondi esplicitamente le textarea originali in stampa */
+            textarea, 
+            .form-input-table-dynamic, 
+            .form-textarea {
+                display: none !important;
+            }
+
+            /* Assicura che i cloni di stampa (generati via JS) siano visibili */
+            .textarea-print {
+                display: block !important;
+                white-space: pre-wrap;
+                font-family: inherit;
+                font-size: inherit;
+                width: 100%;
+            }
+
+            .form-input, .form-input-table, select {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: transparent !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                width: 100% !important;
+            }
+            
+            .form-checkbox {
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                border: 1px solid #000 !important;
+                background-color: transparent !important;
+                width: 1em !important;
+                height: 1em !important;
+                display: inline-block !important;
+                vertical-align: middle !important;
+                position: relative;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .form-checkbox:checked::after {
+                content: '\2714';
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.9em;
+                line-height: 1;
+                font-weight: bold;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+           select {
+        display: none !important;
+    }
+
+    /* MOSTRA IL TESTO GENERATO SOLO IN STAMPA */
+    .select-print {
+        display: block !important;
+        padding: 2px;
+        font-family: inherit;
+        font-size: inherit;
+        white-space: pre-wrap;
+    }
+             #segretarioAltroNome, #presidenteNomeInput, #presidenteAltroNome {
+                 display: none !important;
+             }
+           table {
+                page-break-inside: auto !important;
+                width: 100% !important;
+            }
+#docenti-table {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+            }
+            tr {
+                page-break-inside: avoid !important;
+                page-break-after: auto !important;
+            }
+thead {
+                display: table-header-group;
+            }
+            td, th {
+                 vertical-align: top;
+                 padding: 2px 4px !important;
+            }
+             #firmaSegretario, #firmaCoordinatore {
+                 min-height: 1.2em;
+             }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="no-print fixed top-4 right-4 z-50 flex space-x-2">
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Stampa / Salva PDF
+        </button>
+		<button onclick="downloadHTML()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+        Salva Modifiche (Editabile)
+    </button>
+        <button onclick="resetForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105">
+            Svuota Form
+        </button>
+    </div>
+
+    <div class="container max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-xl border border-gray-200">
+
+        <div class="text-center mb-6">
+            <h1 class="text-xl font-bold text-gray-800">I.T.T. “PANETTI - PITAGORA” – BARI</h1>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <strong>VERBALE N°:</strong>
+                <select id="verbaleNumero" class="form-input w-20">
+                    <option value="-">-</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+		    <option value="9">9</option>
+		    <option value="10">10</option>
+		    <option value="11">11</option>
+		    <option value="12">12</option>
+		    <option value="13">13</option>
+		    <option value="14">14</option>
+		    <option value="15">15</option>
+                </select>
+            </div>
+            <div>
+                <strong>DATA:</strong> <input type="date" class="form-input">
+            </div>
+        </div>
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <strong>ORARIO:</strong> dalle <input type="time" class="form-input w-28"> alle ore <input type="time" class="form-input w-28" id="orarioFine" oninput="aggiornaOrarioChiusura()">
+            </div>
+            <div>
+                <strong>Consiglio della classe:</strong>
+              <select id="selectClasse" class="form-input w-32" onchange="aggiornaCodiceRiunione(); popolaTabellaDocenti(); popolaRappresentanti(); aggiornaTabellaRecupero(); popolaTutorOrientamento(); aggiornaTabellaEdCivica(); aggiornaTabellaPDP();aggiornaTabellaAssenze();">
+                     <option value="-">-</option>
+                    <option value="1A">1A</option>
+                    <option value="1B">1B</option>
+                    <option value="1C">1C</option>
+                    <option value="1D">1D</option>
+                    <option value="1E">1E</option>
+                    <option value="1F">1F</option>
+                    <option value="1G">1G</option>
+                    <option value="1H">1H</option>
+                    <option value="1I">1I</option>
+                    <option value="1L">1L</option>
+                    <option value="2A">2A</option>
+                    <option value="2B">2B</option>
+                    <option value="2C">2C</option>
+                    <option value="2D">2D</option>
+                    <option value="2E">2E</option>
+                    <option value="2F">2F</option>
+                    <option value="2G">2G</option>
+                    <option value="2H">2H</option>
+                    <option value="2I">2I</option>
+                    <option value="3ITCAA">3ITCAA</option>
+                    <option value="3ITCAB">3ITCAB</option>
+                    <option value="3ITCM">3ITCM</option>
+                    <option value="3ITEC">3ITEC</option>
+                    <option value="3ITET">3ITET</option>
+                    <option value="3ITIAA">3ITIAA</option>
+                    <option value="3ITIAB">3ITIAB</option>
+                    <option value="3ITIAC">3ITIAC</option>
+                    <option value="4ITCAA">4ITCAA</option>
+                    <option value="4ITCAB">4ITCAB</option>
+                    <option value="4ITCM">4ITCM</option>
+                    <option value="4ITEC">4ITEC</option>
+                    <option value="4ITET">4ITET</option>
+                    <option value="4ITIAA">4ITIAA</option>
+                    <option value="4ITIAB">4ITIAB</option>
+                    <option value="4ITIAC">4ITIAC</option>
+                    <option value="5ITCAA">5ITCAA</option>
+                    <option value="5ITCAB">5ITCAB</option>
+                    <option value="5ITCM">5ITCM</option>
+                    <option value="5ITEC">5ITEC</option>
+                    <option value="5ITET">5ITET</option>
+                    <option value="5ITIAA">5ITIAA</option>
+                    <option value="5ITIAB">5ITIAB</option>
+                    <option value="5ITIAC">5ITIAC</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">Composizione C.d.C.</h2>
+
+            <table class="w-full border-collapse" id="docenti-table">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-300 p-2 text-left w-1/5 align-top">Composizione</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Disciplina</th>
+                        <th class="border border-gray-300 p-2 text-left w-2/5 align-top">Cognome e Nome</th>
+                        <th class="border border-gray-300 p-2 text-center align-top">Assente</th>
+                        <th class="border border-gray-300 p-2 text-center no-print w-16 align-top"></th>
+                    </tr>
+                </thead>
+                <tbody id="docenti-tbody">
+                    <tr id="coordinatore-row">
+                        <td class="border border-gray-300 p-2 font-semibold align-top">Docente coordinatore:</td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..." value="" id="coordinatoreDisciplina"></textarea></td>
+                        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." value="" id="coordinatoreNome" 
+    oninput="aggiornaPresidente(); aggiornaOpzioniSegretario(); aggiornaOpzioniPresidenteDelegato(); sincronizzaCoordinatoreEdCivica();">
+</textarea>
+                        <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                        <td class="border border-gray-300 p-1 text-center no-print"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="5" class="p-2">
+                            <button onclick="addDocenteManuale()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Docente Manuale
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 border-b pb-2">O.d.g.</h2>
+            <div class="text-sm space-y-1 text-gray-700">
+                <p><strong>PRIMA PARTE(25 MINUTI)</strong></p>
+                <p><strong>ALLA SOLA PRESENZA DEI DOCENTI</strong></p>
+		<p>1. Andamento didattico disciplinare, verifica della programmazione didattica e monitoraggio delle assenze degli studenti;</p>
+
+                <p>2. Ratifica degli esiti delle verifiche del recupero delle insufficienze certificate nello scrutinio del 1° quadrimestre;</p>
+                <p>3. Verifica ed eventuale revisione e/o nuova stesura di PDP;</p>
+                <p>4. Stato di avanzamento delle attività di Educazione civica e verifica della coerenza con la programmazione di classe;</p>
+                
+                <p>5. Monitoraggio delle attività di orientamento (ultimi 5 minuti con la presenza dei docenti tutor dell’orientamento);</p>
+
+                <div id="dynamic-odg-list" class="space-y-1 mt-2"></div>
+                <div class="mt-3 no-print">
+                    <button type="button" onclick="addDynamicOdgPoint()" class="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3 rounded-lg">
+                        + Aggiungi punto O.d.g.
+                    </button>
+                </div>
+            
+<br>
+		<p><strong>SECONDA PARTE(20 minuti)</strong></p>
+		<p><strong>CON GENITORI E STUDENTESSE E STUDENTI ELETTI </strong></p>
+               <p><span id="odg-num-andamento">6</span>. Informativa sull’andamento didattico-disciplinare della classe;</p>
+<p><span id="odg-num-libri">7</span>. Proposta adozione e/o riconferma libri di testo a.s. 2026/27;</p>
+                
+        </div>
+</div>
+
+        <div class="mb-6">
+            <p class="mb-2 flex items-center flex-wrap">
+                Presiede la riunione
+                <select class="form-input w-auto ml-2" id="selectPresidente" onchange="aggiornaPresidente()">
+                    <option value="la Dirigente Scolastica prof.ssa Laura Castellana">la Dirigente Scolastica prof.ssa Laura Castellana</option>
+                    <option value="il delegato dalla Dirigente prof./prof.ssa">il delegato dalla Dirigente prof./prof.ssa</option>
+                </select>
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectPresidenteDelegato" style="display:none;" onchange="checkPresidenteDelegatoAltro()">
+                    <option value="">Seleziona un docente...</option>
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="presidenteAltroNome" style="display:none;" oninput="aggiornaFirmaPresidente()">
+                <input type="text" class="form-input ml-2 flex-grow min-w-[16rem]" placeholder="Nome Coordinatore se delegato..." id="presidenteNomeInput" style="display:none;">
+            </p>
+            <p class="mb-2 flex items-center flex-wrap">
+                Funge da segretario/a il prof/la prof.ssa
+                <select class="form-input ml-2 flex-grow min-w-[16rem]" id="selectSegretario" onchange="checkSegretarioAltro(); aggiornaFirmaSegretario();">
+                    <option value="">Seleziona un docente...</option>
+                    <option value="_altro_">Altro...</option>
+                </select>
+                <input type="text" class="form-input w-auto ml-2 flex-grow min-w-[16rem]" placeholder="Cognome e Nome..." id="segretarioAltroNome" style="display:none;" oninput="aggiornaFirmaSegretario();">
+            </p>
+        </div>
+
+        <div class="mb-6 text-sm text-gray-600 space-y-1 italic">
+             <p>La convocazione, inviata a tutti i docenti con modalità mail il giorno XXX del mese di Marzo c.a, comunicato n. XXX, risulta essere consegnata a tutti, considerato che nessuno ha presentato reclamo relativamente alla mancata ricezione dello stesso. Contestualmente il nickname alla videoconferenza è stato allegato alla stessa.</p>
+		<p>Il codice riunione è il seguente: <input type="text" id="codiceRiunione" class="form-input w-32" placeholder="Codice..." value="cdc"></p>
+            <p>La stabilità di connessione e le misure di tutela dei dati personali sono garantite dal dominio “panettipitagora.edu.it"</p>
+
+            <p>Riconosciuta la validità della riunione, si passa alla discussione del punto all’ordine del giorno.</p>
+        </div>
+
+        
+
+        <hr class="my-8 border-t-2 border-gray-300">
+ <div class="mb-6">
+            <!-- MODIFICA: Numerazione aggiornata a 6 -->
+            <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">1. Andamento didattico disciplinare, verifica della programmazione didattica e monitoraggio delle assenze degli studenti</h3>
+<textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+            <p class="mb-2">Il coordinatore di classe, dopo aver analizzato il report estrapolato dal registro di classe sulle assenze dei singoli alunni, segnala al consiglio le seguenti criticità e propone le seguenti azioni:</p>
+
+            <table class="w-full border-collapse mb-4 text-sm mt-4">
+                 <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">Dettagli Studente/essa</th>
+                        <th class="border border-gray-300 p-2 text-left">Azioni</th>
+                        <th class="border border-gray-300 p-2 no-print w-16"></th>
+                    </tr>
+                </thead>
+                <tbody id="assenze-tbody">
+                    <!-- Righe Assenze aggiunte da JS -->
+                </tbody>
+                <tfoot class="no-print">
+                    <tr>
+                        <td colspan="3" class="p-2">
+                            <button onclick="addAssenzeStudente()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                                + Aggiungi Studente
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+	
+        
+
+        </div>
+     <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">2. Ratifica degli esiti delle verifiche del recupero delle insufficienze (1° Quadrimestre)</h3>
+    <p class="mb-2">Si procede con la ratifica degli esiti delle verifiche del recupero per ogni alunno nelle discipline in cui l’attività di recupero si è conclusa:</p>
+
+  <table class="w-full border-collapse mb-4 text-sm table-fixed border border-gray-300" id="main-recupero-table">
+    <thead>
+        <tr class="bg-gray-100 border-b border-gray-300">
+            <th class="border-r border-gray-300 p-2 text-left w-[25%]">Studente</th>
+            <th class="border-r border-gray-300 p-2 text-left w-[35%]">Disciplina da recuperare</th>
+            <th class="border-r border-gray-300 p-2 text-center w-[15%]">Recuperato<br>(SI/NO)</th>
+            <th class="border-r border-gray-300 p-2 text-center w-[10%]">Voto</th>
+            <th class="p-2 text-center no-print w-[15%]">Azioni</th>
+        </tr>
+    </thead>
+    
+    <tfoot class="no-print bg-gray-50 border-t border-gray-300">
+        <tr>
+            <td colspan="5" class="p-3 text-center">
+                <button onclick="addStudenteBlock()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow-md flex items-center justify-center mx-auto">
+                    <span class="text-xl mr-2 font-bold">+</span> Aggiungi Nuovo Studente
+                </button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+    <textarea class="form-textarea mt-4" placeholder="Specificare per quali discipline la ratifica è rimandata al prossimo consiglio (attività non terminate)..."></textarea>
+</div>
+        <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">3. Verifica ed eventuale revisione e/o nuova stesura di PDP</h3>
+    <p class="mb-2">Il consiglio di classe elabora o revisiona i PDP per i seguenti alunni:</p>
+
+    <table class="w-full border-collapse mb-4 text-sm mt-4">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 p-2 text-left w-1/3">Studente</th>
+                <th class="border border-gray-300 p-2 text-left">Tipo Intervento (Nuovo PDP / Revisione)</th>
+                <th class="border border-gray-300 p-2 text-center w-40">Approvato</th>
+                <th class="border border-gray-300 p-2 no-print w-16"></th>
+            </tr>
+        </thead>
+        <tbody id="pdp-tbody">
+        </tbody>
+        <tfoot class="no-print">
+            <tr>
+                <td colspan="4" class="p-2">
+                    <button onclick="addPDPRow()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                        + Aggiungi Studente PDP
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+</div>
+
+       <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">4. Stato di avanzamento delle attività di Educazione civica e verifica della coerenza con la programmazione di classe;</h3>
+    
+    <div class="mb-4 p-4 bg-gray-50 border rounded">
+        
+
+        <p class="mb-2">Nel primo quadrimestre sono state svolte in totale n. <input type="number" class="form-input w-20 text-center" value="0" min="0"> ore.</p>
+        <p class="mb-2">Per il secondo quadrimestre le materie coinvolte saranno:</p>
+        
+        <table class="w-full border-collapse mb-2 text-sm bg-white">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 p-2 text-left w-1/4">Materia</th>
+                    <th class="border border-gray-300 p-2 text-center w-20">Ore</th>
+                    <th class="border border-gray-300 p-2 text-left">Attività da svolgere</th>
+                    <th class="border border-gray-300 p-2 no-print w-16"></th>
+                </tr>
+            </thead>
+            <tbody id="edcivica-tbody">
+                </tbody>
+            <tfoot class="no-print">
+                <tr>
+                    <td colspan="4" class="p-2">
+                        <button onclick="addEdCivicaRow()" class="bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-lg">
+                            + Aggiungi Materia Ed. Civica
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <textarea class="form-textarea" placeholder="Inserire qui eventuali osservazioni"></textarea>
+     <div class="p-4 border rounded mt-4">
+         <h4 class="font-semibold text-sm mb-2">Verifica attività Orientamento (se pertinente in questo punto):</h4>
+         <textarea class="form-textarea" placeholder="Il Consiglio verifica le attività svolte (eventualmente comprese nelle UDA di Ed. Civica)..."></textarea>
+     </div>
+</div>
+
+       
+
+      <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase">5. Monitoraggio delle attività di orientamento</h3>
+    <p class="mb-2 font-semibold text-sm italic">(Ultimi 5 minuti con la presenza dei docenti tutor dell’orientamento)</p>
+    
+    <div id="tutor-orientamento-container" class="mb-4"></div>
+    
+    <div id="box-attivita-orientamento">
+        <div class="flex flex-wrap items-center mb-4">
+            <span class="mr-2">Alle ore <input type="time" class="form-input w-24"> raggiungono il Consiglio:</span>
+        </div>
+        <div class="bg-gray-50 p-4 border rounded mt-4">
+            <p class="mb-2"><strong>Analisi Piano Ore/Attività:</strong></p>
+            <textarea class="form-textarea mb-2" placeholder="Il Consiglio esamina il piano delle ore svolte..."></textarea>
+            <p class="mb-2"><strong>Attività previste per gli ultimi due mesi:</strong></p>
+            <textarea class="form-textarea" placeholder="Indicare attività in corso/conclusione..."></textarea>
+        </div>
+    </div>
+</div>
+
+        <div id="dynamic-svolgimento-points" class="space-y-6 mb-6"></div>
+<div class="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <p class="mb-4">All’incontro, nell'ora prevista nel suddetto comunicato (Ultimi 20 minuti), sono presenti:</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="font-semibold mb-3">Rappresentanti Genitori</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="genitoreNome1" class="form-input flex-grow" placeholder="Genitore 1">
+                            <input type="checkbox" id="genitoreAssente1" class="form-checkbox">
+                            <label class="text-sm">Assente</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="genitoreNome2" class="form-input flex-grow" placeholder="Genitore 2">
+                            <input type="checkbox" id="genitoreAssente2" class="form-checkbox">
+                            <label class="text-sm">Assente</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="font-semibold mb-3">Rappresentanti Studenti</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="studenteNome1" class="form-input flex-grow" placeholder="Studente 1">
+                            <input type="checkbox" id="studenteAssente1" class="form-checkbox">
+                            <label class="text-sm">Assente</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="studenteNome2" class="form-input flex-grow" placeholder="Studente 2">
+                            <input type="checkbox" id="studenteAssente2" class="form-checkbox">
+                            <label class="text-sm">Assente</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700">Inserire qui eventuali interventi dei Rappresentanti Genitori/Studenti</label>
+                <textarea class="form-textarea mt-1" placeholder="Argomentazioni studenti/genitori..."></textarea>
+            </div>
+            
+        </div>
+
+        <div class="mb-6">
+           <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase"><span id="titolo-num-andamento">6</span>. Informativa sull’andamento didattico-disciplinare della classe;</h3>
+            <textarea class="form-textarea" placeholder="Inserire qui la discussione sull'andamento didattico, UDA, FSL, CLIL e progetti in corso..."></textarea>
+        </div>
+
+        <div class="mb-6">
+    <h3 class="text-md font-semibold text-gray-800 mb-2 uppercase"><span id="titolo-num-libri">7</span>. Proposta adozione e/o riconferma libri di testo a.s. 2026/27</h3>
+    
+    
+       <textarea class="form-textarea" placeholder="Riportare qui eventuali nuove adozioni e/o riconferma dei libri di testo"></textarea>
+    
+    </div>
+        <div class="mb-6 mt-8 border-t pt-4">
+            <p>Alle ore <input type="time" class="form-input w-28" id="orarioChiusura"> terminata la trattazione degli argomenti, il Presidente dichiara sciolta la seduta.</p>
+        </div>
+
+        <div class="mt-12 pt-8 border-t">
+            <div class="flex justify-between">
+                <div class="text-center">
+                    <p class="mb-4">Il/la Docente verbalizzante</p>
+                    <p id="firmaSegretario">...................................</p>
+                </div>
+                <div class="text-center">
+                    <p class="mb-4">La Dirigente scolastica/Presidente</p>
+                   <p id="firmaPresidente">Prof.ssa Laura Castellana</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- CONFIGURAZIONE E DATI ---
+        let nextOdgPoint = 5; // I punti statici sono 7
+
+        // DATI RAPPRESENTANTI (Invariati)
+        const datiRappresentanti = {
+            "1A": { "genitori": ["CENTRONE IDA", "SIFANNO SABRINA"], "studenti": ["MINCUZZI MARIASTELLA", "SIRAGO FABIO"] },
+            "1B": { "genitori": ["GARRET MARC", "LISI RITA DANIELA"], "studenti": ["MUROLO MARCO", "RIZZI ELIANA"] },
+            "1C": { "genitori": ["ARDITO NICLA", "MICCOLIS MARIA GRAZIA"], "studenti": ["CUTRIGNELLI ALESSANDRO", "LAPOMARDA ALESSANDRO"] },
+            "1D": { "genitori": ["CELLAMARE SIMONA", "MOLINARI ANNA"], "studenti": ["FICELE GIORGIA", "PICCINNO RICCARDO"] },
+            "1E": { "genitori": ["ALIANO ROSARIA", "DE BENEDICTIS GIUSEPPE"], "studenti": ["CARONE GIANFRANCO", "PETTI MARCO"] },
+            "1F": { "genitori": ["MEZZAPESA ANTONELLA", "RICCI TERESA"], "studenti": ["GRECO DAVIDE", "SILVESTRIS CHRISTIAN"] },
+            "1G": { "genitori": ["DI COSMO ANNA", "SCATTARELLI ONOFRIO"], "studenti": ["CAPODIFERRO DOMENICO", "PALMITESSA ALESSANDRO"] },
+            "1H": { "genitori": ["CRUDELE ANDREA", "TANZILLO LOREDANA"], "studenti": ["CORINNA NICOLÒ", "IACOBBE FRANCESCO"] },
+            "1I": { "genitori": ["BELLEZZZA MARIA", "IUVONE MARIA CRISTINA"], "studenti": ["BAUTISTA KLEIN HENSLEY", "LOPORCARO ANDREA"] },
+            "1L": { "genitori": ["DE ROBERTIS SCOLAMACCHIA DANIELA", "STRAMBELLA VALENTINA"], "studenti": ["GATTULLI GIULIO", "SOKO EDLIR PIO"] },
+            "2A": { "genitori": ["BRATTOLI MARIA", "MONOPOLI LUCIA"], "studenti": ["STRAMAGLIA GABRIELE", "TERRONE ROCCO"] },
+            "2B": { "genitori": ["GATTUSO ROBERTA", "MASCIA MICAELA MARIA"], "studenti": ["FORNARELLI ANDREA", "NACHERLILLA MATTIA"] },
+            "2C": { "genitori": ["RICCI TERESA", "TRAVERSA ISABELLA"], "studenti": ["ANNOSCIA LUCA", "TRICARICO VITO"] },
+            "2D": { "genitori": ["DALICANTE DANIELA", "TORTORA TIZIANA"], "studenti": ["D'ERASMO NICOLA", "UNGARO EMANUELE"] },
+            "2E": { "genitori": ["LONGO MARIA DOMENICA", "NITTI ANNA"], "studenti": ["PITEO GABRIELE KAROL", "TRAIANI DANIELE"] },
+            "2F": { "genitori": ["BERLEN MARIAGRAZIA", "DELLE FOGLIE SARA"], "studenti": ["LACALAMITA CHRISTIAN", "PETTI GABRIELE"] },
+            "2G": { "genitori": ["LABIANCA LAURA", "MARINO TERESA"], "studenti": ["DIFILIPPO FLAVIO", "SCIACOVELLI LORENZO"] },
+            "2H": { "genitori": ["RIZZUTI ANTONIO", ""], "studenti": ["ARMENISE SAVERIO", "CUTRIGNELLI MARCO"] },
+            "2I": { "genitori": ["PAOLETTA MARIA INCORONATA", "TRAVERSA PASQUA"], "studenti": ["BRUNO NICOLAS", "LOPEZ VITO"] },
+            "3ITCAA": { "genitori": ["LEPORE TERESA", "SIFANNO SABRINA"], "studenti": ["FANELLI GRETA", "RUGGIERO SANTE"] },
+            "3ITCAB": { "genitori": ["", ""], "studenti": ["DIFINO DARIO", "LOBEFARO FABIANA"] },
+            "3ITCM": { "genitori": ["ERACLEA MICHELA", "PERULLI ROBERTA"], "studenti": ["LEGROTTAGLIE ANGELO", "MANCINI GAETANO"] },
+            "3ITEC": { "genitori": ["DI SAPIA PAOLA", "MANFREDI GRAZIANA"], "studenti": ["BARBA ALESSANDRO", "CELANO GIUSEPPE"] },
+            "3ITET": { "genitori": ["MASCIULLO GINA", ""], "studenti": ["PICA CLAUDIO AARON", "ROSATI VINCENZO"] },
+            "3ITIAA": { "genitori": ["GUGLIELMI MARIA LUCIA", "MINCUZZI SIMONA"], "studenti": ["CARBONARA NICOLO'", "PETTI FRANCESCO"] },
+            "3ITIAB": { "genitori": ["CELLAMARE DOMENICA", "LARASPATA MARIA NICOLETTA"], "studenti": ["BORDIGNON VITTORIO", "SILVESTRI FABRIZIO"] },
+            "3ITIAC": { "genitori": ["LISENO MARCO", "PORFIDO PATRIZIA"], "studenti": ["ALTIERI CRISTIANO", "SCARAMUZZI EMANUELE"] },
+            "4ITCAA": { "genitori": ["DEL CORE ROMINA", "FANELLI CRISTINA"], "studenti": ["DAMATO FRANCESCO", "ROTUNNO ANNA"] },
+            "4ITCAB": { "genitori": ["DE LEONIBUS VITTORIA", "MARZO BARBARA"], "studenti": ["DAMMICCO FLAVIA", "ROPPO ROBERTO BRUNO"] },
+            "4ITCM": { "genitori": ["DAMMACCO CHIARA", "DE GIAMBATTISTA ANNUNZIATA"], "studenti": ["BRANDONISIO DAVIDE", "BRUNI NICOLO'"] },
+            "4ITEC": { "genitori": ["LORUSSO ANNA", ""], "studenti": ["MASCIOPINTO GIUSEPPE", "SERAFINI ALESSANDRO"] },
+            "4ITET": { "genitori": ["MAURANTONIO LUCIA", "PERRINI ANGELICA"], "studenti": ["DE PASQUALE FRANCESCO", "FUSANO ANTONIO"] },
+            "4ITIAA": { "genitori": ["PAPAPIETRO ANGELA", ""], "studenti": ["ROMITO GIACOMO", "TRAVERSA FLAVIO"] },
+            "4ITIAB": { "genitori": ["CALABRESE MARIA", "FATTIZZI TERESA"], "studenti": ["BARNABA VINCENZO", "MUGIONE GIUSEPPE"] },
+            "4ITIAC": { "genitori": ["PICCINNO ANTONIO", ""], "studenti": ["BUSCO FRANCESCO", "GRIMALDI AURORA"] },
+            "5ITCAA": { "genitori": ["LACALAMITA MICHELE ANTONIO", "POLLINO NATALA"], "studenti": ["MORAGLIA MIRIAM", "SICILIANO FRANCESCO"] },
+            "5ITCAB": { "genitori": ["DE SALVATORE RACHELE", "TRAVERSA MARIA TERESA"], "studenti": ["APOLLONIO MATTIA", "CARBONARA MARCO"] },
+            "5ITCM": { "genitori": ["ALTAMURA ISABELLA", "MANODORO CHIARA ANNA"], "studenti": ["PICA ANDREA", "SERINI MARCO"] },
+            "5ITEC": { "genitori": ["CIAMPITTI ROBERTO", "MUSCI MARINA"], "studenti": ["ARMAGNO GIOVANNI", "MATTIA GIOELE"] },
+            "5ITET": { "genitori": ["ANACLERIO TERESA", "GRANDOLFO DANIELA"], "studenti": ["DE GIROLAMO MARCO", "PALMISANO VITO"] },
+            "5ITIAA": { "genitori": ["ILLIANO ALESSANDRO", "MASOTTI MARIA TERESA"], "studenti": ["AURIOLE RAFFAELE", "LACOLLA ANTONIO GIUSEPPE"] },
+            "5ITIAB": { "genitori": ["AMBRICO PAOLO FRANCESCO", "ZIPPO VINCENZO SALVATORE"], "studenti": ["GIOVE PIERGIACOMO", "VERDONE EMANUEL"] },
+            "5ITIAC": { "genitori": ["GILE' LUCA", "RAFFAELE GIULIA"], "studenti": ["GILE' MARCO", "MARTIRADONNA DOMENICO"] }
+        };
+const datiAlunni = {
+        "1A": [
+            "ARMENISE ANTONIO", "BANDINI NICOLA", "CAMPANELLI GIULIA", "CARELLA VANNY", 
+            "CASCARANO DIEGO ANTONIO", "CASTAGNA MARCO", "CAVALIERE ANNA", "CAVONE ANDREA", 
+            "CENKA MIKAELA", "COLACICCO LUCIA", "COSTANTINO DANIELE", "CUZZI ANNA MARIA", 
+            "D'ANGELO GABRIELE", "FOCARAZZO MICHELE", "LABBRINO FRANCESCA", "LITURRI SAMUEL", 
+            "LUBISCO GERMANO", "MARCHIONNA MATTIA", "MINCUZZI MARIASTELLA", "ORLANDO GIOVANNI", 
+            "ORTOLANO GABRIELE", "PIACENTINI MATTIA CESARE", "SCANNI FRANCESCO", "SCARGIALI FRANCESCO", 
+            "SIRAGO FABIO", "TANGORRA EMANUELE", "TROCCOLI ALESSIA", "VALROSSO GIOVANNI", "VILLANI CHIARA"
+        ],
+        "1B": [
+            "ABBATANTUONO EMANUELE", "ARMENISE MARIANNA", "BONANTE LOREDANA", "CASCIONE AMBROGIO ALESSIO",
+            "CHIEPPA FLAVIO", "COZZI FEDERICA", "DI CIAULA VITO", "ELIA CRISTIAN",
+            "FALLACARA COSIMO", "FIORETTI DANILO", "GARRET DARIO", "GELSOMINI NICHOLAS",
+            "KUMAR DENIS", "LOCONSOLE PAOLO", "LOSACCO ANNA", "MASTROMARINO MIRIAM",
+            "MILELLA FRANCESCO", "MUROLO MARCO", "NATALE FRANCESCO", "PALELLA VITO",
+            "PALMIERI MICHELE", "PICCIALLO KLARISSA", "RIZZI ELIANA", "ROSSIELLO ROBERTO",
+            "SANTAMARIA GIOVANNI", "TOLENTINO MARMOLEJOS DARLENY", "VITARIELLO VINCENT", "VOLPE LUIGI"
+        ],
+"1C": [
+            "CAMPANELLI MATTIA", "CASSANO VITO ANDREA", "CIARAVOLO GIOVANNI PAOLO",
+            "CIAVARELLA GIUSEPPE", "CUTRIGNELLI ALESSANDRO", "DE FILIPPIS DARIO",
+            "GALIANO GIOELE", "LAPOMARDA ALESSANDRO", "LOMBARDI SABINO ANTONIO",
+            "MARTIRADONNA GIUSEPPE", "NUOVO NICOLA", "PEZZAROSSA PIETRO",
+            "POPEO DANIELE", "RUGGIERI VITO WALTER", "SCARDICCHIO DANIELE",
+            "SCHIAVONE ANDREA PASQUALE", "SEBASTIANI DAVIDE", "SERAFINI DANIELE",
+            "SORANNO FRANCESCO", "ZONNO FRANCESCO"
+        ],
+"1D": [
+            "BALICE GIUSEPPE", "BOTTALICO ANDREA", "CALIA ROCCO", "CARULLI CLAUDIA",
+            "CARUSO ALESSIO", "CASTRIOTTA MARCO", "FICELE GIORGIA",
+            "GIAMMARIA VITO ANTONIO ROCCO", "KAPANADZE GIORGI", "MANZARI FRANCESCO PIO",
+            "NARDELLI PAOLO", "PASTORE ANDREA", "PENNELLI MICHELE", "PICCINNO RICCARDO",
+            "RICCO STEFANO", "ROMANAZZI CRISTIANO", "RUBINO ANTONIO", "SASSO VINCENZO",
+            "SCIACOVELLI MATTIA", "SLIMANI ABDARAHMANE", "VURRO ANDREA"
+        ],
+"1E": [
+            "BASSI ANDREA", "BELVISO NICOLA", "BORREGGINE LEONARDO FILIPPO", "BURDI RUBEN",
+            "BUSCO ANDREA", "CARONE GIANFRANCO", "CASADIBARI NICOLA",
+            "CASSANO GABRIELE FRANCESCO", "CORALLO MARIANO", "COSTANTINO NICOLA",
+            "DE BENEDICTIS ANTONIO", "GJOKA HAKI", "LAVOPA GIOSUE'", "LOTITO GABRIELE",
+            "MAZZACANE RAFFAELE NICOLAS", "MITAROTONDA DAVIDE", "PALMISANO VINCENZO",
+            "PETTI MARCO", "RICCI GIUSEPPE", "TOMASELLI FRANCESCO"
+        ],
+"1F": [
+            "ALBERGA NICOLO'", "AMJAD MOUSA", "ARGONDIZZA MATTIA", "ARMENISE GABRIELE",
+            "BELLOMO GABRIELE", "CALABRESE FRANCESCO", "CICCHELLI FRANCESCO",
+            "CITARELLI ANTONIO", "DE MARZO MICHELE", "DE TULLIO FRANCESCO CLETO",
+            "DI CANIO ADRIANO", "GRANDOLFO MICHELE", "GRECO DAVIDE", "KONGTO RACHANON",
+            "LONGO VITO", "MATERA MATTIA", "MICCOLI GABRIEL", "MORETTI VITO",
+            "SILVESTRIS CHRISTIAN", "SPICONARDO NICOLAS", "SPIZZICO DONATO",
+            "TORRES IVAN GAETANO"
+        ],
+
+  "1G": [
+            "ARMENISE GIUSEPPE", "CAPODIFERRO DOMENICO", "CAVONE FRANCESCO", "CIANCI FRANCESCO",
+            "DE PALO MARCELLO", "DI RELLA PAVEL", "FERRARA MARISOL LOLA", "LORUSSO PAOLO",
+            "LUVERA NICOLA", "MARRA COSIMO", "MONACHINO GIANLUCA", "MONTARULI CRISTIAN",
+            "MONTERISI APOLLONIA JONELLA", "PALMITESSA ALESSANDRO", "SALVATORE DAVIDE",
+            "SCATTARELLI DOMENICO", "SEMERARO LEONARDO", "STALLONE RAFFAELE",
+            "TALPUR MIR MUBARAK ALI"
+        ], 
+"1H": [
+            "CASSANO ANDREA", "CHEN ANTONIO", "CORINNA NICOLÒ", "CRUDELE MARCO",
+            "DEL CONSOLE NICOLA", "DELMEDICO FRANCESCO", "DI MAURO CHRISTIAN",
+            "GAMBACORTA DAVIDE", "GATTI GIUSEPPE", "GELAO ANDREA", "GELAO FRANCESCO",
+            "IACOBBE FRANCESCO", "MATTEO DANIEL", "MINENNA VITTORIO", "MINERVA MATTIA",
+            "MININNI SAMUELE", "MORA FLAVIO", "ROMITO LUCA", "SERINI LUCA",
+            "SIBILIO FABRIZIO", "TSKHADADZE GABRIELI"
+        ],
+"1L": [
+            "BRESCIA ALBERTO", "BURTCHULADZE SHOTIKO", "CHIARAPPA ALESSANDRO",
+            "DASIA CHRISTIAN", "DE RENZIO FRANCESCO", "DIDONA GABRIELE",
+            "GATTULLI GIULIO", "GESUITO CRISTIANO", "LETI BENEDETTO",
+            "MAIURANO ALESSANDRO", "NDOUR MOKHAMADOU LAMINE", "OLIVIERI GIULIO NICOLA",
+            "OTTOMANO FRANCESCO", "PECONIO VITO", "PETRUZZELLI CHRISTIAN",
+            "PETRUZZELLI MATTEO", "PIGNATELLI ETTORE", "RUGGIERO FLAVIO",
+            "SANTORO PIERDAVIDE", "SINGH NAVDEEP", "SOKO EDLIR PIO",
+            "SORRENTINO ALESSANDRO", "VALENTE FRANCESCO CARLO"
+        ],
+"2A": [
+            "CANNITO FRANCESCO", "CARICOLA GIORGIA", "CITELLI STEFANIA", "DAMIANI FRANCESCO",
+            "DI GIOIA DANIEL", "FALCO GABRIEL", "FALLACARA GIUSEPPE", "GALLIANO COSIMO",
+            "GNONI CHIARA", "LOGLISCI ANTONELLO", "MINENNA FRANCESCO", "MODUGNO MICHELE",
+            "PALMISANO MICHELE", "ROBLES SAVERIO", "SARACINO SAMUELE", "SICILIANO ALESSIO",
+            "SPADA GIUSEPPE", "STRAMAGLIA GABRIELE", "TERRONE ROCCO", "TOSCANO GIOVANNI",
+            "ZACCARIA NOEMI"
+        ],
+"2B": [
+            "ANGARANO FEDERICO", "AVELLINO CHRISTIAN", "CICINELLI FRANCESCO", "FORNARELLI ANDREA",
+            "GURI DEVIS", "HOSSAIN ABDUL AHAD", "MAGALETTI SIMONA", "MARI MARTINA",
+            "MARZULLO LUCA", "NACHERLILLA MATTIA", "NODARISHVILI SABA", "PADOVANO MARCO",
+            "PAPARELLA ANTONIO", "PREZIOSA ALESSANDRO", "SCHIAVONE GIORGIA", "TRINCI GIUSEPPE",
+            "VENKETASAMY VALENTINA"
+        ],
+
+"2C": [
+            "ANNOSCIA LUCA", "BELVISO NICOLA", "CAFAGNO FRANCESCO", "CALDARULO DAVIDE",
+            "CAMPO GABRIELE", "CATACCHIO GABRIELE", "COLETTA DOMENICO", "CORDASCO DAVIDE",
+            "DELLA CHIESA GIUSEPPE", "DENTAMARO ANTONIO", "EL BAHLOULI BILAL", "KHAN SAIF",
+            "LOTRIGLIO SAMUEL", "MARCHITELLI GIUSEPPE", "MENOLASCINA DANIELE", "MICCOLI KEVIN",
+            "NIGATU SILAS FITSUM", "PASTORE ROSSI FRANCESCO", "SCIANATICO ROBERT ANTHONY",
+            "SIGNORILE STEFANO", "TRICARICO VITO", "VERRASTRO MARCO"
+        ],
+"2D": [
+            "ABBINANTE CHRISTIAN", "ANTONICELLI FRANCESCO PIO", "BONERBA MARCO", "BOTTALICO MATTEO",
+            "CERIOLA ALESSANDRO", "CHIECHI SAMUELE", "CLARIZIO GABRIELE", "D'ERASMO NICOLA",
+            "FINESTRONE DAVIDE", "GELAO MARCO", "GIAMMARIA DOMENICO", "GIORDANO FABRIZIO",
+            "GRANATA ISABEL", "IACOBONE MICHELE RAFFAELE", "IUSCO DOMINICK", "LOSACCO GAETANO",
+            "MASELLI FLAVIO", "MASTRONARDI MICHELE", "MIZZI MARZIA", "PARTIPILO MICHELE",
+            "SILECCHIA COSIMO DAMIANO", "UNGARO EMANUELE", "VITI VALENTINA", "ZONNO LUIGI"
+        ],
+"2E": [
+            "ANTONACCI ANDREA", "BERNARDIS VITO PIO", "BOTTA ALESSANDRO", "CARANNANTE GABRIELE",
+            "CHIBELLI MARTINA", "CIPOLLA GABRIELE", "FABBRONI GIULIO", "FIORE SABINO FRANCESCO",
+            "HASAN IQBAL MEHRAB", "JIN YILE", "LAPOLLA VINCENZO", "MONTESANO MATTEO FRANCESCO",
+            "NONIKASHVILI MARIAMI", "PAPA EMANUELE BRUNO", "PASTORE FELICE", "PITEO GABRIELE KAROL",
+            "PLANTAMURA GIUSEPPE", "RAM ALESSIA", "SASSO LEONARDO", "SCAVO IRENE",
+            "TRAIANI DANIELE", "TRIGGIANESE GIAMBATTISTA", "ZIPPARI GIUSEPPE"
+        ],
+"2F": [
+            "ALBERGO FRANCESCO", "ANNOSCIA NICCOLO'", "BELLONE DE GRECIS GIUSEPPE",
+            "CAPOZZI BENITO VITTORIO", "CAPUTO GIUSEPPE", "CARONE MIRKO",
+            "CASTELLANO GABRIELE", "CIARFAGLIA LORENZO", "CIRACI GABRIEL",
+            "COLANGIULI DARIO", "DE COSMO NICOLA", "DE TULLIO RAFFAELE",
+            "DELCARMINE NICOLA", "DENTUTO CRISTIAN", "EVANGELISTA DOMENICO",
+            "GENCHI CARMINE MATTIA", "INSALATA CHRISTIAN", "IUSCO ANTONIO",
+            "LACALAMITA CHRISTIAN", "MURGU LEONARDO CONSTANTIN", "NACCI ALESSIO",
+            "PETTI GABRIELE", "SCIANNIMANICO GIUSEPPE"
+        ],
+"2G": [
+            "BELVISO MARCO", "CAGGIANELLI SAMUEL", "CAPRIATI DANIELE", "CARBONARA GABRIELE",
+            "CAVONE ELEONORA", "CUCUMAZZO NICOLAS", "D'ELIA LEONARDO", "DI CAGNO MICHELE",
+            "DIFILIPPO FLAVIO", "FATTIZZI GIANROCCO", "FORTUNATO VINCENZO", "GERADZE ANANO",
+            "INTRONA JOSEPH", "KRASNIQI XHEMSIJAN", "LARICCHIA SAVERIO", "LOIACONO NICOLAS",
+            "LORUSSO GABRIELE", "MITARITONNO DAVIDE", "RICCHIARI CARLO", "SCHIRALDI CHERTI DANIELE",
+            "SCIACOVELLI LORENZO", "TRIGGIANI CHRISTIAN", "VALLONE SAMUELE", "YE WANER"
+        ],
+"2H": [
+            "ABBATICCHIO DENNIS", "ABBRESCIA NICOLO'", "AMORUSO DILETTA", "ARMENISE SAVERIO",
+            "BERARDI FRANCESCO", "BOCCUTO CRISTIAN", "BOGGIA ENRICO", "CALIA FRANCESCO",
+            "COLAPIETRO DANIEL", "CUTRIGNELLI MARCO", "GUERRA GABRIELE", "MILELLA MAURIZIO",
+            "MONTARULO NICOLE", "PISANELLI NICOLA", "RIZZUTI MATTIA", "ROTUNNO GABRIEL",
+            "RUGGIERI FRANCESCO", "SFORZA GIUSEPPE", "SPATARO DANIELE", "SPILOTROS NICOLO'",
+            "TANGORRA DAVIDE", "TEDESCHI GABRIELE", "TUNZI NICOLA", "VIGNOLA ANDREA"
+        ],
+"2I": [
+            "AGOLLI ARMANDA", "ANACLERIO FRANCESCO", "ANACLERIO NICOLE", "BRANDONISIO BENITO",
+            "BRUNO NICOLAS", "BULABON JARED JOSEPH", "D'ALESIO FABIO", "DE IURE ERIKA",
+            "DE SANTIS CRISTIAN", "DI PALMA MICHELE", "FRADDOSIO TERESA", "LATORRE MARCO",
+            "LOPEZ VITO", "MARI DONATO", "MASELLI MICHELA", "ORESTE DANIELE",
+            "PROCIDA DAVIDE CARMELO", "ROSELLI ANDREA", "SABBATELLI VITO"
+        ],
+"3ITCAA": [
+            "AHMAD JANNET", "BIANCOFIORE VALERIO", "CAIATI FRANCESCO", "CARELLA BARBARA MARIA",
+            "DE MARZO MARCO FRANCESCO", "DE MOLA NICOLE", "FANELLI GRETA",
+            "GIOVANNELLI GIUSEPPE ANTONIO", "GUERRA GIUSEPPE", "LACALAMITA GIOVANNI",
+            "LARASPATA VALERIA", "LATILLA NICOLA", "MANGIALAVORI FRANCESCO", "PACUCCI ISABELLA",
+            "PACUCCI NICOLA", "PISCOPO FRANCESCO", "POMES DARIO", "RUGGIERO SANTE",
+            "SIRAGO RAFFAELE"
+        ],
+
+"3ITCAB": [
+            "ABBATESCIANNI DAVIDE", "BACCELLIERE LUCA LAPO", "CARBONARA FRANCESCO",
+            "CATALANO PAOLO", "DIFINO DARIO", "GIULIANI GABRIELE", "GRIMALDI GIORGIO",
+            "LAVOPA FLAVIO", "LELLA RAFFAELE", "LOBEFARO FABIANA", "MAGGI NICOLA",
+            "MICUNCO ANTONIO", "MONNO DANIELE", "NOMPLEGGIO ANDREA", "PACUCCI ANNARITA",
+            "PALUMBO ELENA", "PIARULLI MARTINA", "RUCCIA GIUSEPPE", "SABATO ROCCO",
+            "SORINO GIANVITO", "TOWFIQ JOBAIR KADER"
+        ],
+"3ITCM": [
+            "BALICE ANTONIO", "BARLETTA FRANCESCO PAOLO", "BASSETTI KEVIN", "CAPUTO MICHELE",
+            "DE MASTRO GIOVANNI", "D'ONGHIA ENRICO", "LEGROTTAGLIE ANGELO", "LOSACCO FABRIZIO",
+            "MANCINI GAETANO", "PALMISANO FRANCESCO PIO", "PERRUCCI DOMENICO", "ROMITO DONATELLO",
+            "SALE DENNY", "SALLUSTIO MAURO LUIGI", "SURJA PRATTOY BARUA", "TOMASICCHIO ALBERTO"
+        ],
+"3ITEC": [
+            "ABANICO ASHLYN", "ABBRESCIA ANDREA", "ABRAMIAN ERNEST", "ACCETTURA DOMENICO",
+            "BARBA ALESSANDRO", "BIANCOFIORE EMANUELE", "CAFORIO CLAUDIA", "CELANO GIUSEPPE",
+            "DE CARNE ANDREA", "FANELLI LUCA", "FRADDOSIO DAVIDE", "GRECO GIOVANNI PAOLO",
+            "IACOVAZZI ANDREA", "KARIM ABDELJALIL", "LAMACCHIA MATTIA", "LUCCHESE FABRIZIO",
+            "PEZZUTO ANDREA", "SCIACQUA LORIS", "TANGARI MAURO", "VERGARI ALBERTO EMANUELE"
+        ],
+"3ITET": [
+            "ADONIA GABRIELE", "ALBERGO NICOLAS", "BELLE' ANTONIO", "BIONDI ERRICO",
+            "BRUCOLI DANIELE PIO", "CATACCHIO GIUSEPPE JUNIOR", "DE MARZO TOMMASO", "DI BARI WALTER",
+            "FERRARA MARTIN NICOLAS", "GATTA GABRIELE", "GENCHI KEVIN", "LACRIOLA NICOLO'",
+            "LINSALATA FABRIZIO", "PEZZAROSSA PIETRO", "PICA CLAUDIO AARON", "ROSATI VINCENZO",
+            "RUTIGLIANO UMBERTO", "SASSANELLI PIETRO", "SPADA GIUSEPPE", "STRAGAPEDE MICHELE",
+            "VALERIO MARCO DOMENICO"
+        ],
+"3ITIAA": [
+            "ALBANESE MATTIA", "CARBONARA NICOLO'", "CASALINO NICCOLO' MARIA",
+            "CASSANO SAMUELE", "CAVALIERE MATTIA", "DE BELLIS GIUSEPPE",
+            "DE PACE NICHOLAS", "GANZERLI GABRIELE", "GUZMAN MATA MIGUEL ANTONIO",
+            "IQBAL TAYYAB", "LECCE EDOARDO", "LEPORE ALESSANDRO", "MAGGI FRANCESCO",
+            "MONTEFINESE VITTORIO", "PECORELLI CRISTIANO", "PETTI FRANCESCO",
+            "ROMITO NICOLA", "SBLENDORIO GIUSEPPE LUIGI", "VITERBO DONATO FRANCESCO"
+        ],
+"3ITIAB": [
+            "BORDIGNON VITTORIO", "CHEN XINYU", "COSTANTINO ANDREA", "DE LUCA GIANLEONARDO",
+            "DI CAGNO FEDERICO VITTORIO", "DILISO DANILO", "EPIFANIA PASQUALE", "FLACCO ALESSANDRO",
+            "LORUSSO PASQUALE", "MAFFEI GABRIELE", "MARTIRADONNA DOMENICO", "MORRONE FRANCESCO SAVERIO",
+            "NASCHETTI ALESSANDRO", "SCOLLATO LUIGI", "SILVESTRI FABRIZIO", "TAMMA ALESSANDRO"
+        ],
+"3ITIAC": [
+            "ALTIERI CRISTIANO", "BARILE MATTEO", "CHIAPPARINO DAVIDE", "CONSONNI ANDREA",
+            "DE LELLIS FABRIZIO GIOVANNI", "FANELLI GABRIELE", "LAZZO STEFANIA", "LISENO GIULIA",
+            "MASTROMARCO PIETRO", "MIDILI GIUSEPPE", "RANA FLAVIO", "RESCIGNO FRANCESCO SAVERIO",
+            "SCARAMUZZI EMANUELE", "TARRICONE FABIO", "TRENTADUE CHRISTIAN", "VALENTE LEONARDO"
+        ],
+"4ITCAA": [
+            "ABBINANTE SABINO", "BRUNO NICOLA", "CARDONE GIOVANNI", "COLAMOREA MARTINA",
+            "D'ALESSANDRO CARLO", "DAMATO FRANCESCO", "DE DURO SEBASTIANO MARCO",
+            "DELLE FONTANE FEDERICO", "DI CORRADO MARCO", "FALCICCHIO FRANCESCO",
+            "FIORE FRANCESCO", "LACALAPRICE MARCO", "MARINO ILARIA", "MASTROLONARDO IVAN",
+            "MONDELLI FRANCESCO SAVERIO", "MONNO MARCO", "NATILLA ALESSANDRO",
+            "PERRINI MADDALENA", "PETAROSCIA ALESSIO", "QUATRARO FRANCESCO",
+            "ROTUNNO ANNA", "SCHINO MICHELE", "STRIPPOLI CORRADO",
+            "TOMANELLI VITO FRANCESCO", "ZACCARO MATTIA PIO"
+        ],
+"4ITCAB": [
+            "ADRI LAURA", "ANNICELLI GABRIELE", "ARMENTI ALESSANDRO", "BELLANOVA MARCO",
+            "CALABRESE SILVIA", "CASTORE EMANUELE", "DAMMICCO FLAVIA", "DIANA MIRCO",
+            "FERRANTE LUCA", "GRANDE GABRIELLA", "LA FORGE DAVIDE", "LACALENDOLA MARCO",
+            "LANAVE CHRISTIAN", "OSES MAYA MAURO ALEJANDRO", "RIGLIETTI FRANCESCO",
+            "ROPPO ROBERTO BRUNO", "SARTORIO JACOPO PIETRO", "SCHIRONE DAVIDE",
+            "TRAVERSA ARTIOM FRANCESCOPIO"
+        ],
+"4ITCM": [
+            "ABRAR AMIMA", "AMBRA DANIELE", "BERNARDIS SALVATORE", "BRANDONISIO DAVIDE",
+            "BRUNI NICOLO'", "CAMPO NICOLO'", "D'ALENA CHRISTIAN", "DIANA ANTONIO",
+            "GRECO NICOLA ANTONIO", "LORUSSO DANIELE", "MALERBA DOMENICO CHRISTIAN",
+            "MYFTARI KEVIN", "NARDELLI GRETA", "NIGATU PAOLOS FITSUM", "PARIBONI MARCO",
+            "PERRINI ENG THOM", "SALIANI GIUSEPPE", "SARNELLI FRANCESCO RAFFAELE",
+            "SCATTARELLA STEFANO", "STOLA LUIGI", "TAMMARO GIOVANNI", "TORNESELLO MARCO"
+        ],
+"4ITEC": [
+            "ALAM SAZZAD", "BISANTI ANTONIO", "CARAMIA ANDREA", "FALCO NICOLAS",
+            "GIANNELLI VITO ALESSANDRO", "GRAMEGNA ALEX", "GRECO FRANCESCO",
+            "GUAGLIANONE KEVIN", "LALARIO FRANCESCO", "LOLLINO DOMENICO",
+            "LORUSSO NICOLA", "MARZIANI ALESSIO", "MASCIOPINTO GIUSEPPE",
+            "MENOLASCINA DANIELE", "MINCUZZI MARTINA", "MUOLO ABINET",
+            "ORTIZ VICTOR", "PACUCCI FLAVIO ANTONIO", "PROFETA VITO",
+            "PROSCIA PASQUALE", "RONZULLI ANDREA CAROL", "SASANELLI FRANCESCO PIO",
+            "SCALERA FRANCESCO", "SERAFINI ALESSANDRO", "SHKRELI FLORJAN"
+        ],
+"4ITET": [
+            "ABBINANTE SAMUEL", "ALFONSO VINCENZO", "AMICONE FLAVIO FELIPE",
+            "ANTONACCI NICOLA", "ANTONACCI PAOLO", "BARILE MARIO", "BAVARO BIAGIO",
+            "BOSCO ANTONIO", "CARBONARA SERGIO", "CARICOLA ANDREA",
+            "DE PASQUALE FRANCESCO", "DE SANDI GIOVANNI CARMINE", "DI COSTANZO LUCA",
+            "DI PEDE VITO", "FIORE NICOLA", "FRANCO VITO", "FUSANO ANTONIO",
+            "LAMPARELLI VITO FLAVIO", "MANCINI ANTONIO", "MARTINELLI LORENZO",
+            "MISCEO DANIELE", "PONTRELLI IGNAZIO", "PROSCIA VITO",
+            "SCANNICCHIO LEONARDO", "TANZI FABIO", "VINCI DAVIDE", "VINCI EMILIO"
+        ],
+
+"4ITIAA": [
+            "AMORUSO NICOLAS PIO", "ARESTA SIMONE", "BELLAMIA STEFANO", 
+            "CALIANDRO FRANCESCO MARIA", "CAPASSO ANTONELLO", "CARBONARA ALESSANDRO", 
+            "CARBONARA LUCA", "COLUCCI ALESSANDRO", "D'ASTICI FRANCESCO", 
+            "FAZIO GIUSEPPE SIMONE", "GIULIANI ANDREA PIO", "GRANATA CHRISTIAN DOMINICK", 
+            "LABARILE ORONZO", "LAROCCHIA CARLO", "LOIOTILE MATTIA", "LORUSSO ALESSIO", 
+            "MARZULLO MATTIA", "PARTIPILO MATTIA", "PEPE ALESSANDRO", "PROSCIA KAYQUE", 
+            "ROMITO GIACOMO", "SALHAN KABIR", "SANTORSOLA GABRIELE", "SANTORSOLA MATTIA", 
+            "SCIACOVELLI GIOVANNI", "SEQUESTRO VITTORIO", "TRAVERSA FLAVIO"
+        ],
+"4ITIAB": [
+            "ACQUAVIVA GABRIELE", "BARNABA VINCENZO", "CHIURLIA DANIELE",
+            "CLEMENTE FEDERICO", "COLOMBO CARLO", "DE TOMA MARIO",
+            "DENTAMARO ALESSIO", "DI BISCEGLIE DOMENICO", "DI NOIA ANDREA",
+            "FANELLI ANTONIO", "GELAO KAROL", "HOSSAIN MUBARAK",
+            "INDINI GIUSEPPE", "LATORRE ALESSANDRO", "MARMO DANIELE",
+            "MUGIONE GIUSEPPE", "NOCELLA DAVIDE", "SETTANNI ANTONIO FILIPPO",
+            "SIGNORE GIACOMO ANTONIO", "TIMEO CLAUDIO"
+        ],
+"4ITIAC": [
+            "ALBA NICOLA", "BUSCO FRANCESCO", "CARAVELLA LUCIANO", "CARONE ALESSANDRO",
+            "DE IANNI ANDREA", "DE LUCCI SIMONE", "DI MASO DOMENICO", "FRANCO ANTONIO LEON",
+            "GENTILE FABIO", "GRANDE GIACOMO", "GRIMALDI AURORA", "LAZZO VITTORIO",
+            "MALTARINI FRANCESCO PIO", "MONNO MATILDA", "PATANO MICHELANGELO",
+            "PETRAROLO LUCA", "PICCINNO FEDERICO", "PONTRELLI NICOLO'", "RACANO GIUSEPPE",
+            "ROCA SEBASTIANO LUCA PIETRO", "RUGGIERI ROBERTO", "STRAGAPEDE ALBERTO",
+            "STRANIERO ROBERTO", "STRISCIULLO MATTIA"
+        ],
+"5ITCAA": [
+            "BOLOGNINI ALESSANDRO", "CAPONE VINCENZO", "CASADIBARI MATTIA",
+            "DE GREGORIO MICHELE", "D'ELIA ANGELA", "DI GIOIA MICHAEL",
+            "GALTIERI FRANCESCO", "GIARDINO CRISTIANO", "LACALAMITA NICOLAS",
+            "LEPORE ANTONIO", "LEPORE FRANCESCO PAOLO", "MORAGLIA MIRIAM",
+            "PROFETA MIRCO", "RUGGIERO GIOVANNI", "SICILIANO FRANCESCO",
+            "STORNANTI MATTEO", "TEOFILO FRANCESCO", "VITULLI GABRIELE"
+        ],
+"5ITCAB": [
+            "APOLLONIO MATTIA", "ARPINO ADRIANO", "BRUCOLI ANTONIO", "CARBONARA MARCO",
+            "CAROFIGLIO NICOLAS", "CASSANO NICOLA", "D'AMATO TOMMASO", "DE MEO ALESSANDRO",
+            "DE MEO ANDREA", "LAGIOIA ALESSIO", "MARTELLINI BRUNO", "MASSARI GIOVANNI",
+            "NOVEMBRE ANDREA", "SOMMA ROBERTO", "TRIGGIANI GAETANO"
+        ],
+"5ITCM": [
+            "ABBATECOLA ANDREA", "BELLEZZA SIMONE", "BOGGIA MARCO", "CARUCCI FRANCESCO",
+            "CIANCIOTTA VITO NICOLA", "DE CANDIA DOMENICO", "DE RUVO STEFANO",
+            "FALCO NICOLA", "FANELLI GIOVANNI", "GAUDIO ANGELO", "LANAVE GIANLUCA",
+            "LOISI FRANCESCO", "MELE GIACOMO", "MENOLASCINA MATTEO", "MONTANARO MARCO",
+            "PISCOPO DANIELE", "PROSCIA MARCO", "SANROCCO FRANCESCO", "SPILOTROS GIANLUCA"
+        ],
+"5ITEC": [
+            "CASSANO GIUSEPPE", "DEL VECCHIO GABRIELE", "DOSSI SIMONE MAURO", 
+            "GALLO VITO LEONARDO", "LASORSA MORENA", "LAVOPA GIULIANA", 
+            "LOSACCO GIACOMO", "NUZZO GIORGIA", "PECORELLA MARCO", "PICA ANDREA", 
+            "PINTO MICHELE", "POZZI ALESSANDRO", "SCIACOVELLI MICHELE", 
+            "SERINI MARCO", "SIGNORILE FRANCESCO GIOVANNI", "SPERA ROBERTO", 
+            "STRISCIUGLIO EMANUEL FRANCESCO NICOLA", "ZAMPIERI MARCO"
+        ],
+"5ITET": [
+            "ARMAGNO GIOVANNI", "BOTTALICO CHRISTIAN", "CANNATA GIOVANNI", 
+            "CARADONNA GIOVANNI", "CARADONNA LUCA", "CARICOLA SIMONE", 
+            "CASCIONE RAFFAELLO", "CIAMPITTI CLAUDIO", "DE LUISI ANGELO", 
+            "DE TULLIO MICHELE", "DI BRISCO JACOPO", "DI FALCO DANIELE", 
+            "FRAPPAMPINA ANTONELLO", "MARTIRADONNA UMBERTO", "MATTIA GIOELE", 
+            "PANZONE EMANUELE", "TANZI VALENTINO", "TORRES FRANCESCO PIO", 
+            "TRIGGIANI MAURO", "TUTTISANTI MARCO", "VALERIO FRANCESCO"
+        ],
+
+"5ITIAA": [
+            "ANNESE NICOLA", "AURIOLE RAFFAELE", "BAVARO RUBEN", "CAPOZZI NICOLO'",
+            "CASADIBARI ALESSANDRO", "CIPPONE MICHELE", "COPPOLECCHIA LUCA",
+            "DE GIOSA ANTONELLO", "FICARELLA NICOLA GIOVANNI", "FRANCABANDERA FRANCESCO",
+            "GENCHI SAMUEL", "GRECO GABRIELE", "ILLIANO LUCA", "LACOLLA ANTONIO GIUSEPPE",
+            "LATTANZIO LUIGI", "LEONE ANDREA", "LINCIANO ANTONIO", "PUGLIESE GABRIELE",
+            "QUARTO LUCA", "RAUDINO FRANCESCO", "RECCHIMURZI MICHELE", "SANESE GIUSEPPE",
+            "SIBILANO DAVIDE", "TENERELLI FRANCESCO"
+        ],
+"5ITIAB": [
+            "AMBRICO LUKAS", "ANDRIANO GIACOMO", "BELVISO VITO", "BRATTA GIUSEPPE OLIVIER",
+            "DE LELLA EDOARDO MARIA", "DELLE FOGLIE MAURO", "DEMARCO CRISTIAN", "ERCOLE LUIGI ANTONIO",
+            "GIOVE PIERIACOMO", "GIRONE ANDREA", "MANCINO FLAVIO", "MARTINELLI IVAN",
+            "MELE MARCO", "NOVEMBRINO ANDREA", "POLIGNANO ANTONIO", "SILVESTRIS ANTONIO",
+            "SINA FABJOL", "TANZI CRISTIAN", "TURKER GIUSEPPE OSMAN", "VERDONE EMANUEL",
+            "ZIPPO ALBERTO"
+        ],
+"5ITIAC": [
+            "ABBINANTE ANTONIO", "ALBANESE SIMONE", "CHIRICALLO PIETRO", "GALEAZZI GABRIELE",
+            "GILE' MARCO", "GIOVE ANDREA", "IACOBBE ALESSANDRO", "LADISA CHRISTIAN",
+            "LORUSSO ALESSANDRO", "MAGALETTI ANDREA", "MARAZIA IVAN", "MARIANI NICOLO'",
+            "MARTIRADONNA DOMENICO", "MASSARI ANDREA", "PAGANO MATTIA", "SCANNI FRANCESCO",
+            "SQUEO CRISTIAN", "VERROCA SAMUELE"
+        ]
+
+ };
+
+
+        // DATI DOCENTI CDC (Invariati - Inseriti nel codice HTML precedente)
+        // Mappatura classi
+        const classeMap = {
+            "3A": "3AG", "3B": "3BG", "4A": "4AG", "4B": "4BG", "5A": "5AG", "5B": "5BG",
+            "3ITIA": "3ITIAA", "3ITIB": "3ITIAB", "3ITIC": "3ITIAC",
+            "4ITIA": "4ITIAA", "4ITIB": "4ITIAB", "4ITIC": "4ITIAC",
+            "5ITIA": "5ITIAA", "5ITIB": "5ITIAB", "5ITIC": "5ITIAC",
+             "3AG": "3AG", "3BG": "3BG", "4AG": "4AG", "4BG": "4BG", "5AG": "5AG", "5BG": "5BG",
+             "1A": "1A", "1B": "1B", "1C": "1C", "1D": "1D", "1E": "1E", "1F": "1F", "1G": "1G", "1H": "1H", "1I": "1I", "1L": "1L",
+             "2A": "2A", "2B": "2B", "2C": "2C", "2D": "2D", "2E": "2E", "2F": "2F", "2G": "2G", "2H": "2H", "2I": "2I",
+             "3ITIAA": "3ITIAA", "3ITIAB": "3ITIAB", "3ITIAC": "3ITIAC",
+             "4ITIAA": "4ITIAA", "4ITIAB": "4ITIAB", "4ITIAC": "4ITIAC",
+             "5ITIAA": "5ITIAA", "5ITIAB": "5ITIAB", "5ITIAC": "5ITIAC",
+             "3ITCM": "3ITCM", "3ITEC": "3ITEC", "3ITET": "3ITET",
+             "4ITCM": "4ITCM", "4ITEC": "4ITEC", "4ITET": "4ITET",
+             "5ITCM": "5ITCM", "5ITEC": "5ITEC", "5ITET": "5ITET"
+        };
+        // Per brevità nel codice visualizzato qui, assumiamo che l'oggetto datiDocentiCDC sia identico a quello del file precedente.
+        // Se necessario, copiare l'intero oggetto const datiDocentiCDC = { ... } dal file HTML di Novembre.
+        // Qui includo un placeholder vuoto che deve essere sostituito con i dati reali se si vuole la funzionalità completa offline.
+        // NOTA: Nell'uso pratico, incolla qui il blocco "const datiDocentiCDC = { ... }" dal file precedente.
+        const datiDocentiCDC = {
+            "1D": [
+                { nome: "ABUNDO CLAUDIA", materia: "MATEMATICA", coordinatore: "no" },
+                { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                { nome: "CIRACI TIZIANA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                { nome: "LAPRESA MICHELE ", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                { nome: "LORUSSO MADDALENA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                { nome: "MAGRONE VITA", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "si" },
+                { nome: "ROMITO GIOVANNA ROSA MARIA", materia: "SOSTEGNO", coordinatore: "no" },
+                { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" },
+                { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+            "1I": [
+                 { nome: "ABUNDO CLAUDIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "CIRACI TIZIANA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DE GIGLIO CARMELA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "GIGLIO GIACINTO", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "LOCONSOLE ANNAMARIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "PULITO ANTONELLA", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" }
+             ],
+            "2D": [
+                { nome: "ABUNDO CLAUDIA", materia: "MATEMATICA", coordinatore: "no" },
+                { nome: "ADAMO GIOVANNA", materia: "CHIMICA", coordinatore: "no" },
+                { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                { nome: "BOLOGNESE CHIARA", materia: "SOSTEGNO", coordinatore: "no" },
+                { nome: "CIRACI TIZIANA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                { nome: "LORUSSO MADDALENA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                { nome: "MAGRONE VITA", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "si" },
+                { nome: "SALVATORE NADIA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" }
+            ],
+             "3ITIAA": [ // Mappato da 3ITIA
+                 { nome: "ABUNDO CLAUDIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "GENCO VITO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "GIULIANI MARIA TERESA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP INFORMATICA", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "OCCHINEGRO VALENTINA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SACCHETTI DOMENICO", materia: "SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "SANNICANDRO PATRIZIA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP SISTEMI E RETI", coordinatore: "no" }
+            ],
+             "4ITIAA": [ // Mappato da 4ITIA
+                 { nome: "ABUNDO CLAUDIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "CURCI ANTONIO", materia: "ITP INFORMATICA", coordinatore: "no" },
+                 { nome: "GENCO VITO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "GIULIANI MARIA TERESA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SACCHETTI DOMENICO", materia: "TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "si" },
+                 { nome: "SANNICANDRO PATRIZIA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" }
+            ],
+            "2F": [
+                 { nome: "ADAMO GIOVANNA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BONATESTA MONICA ELENA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "si" },
+                 { nome: "LA MANTIA VITO", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MERCURIO ANTONIO", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MONNO RITA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "NOVIELLO ANNAMARIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SALVATORE NADIA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "SCALIOTI ANTONIO MARIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "STEFANI' GIUSEPPE", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+            "3ITCM": [
+                 { nome: "ADAMO GIOVANNA", materia: "TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CHIRONI ANNALISA PASQUALINA", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA ANALITICA E STRUMENTALE", coordinatore: "no" },
+                 { nome: "FLACE MARTINA ANNA", materia: "ITP CHIMICA ORGANICA E BIOCHIMICA, TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "no" },
+                 { nome: "MANCO STEFANIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "MARCHESE LUCIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PEDONE ADRIANA", materia: "CHIMICA ORGANICA E BIOCHIMICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SCIALPI FABRIZIO", materia: "CHIMICA ANALITICA E STRUMENTALE", coordinatore: "no" },
+                 { nome: "TRAVERSA ROSSELLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" }
+            ],
+            "4ITCM": [
+                 { nome: "ADAMO GIOVANNA", materia: "TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "si" },
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA ORGANICA E BIOCHIMICA", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CASCIARO FEDERICA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA ANALITICA E STRUMENTALE", coordinatore: "no" },
+                 { nome: "FLACE MARTINA ANNA", materia: "ITP TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "no" },
+                 { nome: "MANCO STEFANIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "PEDONE ADRIANA", materia: "CHIMICA ORGANICA E BIOCHIMICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SCIALPI FABRIZIO", materia: "CHIMICA ANALITICA E STRUMENTALE", coordinatore: "no" },
+                 { nome: "TRAVERSA ROSSELLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" }
+            ],
+            "5ITCM": [
+                 { nome: "ADAMO GIOVANNA", materia: "TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DE MURO FERDINANDO IGNAZIO ANTONIO", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA ANALITICA E STRUMENTALE, CHIMICA ORGANICA E BIOCHIMICA", coordinatore: "no" },
+                 { nome: "FLACE MARTINA ANNA", materia: "ITP TECNOLOGIE CHIMICHE INDUSTRIALI", coordinatore: "no" },
+                 { nome: "MANCO STEFANIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PARADISO ANTONIA", materia: "CHIMICA ANALITICA E STRUMENTALE", coordinatore: "no" },
+                 { nome: "PEDONE ADRIANA", materia: "CHIMICA ORGANICA E BIOCHIMICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SOLDO AGATA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" }
+            ],
+             "4ITCAB": [ // Mappato da 4B
+                 { nome: "ADDABBO ROBERTA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CELESTRE MARIA RITA FILOMENA", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" },
+                 { nome: "CICOLELLA OLINDA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "COLONNA CLARA", materia: "ITP PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "DI RUTIGLIANO MATTEO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, GESTIONE DEL CANTIERE E SICUREZZA, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "GIACOVAZZO ANNA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "MASTROMATTEO GRAZIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "NITTI EMMANUELE", materia: "PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "PIRRO GIANFRANCO", materia: "GESTIONE DEL CANTIERE E SICUREZZA SUL LAVORO, TOPOGRAFIA", coordinatore: "si" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" }
+            ],
+             "1L": [
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "ATTOLINI DANIELA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "si" },
+                 { nome: "BONOMO MICHELA", materia: "GEOGRAFIA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "COLUCCI MODESTA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "LA MANTIA VITO", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "LAPRESA MICHELE ", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "LIVORTI LUCIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "MORO GRAZIANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "PIARULLI ANTONIO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "5ITCAB": [ // Mappato da 5B
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CAZZOLLA MARIA PIA", materia: "GESTIONE DEL CANTIERE E SICUREZZA, PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "CICOLELLA OLINDA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "DI RUTIGLIANO MATTEO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, GESTIONE DEL CANTIERE E SICUREZZA, PROGETTAZIONE, COSTRUZIONI E IMPIANTI, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "MASTROMATTEO GRAZIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PIRRO GIANFRANCO", materia: "TOPOGRAFIA", coordinatore: "si" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "STALLONE SAVERIO", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" }
+            ],
+             "1A": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BONOMO MICHELA", materia: "GEOGRAFIA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PARADISO ANTONIA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PICCOLO ANNA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "ROMITO LAURA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "SPADONE ANDREA", materia: "MATEMATICA", coordinatore: "no" }
+            ],
+            "1B": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "BONOMO MICHELA", materia: "GEOGRAFIA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "CARPENTIERI ROSA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "CICOLELLA OLINDA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MASTROMATTEO GRAZIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PARADISO ANTONIA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PICCOLO ANNA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "no" }
+            ],
+             "1C": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BORRELLI ALBERTO", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "CIRACI TIZIANA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "LAPRESA MICHELE ", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "LEOPARDI VITO", materia: "MATEMATICA", coordinatore: "si" },
+                 { nome: "LORUSSO MADDALENA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "MAGRONE VITA", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "1E": [
+                 { nome: "CURCI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DENORA MARCO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "LA MANTIA VITO", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MARCHESE LUCIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SCALIOTI ANTONIO MARIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" },
+                 { nome: "SOLDO AGATA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "STEFANI' GIUSEPPE", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TRIGGIANI EMANUELE", materia: "SOSTEGNO", coordinatore: "no" }
+            ],
+             "1F": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BIANCONI FLAVIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "LA MANTIA VITO", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "LEOPARDI VITO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "MERCURIO ANTONIO", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "MONNO RITA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "STEFANI' GIUSEPPE", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "1G": [
+                 { nome: "BIANCONI FLAVIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "CANTALICE GABRIELLA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DENORA MARCO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "GIGLIO GIACINTO", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MAGRONE VITA", materia: "CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PULITO ANTONELLA", materia: "GEOGRAFIA GENERALE ED ECONOMICA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SIGNORILE ANNAMARIA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" }
+            ],
+             "1H": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "COLUCCI MODESTA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DE GIGLIO CARMELA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "MAGALETTI ANTONIO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP TECNOLOGIE INFORMATICHE", coordinatore: "no" },
+                 { nome: "MURA LUCIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PULITO ANTONELLA", materia: "GEOGRAFIA, CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "si" },
+                 { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SPIZZICO MARIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "STEFANI' GIUSEPPE", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "2A": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BONOMO MICHELA", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "DE MARZO PAOLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PANTALEO MARIANNA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PARADISO ANTONIA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PICCOLO ANNA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "si" },
+                 { nome: "RICCI GEMMA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "SPADONE ANDREA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "TATULLI VINCENZO", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "2B": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "BONOMO MICHELA", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "CARPENTIERI ROSA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DE MARZO PAOLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MANCO STEFANIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PARADISO ANTONIA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "PICCOLO ANNA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "TATULLI VINCENZO", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+             "2C": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CIRACI TIZIANA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DILONARDO GRAZIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MAGRONE VITA", materia: "CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "NOVIELLO ANNAMARIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TRAVERSA ROSSELLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" }
+            ],
+             "2E": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "BONATESTA MONICA ELENA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "CANTORE ANNA GIOIA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "DAMASCO CLAUDIO", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "LA MANTIA VITO", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MONTALTO GIUSEPPINA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "NOVIELLO ANNAMaria", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PEDONE ADRIANA", materia: "CHIMICA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "si" },
+                 { nome: "SALVATORE NADIA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "SCALIOTI ANTONIO MARIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "SCARCIGLIA MAURIZIO", materia: "FISICA", coordinatore: "no" },
+                 { nome: "STEFANI' GIUSEPPE", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+            "2G": [
+                 { nome: "BIANCONI FLAVIA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DE GAETANO ALESSANDRA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "DENORA MARCO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "DI LILLO ANTONELLA", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "GIGLIO GIACINTO", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "LA MANTIA VITO", materia: "SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PALUMBO RAFFAELE", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PEDONE ADRIANA", materia: "CHIMICA", coordinatore: "si" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SIGNORILE ANNAMARIA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "TORTORELLI ANTONIO", materia: "SOSTEGNO", coordinatore: "no" }
+            ],
+            "2H": [
+                 { nome: "AVELLIS FRANCESCO", materia: "ITP CHIMICA", coordinatore: "no" },
+                 { nome: "COLUCCI MODESTA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "DE GIGLIO CARMELA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "INTONTI ROSARIA ANNALISA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "MAGALETTI ANTONIO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PULITO ANTONELLA", materia: "CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "RESTA TERESA", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RUBINO SOFIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "TERRAFINO DOMENICO", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" }
+            ],
+            "2I": [
+                 { nome: "BONOMO MICHELA", materia: "CHIMICA, SCIENZE DELLA TERRA E BIOLOGIA", coordinatore: "no" },
+                 { nome: "DE MARZO PAOLA", materia: "STORIA", coordinatore: "no" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MAGRINO VALERIA", materia: "ITP TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "MANCO STEFANIA", materia: "MATEMATICA", coordinatore: "si" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "TECNOLOGIE E TECNICHE DI RAPPRESENTAZIONE GRAFICA", coordinatore: "no" },
+                 { nome: "PATERNOSTER FRANCESCA", materia: "SCIENZE E TECNOLOGIE APPLICATE", coordinatore: "no" },
+                 { nome: "PICCOLO ANNA", materia: "DIRITTO ED ECONOMIA", coordinatore: "no" },
+                 { nome: "PIRLO ROSEMARIE", materia: "ITP FISICA", coordinatore: "no" },
+                 { nome: "PRINCIGALLI  GABRIELLA", materia: "FISICA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "ROMITO LAURA", materia: "LINGUA E LETTERATURA ITALIANA", coordinatore: "no" }
+            ],
+            "3ITCAA": [ // Mappato da 3A
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "CICOLELLA PAOLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "FIORIELLO MICHELE", materia: "TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "GUERRA MARIA GRAZIA", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "GESTIONE DEL CANTIERE E SICUREZZA SUL LAVORO", coordinatore: "no" },
+                 { nome: "POLISENO VINCENZO", materia: "PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "PRIVITERA PAOLO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, GESTIONE DEL CANTIERE E SICUREZZA, PROGETTAZIONE, COSTRUZIONI E IMPIANTI, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "SPADONE ANDREA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "STALLONE SAVERIO", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" }
+            ],
+            "3ITCAB": [ // Mappato da 3B
+                 { nome: "BELLUCCI BARBARA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "COLONNA CLARA", materia: "ITP GESTIONE DEL CANTIERE E SICUREZZA, PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "DI RUTIGLIANO MATTEO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "GIACOVAZZO ANNA", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "MASTROMATTEO GRAZIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "NITTI EMMANUELE", materia: "PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "PANTALEO MARIANNA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PIRRO GIANFRANCO", materia: "GESTIONE DEL CANTIERE E SICUREZZA SUL LAVORO, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "RICCI GEMMA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "ROMITO LAURA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "STALLONE SAVERIO", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" }
+            ],
+            "3ITEC": [
+                 { nome: "ATTOLINI DANIELA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "BILUCAGLIA GABRIELLA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "CANTORE ANNA GIOIA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "CARNIMEO ALESSANDRO", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "MACCHIA MARICA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MATARRESE SILVIA", materia: "TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP ELETTROTECNICA ED ELETTRONICA, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" }
+            ],
+            "3ITET": [
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "BOARETTO FABIO", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "FASULO LORENZO", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "GENCO VITO", materia: "TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "MORO GRAZIANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "NOVIELLO ANNAMARIA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "PUTIGNANO ANDREINA VALERIA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "RANIERI LUCIANA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "si" },
+                 { nome: "RICCI MARIO", materia: "ITP ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "SALVATORE NADIA", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "TORTORELLI ANTONIO", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "VILELLA LUCIA", materia: "SOSTEGNO", coordinatore: "no" }
+            ],
+            "3ITIAB": [ // Mappato da 3ITIB
+                 { nome: "DECEMBRINO DANIELA", materia: "SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "GENCO VITO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "INGROSSO MARIA DOMENICA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "MIZZI LEONARDO", materia: "ITP SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "PIARULLI ANTONIO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "si" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RICCI MARIO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "TAMPORRA PAOLA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP INFORMATICA", coordinatore: "no" }
+            ],
+            "3ITIAC": [ // Mappato da 3ITIC
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "CARNIMEO ALESSANDRO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "CURCI ANTONIO", materia: "ITP INFORMATICA, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "DE GAETANO ALESSANDRA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "MAGALETTI ANTONIO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "si" },
+                 { nome: "MASTRANDREA GIUSEPPE", materia: "EDUCAZIONE CIVICA, SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RICCI MARIO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "SAVINO ANNA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" }
+            ],
+            "4ITCAA": [ // Mappato da 4A
+                 { nome: "CICOLELLA PAOLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "COLONNA CLARA", materia: "ITP PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "si" },
+                 { nome: "FIORIELLO MICHELE", materia: "TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "PASCAZIO ANNA MARIA GRAZIA", materia: "GESTIONE DEL CANTIERE E SICUREZZA SUL LAVORO", coordinatore: "no" },
+                 { nome: "POLISENO VINCENZO", materia: "PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "PRIVITERA PAOLO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, GESTIONE DEL CANTIERE E SICUREZZA, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "SPADONE ANDREA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "STALLONE SAVERIO", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" }
+            ],
+            "4ITEC": [
+                 { nome: "BILUCAGLIA GABRIELLA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "CANTORE ANNA GIOIA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "CARNIMEO ALESSANDRO", materia: "TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "GIUDICE TIZIANA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MANFREDI MARINA DOMENICA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MATARRESE SILVIA", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP ELETTROTECNICA ED ELETTRONICA, SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SISTEMI AUTOMATICI", coordinatore: "si" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" }
+            ],
+            "4ITET": [
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "BARLETTA MARCO", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "BILUCAGLIA GABRIELLA", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP SISTEMI AUTOMATICI, TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "FASULO LORENZO", materia: "ITP ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "LAPRESA MICHELE ", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "MANFREDI MARINA DOMENICA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MORO GRAZIANA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "si" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RIGANTI ALESSIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "ROMITO GIOVANNI", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "SALVATORE NADIA", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SISTEMI AUTOMATICI", coordinatore: "no" }
+            ],
+            "4ITIAB": [ // Mappato da 4ITIB
+                 { nome: "DECEMBRINO DANIELA", materia: "SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "si" },
+                 { nome: "GENCO VITO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "INGROSSO MARIA DOMENICA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "LEOPARDI VITO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "MIZZI LEONARDO", materia: "ITP SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "TAMPORRA PAOLA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP INFORMATICA", coordinatore: "no" }
+            ],
+            "4ITIAC": [ // Mappato da 4ITIC
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "CURCI ANTONIO", materia: "ITP INFORMATICA", coordinatore: "si" },
+                 { nome: "DE GAETANO ALESSANDRA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "ESPOSITO EMANUELA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "GENCO VITO", materia: "TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "PIARULLI ANTONIO", materia: "MATEMATICA E COMPLEMENTI DI MATEMATICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RICCI MARIO", materia: "ITP TELECOMUNICAZIONI", coordinatore: "no" },
+                 { nome: "SACCHETTI DOMENICO", materia: "SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" }
+            ],
+            "5ITCAA": [ // Mappato da 5A
+                 { nome: "CICOLELLA PAOLA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "COLONNA CLARA", materia: "ITP PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" },
+                 { nome: "FIORIELLO MICHELE", materia: "TOPOGRAFIA", coordinatore: "si" },
+                 { nome: "GIORGIO ADRIANA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "GIORGIO ALFONSO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "LEUZZI PATRIZIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "MASTROMATTEO GRAZIA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "PIRRO GIANFRANCO", materia: "GESTIONE DEL CANTIERE E SICUREZZA SUL LAVORO", coordinatore: "no" },
+                 { nome: "PRIVITERA PAOLO", materia: "ITP GEOPEDOLOGIA, ECONOMIA ED ESTIMO, GESTIONE DEL CANTIERE E SICUREZZA, TOPOGRAFIA", coordinatore: "no" },
+                 { nome: "ROMITA PIERLUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "STALLONE SAVERIO", materia: "GEOPEDOLOGIA, ECONOMIA ED ESTIMO", coordinatore: "no" },
+                 { nome: "TATULLI VINCENZO", materia: "PROGETTAZIONE, COSTRUZIONI E IMPIANTI", coordinatore: "no" }
+            ],
+            "5ITEC": [
+                 { nome: "BILUCAGLIA GABRIELLA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "CARNIMEO ALESSANDRO", materia: "TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "DELL'AQUILA ROBERTO", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "FASULO LORENZO", materia: "ITP ELETTROTECNICA ED ELETTRONICA, SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "GIANGUALANO FRANCESCO", materia: "SOSTEGNO", coordinatore: "si" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MATARRESE SILVIA", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "MONTERISI STEFANO", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SANTOSTASI SERGIO", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "SOLDO AGATA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" }
+            ],
+		
+            "5ITET": [
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "BOARETTO FABIO", materia: "ELETTROTECNICA ED ELETTRONICA", coordinatore: "no" },
+                 { nome: "DE LUISI CARMELA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "DIVELLA DIEGO GIUSEPPE", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "FASULO LORENZO", materia: "ITP ELETTROTECNICA ED ELETTRONICA, SISTEMI AUTOMATICI", coordinatore: "si" },
+                 { nome: "LAPRESA MICHELE ", materia: "ITP TECNOLOGIE E PROGETTAZIONE DI SISTEMI ELETTRICI ED ELETTRONICI", coordinatore: "no" },
+                 { nome: "LEOPARDI VITO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "MURA LUCIA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "PALUMBO RAFFAELE", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "RICCIARDI STEFANO", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SALVATORE NADIA", materia: "SISTEMI AUTOMATICI", coordinatore: "no" },
+                 { nome: "SAVINO ANNA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "SPIZZICO MARIA", materia: "SOSTEGNO", coordinatore: "no" }
+            ],
+             "5ITIAA": [ // Mappato da 5ITIA
+                 { nome: "BILUCAGLIA GABRIELLA", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "CURCI ANTONIO", materia: "ITP INFORMATICA", coordinatore: "no" },
+                 { nome: "DECEMBRINO DANIELA", materia: "GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA", coordinatore: "no" },
+                 { nome: "GIULIANI MARIA TERESA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "MASTRANDREA GIUSEPPE", materia: "TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MIZZI LEONARDO", materia: "ITP TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MONGELLI ANTONIO", materia: "ITP GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SACCHETTI DOMENICO", materia: "SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "SANNICANDRO PATRIZIA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "SUMMO LETIZIA", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "TRIGGIANI EMANUELE", materia: "SOSTEGNO", coordinatore: "si" }
+            ],
+             "5ITIAB": [ // Mappato da 5ITIB
+                 { nome: "DECEMBRINO DANIELA", materia: "GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA, SISTEMI E RETI", coordinatore: "si" },
+                 { nome: "DI FRANCO LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "INGROSSO MARIA DOMENICA", materia: "LINGUA E LETTERATURA ITALIANA, STORIA", coordinatore: "no" },
+                 { nome: "LEOPARDI VITO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "MIZZI LEONARDO", materia: "ITP GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA, SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "RANIERI LUCIANA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SIMONE LISIENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "TAMPORRA PAOLA", materia: "INFORMATICA", coordinatore: "no" },
+                 { nome: "TANDOI GIUSEPPE", materia: "ITP INFORMATICA", coordinatore: "no" },
+                 { nome: "TORTORELLI ANTONIO", materia: "SOSTEGNO", coordinatore: "no" }
+            ],
+             "5ITIAC": [ // Mappato da 5ITIC
+                 { nome: "ALTAMURA LUIGI", materia: "SCIENZE MOTORIE E SPORTIVE", coordinatore: "no" },
+                 { nome: "CANTALICE GABRIELLA", materia: "SOSTEGNO", coordinatore: "no" },
+                 { nome: "CURCI ANTONIO", materia: "ITP INFORMATICA", coordinatore: "no" },
+                 { nome: "DE GAETANO ALESSANDRA", materia: "EDUCAZIONE CIVICA, INFORMATICA", coordinatore: "si" },
+                 { nome: "ESPOSITO EMANUELA", materia: "LINGUA E LETTERATURA ITALIANA", coordinatore: "no" },
+                 { nome: "GABRIELE ANNARITA", materia: "GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA", coordinatore: "no" },
+                 { nome: "IACOVAZZI ANTONIO RAFFAELE", materia: "ITP SISTEMI E RETI, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MASSARI ELENA", materia: "LINGUA INGLESE", coordinatore: "no" },
+                 { nome: "MASTRANDREA GIUSEPPE", materia: "EDUCAZIONE CIVICA, TECN. E PROGETTAZIONE DI SISTEMI INFORMATICI E DI TELECOMUNICAZ.", coordinatore: "no" },
+                 { nome: "MIZZI LEONARDO", materia: "ITP GESTIONE PROGETTO, ORGANIZZAZIONE D'IMPRESA", coordinatore: "no" },
+                 { nome: "PIARULLI ANTONIO", materia: "MATEMATICA", coordinatore: "no" },
+                 { nome: "RASPATELLI MARIA", materia: "RELIGIONE CATTOLICA/ATTIVITA' ALTERNATIVA", coordinatore: "no" },
+                 { nome: "SACCHETTI DOMENICO", materia: "SISTEMI E RETI", coordinatore: "no" },
+                 { nome: "SAVINO ANNA", materia: "STORIA", coordinatore: "no" }
+            ]
+        };
+// --- CONFIGURAZIONE TUTOR ORIENTAMENTO (PUNTO 7) ---
+const datiTutorOrientamento = {
+    "3ITEC": [
+        { nome: "DELL'AQUILA Roberto", info: "da ABANICO Ashlyn a IACOVAZZI Andrea" },
+        { nome: "DIVELLA Diego Giuseppe", info: "da KARIM Abdeljalil a VERGARI Alberto Emanuele" }
+    ],
+    "3ITCAA": [{ nome: "FIORIELLO Michele" }],
+    "3ITCAB": [{ nome: "MONGELLI Antonio" }],
+    "3ITCM": [{ nome: "DI LILLO Antonella" }],
+    "3ITET": [{ nome: "NOVIELLO Annamaria" }],
+    "3ITIAA": [{ nome: "GIULIANI Maria Teresa" }],
+    "3ITIAB": [{ nome: "PIARULLI Antonio" }],
+    "3ITIAC": [{ nome: "PIARULLI Antonio" }],
+    
+    "4ITCAA": [
+        { nome: "FIORIELLO Michele", info: "da ABBINANTE Sabino a MASTROLONARDO Ivan" },
+        { nome: "MANCO Stefania", info: "da MONDELLI Francesco Saverio a ZACCARO Mattia Pio" }
+    ],
+    "4ITIAC": [
+        { nome: "DECEMBRINO Daniela", info: "da ALBA Nicola a GRANDE Giacomo" },
+        { nome: "GIULIANI Maria Teresa", info: "da GRIMALDI Aurora a STRISCIULLO Mattia" }
+    ],
+    "4ITCAB": [{ nome: "MONGELLI Antonio" }],
+    "4ITCM": [{ nome: "MANCO Stefania" }],
+    "4ITEC": [{ nome: "DIVELLA Diego Giuseppe" }],
+    "4ITET": [{ nome: "ROMITO Giovanna M.R." }],
+    "4ITIAA": [{ nome: "SACCHETTI Domenico" }],
+    "4ITIAB": [{ nome: "GABRIELE Annarita" }],
+    
+    "5ITET": [
+        { nome: "NOVIELLO Annamaria", info: "da ARMAGNO Giovanni a DI FALCO Daniele" },
+        { nome: "ROMITO Giovanna M.R.", info: "da FRAPPAMPINA Antonello a MATTIA Gioele" },
+        { nome: "TANDOI Giuseppe", info: "da PANZONE Emanuele a VALERIO Francesco" }
+    ],
+    "5ITIAC": [
+        { nome: "GABRIELE Annarita", info: "da ABBINANTE Antonio a LORUSSO Alessandro" },
+        { nome: "SACCHETTI Domenico", info: "da MAGALETTI Andrea a VERROCA Samuele" }
+    ],
+    "5ITCAA": [{ nome: "TATULLI Vincenzo" }],
+    "5ITCAB": [{ nome: "TATULLI Vincenzo" }],
+    "5ITCM": [{ nome: "DI LILLO Antonella" }],
+    "5ITEC": [{ nome: "DELL'AQUILA Roberto" }],
+    "5ITIAA": [{ nome: "TANDOI Giuseppe" }],
+    "5ITIAB": [{ nome: "DECEMBRINO Daniela" }]
+};// Funzione per sincronizzare il nome del Coordinatore nel punto 5 (Ed. Civica)
+function sincronizzaCoordinatoreEdCivica() {
+    const coordInput = document.getElementById('coordinatoreNome');
+    const targetSpan = document.getElementById('coordEdCivicaNome');
+    
+    if (coordInput && targetSpan) {
+        // Se c'è un nome, usalo, altrimenti metti la linea
+        targetSpan.textContent = coordInput.value.trim() || '_________________';
+    }
+}
+function getSelectAlunniHTML() {
+        const selectClasse = document.getElementById('selectClasse');
+        const classe = selectClasse ? selectClasse.value : "";
+        const listaAlunni = datiAlunni[classe] || []; 
+
+        if (listaAlunni.length > 0) {
+            let options = `<option value="">Seleziona studente...</option>`;
+            listaAlunni.forEach(alunno => {
+                options += `<option value="${alunno}">${alunno}</option>`;
+            });
+            return `<select class="form-input-table-dynamic w-full font-bold" style="background-color: white;">${options}</select>`;
+        } else {
+            // Se non ci sono alunni nel DB per questa classe, mostra la casella di testo normale
+            return `<textarea class="form-input-table-dynamic font-bold" placeholder="Cognome e Nome studente..."></textarea>`;
+        }
+    }
+function aggiornaTabellaAssenze() {
+    const tbody = document.getElementById('assenze-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = ''; // Svuota la tabella
+    addAssenzeStudente(); // Aggiunge la prima riga con il nuovo menu alunni
+}
+// Funzione per popolare i Tutor nel Punto 7
+function popolaTutorOrientamento() {
+    const selectClasse = document.getElementById('selectClasse');
+    const container = document.getElementById('tutor-orientamento-container');
+    const sezioneAnalisi = document.getElementById('box-attivita-orientamento'); 
+    
+    if (!selectClasse || !container) return;
+
+    const classeSelezionata = selectClasse.value;
+    const anno = classeSelezionata.charAt(0);
+    
+    container.innerHTML = ''; 
+
+    // Se è biennio nasconde e mette la frase standard
+    if (anno === "1" || anno === "2") {
+        container.style.display = 'block';
+        container.className = "mb-4 p-4 bg-gray-100 border rounded italic text-gray-600";
+        container.innerHTML = `<p>Il punto non viene discusso in quanto non sono previste attività di orientamento specifiche per le classi del biennio.</p>`;
+        if (sezioneAnalisi) sezioneAnalisi.style.display = 'none';
+        return;
+    }
+
+    // Se è triennio mostra i tutor
+    if (sezioneAnalisi) sezioneAnalisi.style.display = 'block';
+    
+    const tutors = datiTutorOrientamento[classeSelezionata];
+
+    if (tutors && tutors.length > 0) {
+        container.style.display = 'block';
+        container.className = "mb-4 space-y-2 bg-yellow-50 p-3 rounded border border-yellow-200";
+        
+        const header = document.createElement('div');
+        header.className = "text-sm font-bold text-gray-700 mb-2";
+        header.innerText = "Docenti Tutor Orientamento:";
+        container.appendChild(header);
+
+        tutors.forEach((tutorObj, index) => {
+            // Gestisce anche se per sbaglio il formato è rimasto a stringa nel file
+            const isOldFormat = typeof tutorObj === 'string';
+            const nomeTutor = isOldFormat ? tutorObj : tutorObj.nome;
+            const infoTutor = isOldFormat ? undefined : tutorObj.info;
+
+            const row = document.createElement('div');
+            row.className = "flex flex-col mb-2 bg-white p-2 rounded border border-gray-200";
+            
+            // LA TUA MODIFICA: La label appare SOLO se ci sono 2 o più tutor e c'è l'informazione
+            let infoHtml = "";
+            if (tutors.length >= 2 && infoTutor) {
+                infoHtml = `<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase mb-1 w-fit border border-blue-200 shadow-sm">
+                                ${infoTutor}
+                            </span>`;
+            }
+
+            // Struttura HTML della riga: prima la label (se esiste), poi l'input col nome
+            row.innerHTML = `
+                ${infoHtml}
+                <div class="flex items-center space-x-2">
+                    <span class="font-semibold text-sm w-16">Tutor ${index + 1}:</span>
+                    <input type="text" class="form-input flex-grow font-semibold" value="${nomeTutor}">
+                    <div class="flex items-center ml-2 border-l pl-2">
+                        <input type="checkbox" class="form-checkbox h-5 w-5">
+                        <label class="text-sm ml-1 font-semibold">Assente</label>
+                    </div>
+                </div>`;
+            container.appendChild(row);
+        });
+    } else {
+        container.style.display = 'none';
+    }
+}   // --- FINE DATI DOCENTI ---
+
+        // --- FUNZIONI UTILITY ---
+
+       function autoResizeTextarea(textarea) {
+    if (!textarea) return;
+    textarea.style.height = 'auto'; 
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+        function onTextareaInput() {
+            autoResizeTextarea(this);
+        }
+
+        function initAutoResize() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.removeEventListener('input', onTextareaInput); 
+                textarea.addEventListener('input', onTextareaInput);
+                autoResizeTextarea(textarea);
+            });
+        }
+
+        function removeDynamicRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        // --- FUNZIONI SPECIFICHE APRILE ---
+
+       
+        // Punto 2: Libri
+function addLibroRow() {
+    const tbody = document.getElementById('libri-tbody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Materia"></textarea></td>
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Autore / Titolo / ISBN"></textarea></td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    // Applica auto-resize
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+
+       // --- NUOVE FUNZIONI PER TABELLA RECUPERO (PUNTO 3) ---
+
+// --- NUOVE FUNZIONI PER TABELLA RECUPERO (PUNTO 3 - FIX ALLINEAMENTO) ---
+
+// --- CONFIGURAZIONE MATERIE PER ANNO E INDIRIZZO ---
+const materieRecuperoDB = {
+    "1": [ // CLASSI PRIME
+        "Lingua e letteratura italiana", 
+        "Storia", 
+        "Matematica", 
+        "Lingua inglese", 
+        "Fisica", 
+        "Chimica", 
+        "Diritto ed Economia", 
+        "Scienze della Terra e Biologia", 
+        "Tecnologie e tecniche di Rappresentazione Grafica", 
+        "Tecnologie informatiche", 
+        "Scienze motorie e sportive", 
+        "Geografia", 
+        "Religione Cattolica o Attività alternative", 
+        "Ed. Civica"
+    ],
+    "2": [ // CLASSI SECONDE
+        "Lingua e letteratura italiana", 
+        "Storia", 
+        "Matematica", 
+        "Lingua inglese", 
+        "Fisica", 
+        "Chimica", 
+        "Diritto ed Economia", 
+        "Scienze della Terra e Biologia", 
+        "Tecnologie e tecniche di Rappresentazione Grafica", 
+        "Scienze e tecnologie applicate", 
+        "Scienze motorie e sportive", 
+        "Religione Cattolica o Attività alternative", 
+        "Ed. Civica"
+    ],
+    "ITCM": [ // TRIENNIO ITCM (CHIMICA)
+        "Lingua e Letteratura italiana",
+        "Storia",
+        "Lingua Inglese",
+        "Matematica",
+        "Chimica analitica e strumentale",
+        "Chimica organica e biochimica",
+        "Tecnologie chimiche industriali",
+        "Scienze Motorie e Sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ],
+    "ITEC": [ // TRIENNIO ITEC (ELETTRONICA)
+        "Lingua e Letteratura italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica",
+        "Elettronica ed Elettrotecnica",
+        "Sistemi automatici per apparati elettronici",
+        "Tecnologie e progettazione di sistemi elettrici ed elettronici",
+        "Scienze motorie e sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ],
+    "ITET": [ // TRIENNIO ITET (ELETTROTECNICA)
+        "Lingua e Letteratura italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica",
+        "Elettrotecnica",
+        "Sistemi automatici per apparati elettronici",
+        "Tecnologie e progettazione di sistemi elettrici ed elettronici",
+        "Scienze motorie e sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ],
+    "ITIA_34": [ // TRIENNIO ITIA (3^ e 4^)
+        "Lingua e Letteratura Italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica",
+        "Sistemi e Reti",
+        "Tecnologie e Progettazione Sistemi Informatici e di Telecom.",
+        "Telecomunicazioni",
+        "Informatica",
+        "Scienze Motorie e Sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ],
+    "ITIA_5": [ // TRIENNIO ITIA (5^)
+        "Lingua e Letteratura Italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica",
+        "Sistemi e Reti",
+        "Tecnologie e Progettazione Sistemi Informatici e di Telecom.",
+        "Gestione del Progetto e Organizzazione d’Impresa",
+        "Informatica",
+        "Scienze Motorie e Sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ],
+    "ITCA": [ // TRIENNIO ITCA (COSTRUZIONI) - NUOVO
+        "Lingua e Letteratura Italiana",
+        "Storia",
+        "Lingua inglese",
+        "Matematica",
+        "Topografia",
+        "Gestione del cantiere e sicurezza sul lavoro",
+        "Progettazione costruzioni ed impianti",
+        "Geopedologia, economia ed estimo",
+        "Scienze Motorie e Sportive",
+        "Religione Cattolica o Attività alternative",
+        "Ed. Civica"
+    ]
+};
+
+// Funzione Helper per decidere se mostrare Select o Textarea
+function getCampoDisciplinaHTML() {
+    const selectClasse = document.getElementById('selectClasse');
+    const classe = selectClasse ? selectClasse.value : "";
+    const anno = classe.charAt(0); // Prende il primo carattere (es. "1" da "1A")
+    
+    let listaMaterie = null;
+
+    // Logica di selezione della lista in base alla priorità
+    if (anno === "1") {
+        listaMaterie = materieRecuperoDB["1"];
+    } else if (anno === "2") {
+        listaMaterie = materieRecuperoDB["2"];
+    } else if (classe.includes("ITCM")) {
+        listaMaterie = materieRecuperoDB["ITCM"];
+    } else if (classe.includes("ITEC")) {
+        listaMaterie = materieRecuperoDB["ITEC"];
+    } else if (classe.includes("ITET")) {
+        listaMaterie = materieRecuperoDB["ITET"];
+    } else if (classe.includes("ITCA")) {
+        listaMaterie = materieRecuperoDB["ITCA"]; // Nuova condizione per ITCA
+    } else if (classe.includes("ITIA")) {
+        // Controllo specifico per ITIA: distingue 5^ da 3^ e 4^
+        if (anno === "5") {
+            listaMaterie = materieRecuperoDB["ITIA_5"];
+        } else {
+            listaMaterie = materieRecuperoDB["ITIA_34"];
+        }
+    }
+
+    if (listaMaterie) {
+        // Se abbiamo trovato una lista, costruisce la SELECT
+        let options = `<option value="">Seleziona materia...</option>`;
+        listaMaterie.forEach(materia => {
+            options += `<option value="${materia}">${materia}</option>`;
+        });
+        return `<select class="form-input-table-dynamic w-full" style="background-color: white;">${options}</select>`;
+    } else {
+        // Altrimenti (es. classi non mappate) ritorna TEXTAREA libera
+        return `<textarea class="form-input-table-dynamic w-full" placeholder="Disciplina"></textarea>`;
+    }
+}
+
+// --- NUOVE FUNZIONI PER TABELLA RECUPERO ---
+
+// 1. Aggiunge un nuovo Alunno (AGGIORNATA CON MENU ALUNNI)
+function addStudenteBlock() {
+    const table = document.getElementById('main-recupero-table');
+    const tfoot = table.querySelector('tfoot');
+    
+    const campoDisciplina = getCampoDisciplinaHTML();
+    const campoAlunno = getSelectAlunniHTML();
+
+    const newTbody = document.createElement('tbody');
+    newTbody.className = "border-b-2 border-gray-400 group-studente bg-white"; 
+
+    newTbody.innerHTML = `
+        <tr>
+            <td class="border-r border-gray-300 p-2" rowspan="1">
+                ${campoAlunno}
+                <div class="mt-2 no-print">
+                    <button onclick="addMateriaToStudente(this)" class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded w-full mb-1 shadow-sm transition duration-150">
+                        + Aggiungi Materia
+                    </button>
+                </div>
+            </td>
+            
+            <td class="border-r border-gray-300 p-1">
+                ${campoDisciplina}
+            </td>
+            
+            <td class="border-r border-gray-300 p-1 text-center">
+                <select class="form-input-table w-full text-center bg-transparent">
+                    <option value="">-</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                </select>
+            </td>
+            
+            <td class="border-r border-gray-300 p-1 text-center">
+                <input type="text" class="form-input-table w-full text-center" maxlength="4">
+            </td>
+            
+            <td class="p-1 text-center no-print align-middle">
+                <button onclick="removeStudenteBlock(this)" class="bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-3 rounded shadow">
+                    Elimina Studente
+                </button>
+            </td>
+        </tr>
+    `;
+    
+    table.insertBefore(newTbody, tfoot);
+    
+    setTimeout(() => {
+        newTbody.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+// 2. Aggiunge una Materia allo stesso Alunno
+function addMateriaToStudente(btn) {
+    const tbody = btn.closest('tbody');
+    const firstRow = tbody.querySelector('tr');
+    const nameCell = firstRow.cells[0];
+    
+    const campoDisciplina = getCampoDisciplinaHTML();
+
+    let currentSpan = parseInt(nameCell.getAttribute('rowspan') || 1);
+    nameCell.setAttribute('rowspan', currentSpan + 1);
+    
+    const newRow = document.createElement('tr');
+    newRow.className = "border-t border-gray-200"; 
+    
+    newRow.innerHTML = `
+        <td class="border-r border-gray-300 p-1 align-top">
+            ${campoDisciplina}
+        </td>
+        
+        <td class="border-r border-gray-300 p-1 align-top text-center">
+            <select class="form-input-table w-full text-center bg-transparent">
+                <option value="">-</option>
+                <option value="SI">SI</option>
+                <option value="NO">NO</option>
+            </select>
+        </td>
+        
+        <td class="border-r border-gray-300 p-1 align-top text-center">
+            <input type="text" class="form-input-table w-full text-center" maxlength="4">
+        </td>
+        
+        <td class="p-1 text-center no-print align-middle">
+            <button onclick="removeMateriaRow(this)" class="bg-red-100 text-red-700 hover:bg-red-200 border border-red-300 text-xs py-1 px-2 rounded">
+                Rimuovi Materia
+            </button>
+        </td>
+    `;
+    
+    tbody.appendChild(newRow);
+    
+    newRow.querySelectorAll('textarea').forEach(t => {
+        t.addEventListener('input', onTextareaInput);
+        autoResizeTextarea(t);
+    });
+}
+
+// 3. Rimuove l'intero blocco studente
+function removeStudenteBlock(btn) {
+    if(confirm("Vuoi eliminare questo studente e tutte le sue materie?")) {
+        const tbody = btn.closest('tbody');
+        tbody.remove();
+    }
+}
+
+// 4. Rimuove solo una riga materia
+function removeMateriaRow(btn) {
+    const row = btn.closest('tr');
+    const tbody = row.closest('tbody');
+    const nameCell = tbody.querySelector('tr').cells[0]; 
+    
+    let currentSpan = parseInt(nameCell.getAttribute('rowspan'));
+    nameCell.setAttribute('rowspan', currentSpan - 1);
+    
+    row.remove();
+}
+// Punto 4: PDP (AGGIORNATA CON MENU ALUNNI)
+function addPDPRow() {
+    const tbody = document.getElementById('pdp-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Richiama il menu a tendina degli alunni basato sulla classe selezionata
+    const campoAlunno = getSelectAlunniHTML(); 
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1">
+            ${campoAlunno} 
+        </td>
+        <td class="border border-gray-300 p-1">
+            <textarea class="form-input-table-dynamic" placeholder="Es. Stesura Nuovo / Revisione..."></textarea>
+        </td>
+        <td class="border border-gray-300 p-1 text-center">
+            <select class="form-input-table w-full text-center bg-transparent">
+                <option value="">-</option>
+                <option value="Unanimità">Unanimità</option>
+                <option value="A maggioranza">A Maggioranza</option>
+		<option value="Non Approvato">Non Approvato</option>
+            </select>
+        </td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    // Attiva l'auto-ridimensionamento per le textarea appena create
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}        
+// Punto 5: Ed Civica (Materie 2° quad)
+       // --- NUOVE FUNZIONI PER ED. CIVICA (PUNTO 5) ---
+
+// 1. Funzione Helper per generare il menu materie di Ed. Civica
+function getCampoMateriaEdCivicaHTML() {
+    const selectClasse = document.getElementById('selectClasse');
+    const classe = selectClasse ? selectClasse.value : "";
+    const anno = classe.charAt(0); // Es. "1", "4", "5"
+
+    let listaMaterie = [];
+
+    // Recupera la lista base usando la stessa logica dei recuperi
+    if (anno === "1") listaMaterie = materieRecuperoDB["1"];
+    else if (anno === "2") listaMaterie = materieRecuperoDB["2"];
+    else if (classe.includes("ITCM")) listaMaterie = materieRecuperoDB["ITCM"];
+    else if (classe.includes("ITEC")) listaMaterie = materieRecuperoDB["ITEC"];
+    else if (classe.includes("ITET")) listaMaterie = materieRecuperoDB["ITET"];
+    else if (classe.includes("ITCA")) listaMaterie = materieRecuperoDB["ITCA"];
+    else if (classe.includes("ITIA")) {
+        if (anno === "5") listaMaterie = materieRecuperoDB["ITIA_5"];
+        else listaMaterie = materieRecuperoDB["ITIA_34"];
+    }
+
+    // Se abbiamo una lista, la filtriamo e modifichiamo
+    if (listaMaterie && listaMaterie.length > 0) {
+        // Clona la lista per non modificare l'originale
+        let opzioni = [...listaMaterie];
+
+        // 1. RIMUOVI "Ed. Civica"
+        opzioni = opzioni.filter(m => m !== "Ed. Civica");
+
+        // 2. AGGIUNGI "Diritto-Potenziamento" SOLO per Quarte e Quinte
+        if (anno === "4" || anno === "5") {
+            opzioni.push("Diritto-Potenziamento");
+        }
+
+        // Costruisci il menu a tendina
+        let htmlOptions = `<option value="">Seleziona materia...</option>`;
+        opzioni.forEach(m => {
+            htmlOptions += `<option value="${m}">${m}</option>`;
+        });
+        return `<select class="form-input-table-dynamic w-full" style="background-color: white;">${htmlOptions}</select>`;
+    } else {
+        // Fallback: casella di testo se nessuna classe è selezionata
+        return `<textarea class="form-input-table-dynamic" placeholder="Materia"></textarea>`;
+    }
+}
+
+// 2. Funzione per aggiungere una riga (Aggiornata con il menu)
+function addEdCivicaRow() {
+    const tbody = document.getElementById('edcivica-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Genera il campo corretto (Menu o Textarea)
+    const campoMateria = getCampoMateriaEdCivicaHTML();
+
+    newRow.innerHTML = `
+    <td class="border border-gray-300 p-1">
+        ${campoMateria}
+    </td>
+    <td class="border border-gray-300 p-1">
+        <input type="number" class="form-input-table w-full text-center" value="0" min="0">
+    </td>
+    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Attività prevista"></textarea></td>
+    <td class="border border-gray-300 p-1 text-center no-print align-middle">
+        <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+    </td>
+`;
+    tbody.appendChild(newRow);
+    
+    // Applica auto-resize solo alle textarea (non al select)
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+
+// 3. Funzione per aggiornare la tabella quando cambi classe
+function aggiornaTabellaEdCivica() {
+    const tbody = document.getElementById('edcivica-tbody');
+    if (!tbody) return;
+    
+    // Svuota la tabella e aggiunge una nuova riga con le opzioni corrette
+    tbody.innerHTML = '';
+    addEdCivicaRow();
+}
+
+
+function aggiornaTabellaPDP() {
+    const tbody = document.getElementById('pdp-tbody');
+    if (!tbody) return;
+    // Svuota la tabella e ricrea la prima riga (che ora leggerà la classe e metterà il menu)
+    tbody.innerHTML = '';
+    addPDPRow();
+}
+
+function aggiornaTabellaDisciplinare() {
+    const tbody = document.getElementById('disciplinari-tbody');
+    if (!tbody) return;
+    // Svuota la tabella e ricrea la prima riga
+    tbody.innerHTML = '';
+    addDisciplinareRow();
+}
+
+        // Punto 6: Disciplinare (AGGIORNATA CON MENU ALUNNI)
+function addDisciplinareRow() {
+    const tbody = document.getElementById('disciplinari-tbody');
+    const newRow = document.createElement('tr');
+    
+    // QUI RICHIAMIAMO IL MENU A TENDINA DEGLI ALUNNI
+    const campoAlunno = getSelectAlunniHTML();
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-1">
+            ${campoAlunno}
+        </td>
+        <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Provvedimento adottato..."></textarea></td>
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+    
+    setTimeout(() => {
+        newRow.querySelectorAll('textarea').forEach(t => {
+            t.addEventListener('input', onTextareaInput);
+            autoResizeTextarea(t);
+        });
+    }, 0);
+}
+        // --- FUNZIONI CORE (ODG Dinamico, Rappresentanti, Docenti) ---
+// --- FUNZIONI CORE (ODG Dinamico, Rappresentanti, Docenti) ---
+
+function updateAllNumbering() {
+    const dynamicList = document.getElementById('dynamic-odg-list');
+    let currentNum = 6; // I primi 5 punti sono fissi
+    
+    // 1. Ricalcola i numeri dei punti dinamici
+    if (dynamicList) {
+        Array.from(dynamicList.children).forEach(odgDiv => {
+            const pointId = odgDiv.id.replace('odg-item-', '');
+            
+            // Aggiorna l'etichetta numerica nell'elenco O.d.g.
+            const label = odgDiv.querySelector('label');
+            if (label) label.textContent = currentNum + '.';
+            
+            // Aggiorna l'etichetta nello svolgimento
+            const titleElement = document.getElementById(`svolgimento-title-${pointId}`);
+            const inputElement = odgDiv.querySelector('input');
+            if (titleElement && inputElement) {
+                titleElement.textContent = `${currentNum}. ${inputElement.value || '...'}`;
+            }
+            
+            // Aggiorna il placeholder della textarea per coerenza
+            const svolgimentoDiv = document.getElementById(`svolgimento-point-${pointId}`);
+            if (svolgimentoDiv) {
+                const textarea = svolgimentoDiv.querySelector('textarea');
+                if (textarea) textarea.placeholder = `Discussione punto ${currentNum}...`;
+            }
+            
+            currentNum++;
+        });
+    }
+
+    // 2. Aggiorna in tempo reale i punti statici finali (Genitori e Libri)
+    const elOdgAndamento = document.getElementById('odg-num-andamento');
+    if (elOdgAndamento) elOdgAndamento.textContent = currentNum;
+    const elTitoloAndamento = document.getElementById('titolo-num-andamento');
+    if (elTitoloAndamento) elTitoloAndamento.textContent = currentNum;
+    
+    const elOdgLibri = document.getElementById('odg-num-libri');
+    if (elOdgLibri) elOdgLibri.textContent = currentNum + 1;
+    const elTitoloLibri = document.getElementById('titolo-num-libri');
+    if (elTitoloLibri) elTitoloLibri.textContent = currentNum + 1;
+}
+
+function addDynamicOdgPoint() {
+    const odgList = document.getElementById('dynamic-odg-list');
+    const svolgimentoPoints = document.getElementById('dynamic-svolgimento-points');
+    const uniqueId = nextOdgPoint++; 
+    
+    const odgDiv = document.createElement('div');
+    odgDiv.id = `odg-item-${uniqueId}`;
+    odgDiv.className = 'flex items-center space-x-2';
+    odgDiv.innerHTML = `
+        <label class="font-semibold"></label>
+        <input type="text" class="form-input flex-grow text-sm" placeholder="Titolo punto O.d.g..." oninput="updateAllNumbering()">
+        <button type="button" onclick="removeDynamicOdgPoint(${uniqueId})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg no-print">Rimuovi</button>
+    `;
+    odgList.appendChild(odgDiv);
+
+    const svolgimentoDiv = document.createElement('div');
+    svolgimentoDiv.id = `svolgimento-point-${uniqueId}`;
+    svolgimentoDiv.innerHTML = ` 
+        <h3 id="svolgimento-title-${uniqueId}" class="text-md font-semibold text-gray-800 mb-2 uppercase"></h3>
+        <textarea class="form-textarea"></textarea>
+    `;
+    svolgimentoPoints.appendChild(svolgimentoDiv);
+    
+    initAutoResize();
+    updateAllNumbering(); // Ricalcola tutto subito
+}
+
+function removeDynamicOdgPoint(uniqueId) {
+    document.getElementById(`odg-item-${uniqueId}`)?.remove();
+    document.getElementById(`svolgimento-point-${uniqueId}`)?.remove();
+    updateAllNumbering(); // Ricalcola tutto stringendo i buchi
+}
+       
+        // POPOLAMENTO DATI
+        function popolaRappresentanti() {
+            let classeSelezionata = document.getElementById('selectClasse').value;
+            const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+            const reps = datiRappresentanti[classeEffettiva];
+
+            const campi = ['genitoreNome1', 'genitoreNome2', 'studenteNome1', 'studenteNome2'];
+            const checkboxes = ['genitoreAssente1', 'genitoreAssente2', 'studenteAssente1', 'studenteAssente2'];
+
+            campi.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                if(el) el.value = (reps && idx < 2 ? reps.genitori[idx] : (reps && idx >= 2 ? reps.studenti[idx-2] : '')) || '';
+            });
+            checkboxes.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.checked = false;
+            });
+        }
+// Funzione per aggiornare la tabella recupero quando cambia la classe
+function aggiornaTabellaRecupero() {
+    const table = document.getElementById('main-recupero-table');
+    if (!table) return;
+
+    // Rimuove tutti i blocchi studenti esistenti
+    table.querySelectorAll('tbody').forEach(tbody => tbody.remove());
+    
+    // Aggiunge un nuovo blocco vuoto che ora leggerà la classe corretta
+    addStudenteBlock();
+}
+        // --- INIZIO NUOVA LOGICA POPOLAMENTO DOCENTI (SENZA ROWSPAN PER FIX STAMPA) ---
+        function popolaTabellaDocenti() {
+            let classeSelezionata = document.getElementById('selectClasse').value;
+            const classeEffettiva = classeMap[classeSelezionata] || classeSelezionata;
+
+            const tbody = document.getElementById('docenti-tbody');
+            const rigaCoordinatore = document.getElementById('coordinatore-row');
+
+            // 1. Pulisci le righe esistenti dei docenti C.d.C (tranne coordinatore)
+            const righeDocentiAttuali = tbody.querySelectorAll('tr:not(#coordinatore-row)');
+            righeDocentiAttuali.forEach(row => row.remove());
+
+            // 2. Recupera dati docenti
+            const docentiClasse = datiDocentiCDC[classeEffettiva] || [];
+            
+            let coordinatore = null;
+            const altriDocenti = [];
+            
+            docentiClasse.forEach(doc => {
+                 let cleanMateria = doc.materia ? doc.materia.trim() : 'N/D';
+                 let cleanNome = doc.nome ? doc.nome.trim() : 'N/D';
+                 let isCoord = doc.coordinatore ? doc.coordinatore.trim().toLowerCase() === 'si' : false;
+
+                if (isCoord && !coordinatore) {
+                    coordinatore = { nome: cleanNome, materia: cleanMateria };
+                } else {
+                    altriDocenti.push({ nome: cleanNome, materia: cleanMateria });
+                }
+            });
+
+             // Ordina per cognome
+             altriDocenti.sort((a, b) => a.nome.localeCompare(b.nome));
+
+            // 3. Popola Coordinatore
+            const coordDisciplinaTextarea = document.getElementById('coordinatoreDisciplina');
+            const coordNomeTextarea = document.getElementById('coordinatoreNome');
+            if (coordinatore) {
+                coordDisciplinaTextarea.value = coordinatore.materia;
+                coordNomeTextarea.value = coordinatore.nome;
+            } else {
+                coordDisciplinaTextarea.value = '';
+                coordNomeTextarea.value = '';
+                coordDisciplinaTextarea.placeholder = 'Disciplina...';
+                coordNomeTextarea.placeholder = 'Cognome e Nome...';
+            }
+            // Reset checkbox coordinatore
+            const coordCheckbox = rigaCoordinatore.querySelector('.form-checkbox');
+            if(coordCheckbox) coordCheckbox.checked = false;
+
+            // 4. Popola gli altri docenti (SENZA ROWSPAN)
+            altriDocenti.forEach((doc, index) => {
+                const newRow = document.createElement('tr');
+                
+                // Determina cosa scrivere nella prima colonna
+                // Scriviamo "DOCENTI C.D.C" solo nella prima riga, ma la cella esiste fisicamente in tutte
+                let labelCella = (index === 0) ? '<strong>DOCENTI C.D.C</strong>' : '';
+                
+                // Nota: Usiamo border-t-0 sulle righe successive per simulare visivamente l'unione, 
+                // ma manteniamo l'integrità strutturale per la stampa.
+                // Tuttavia, per semplicità e robustezza in stampa, usiamo bordi standard.
+                
+                newRow.innerHTML = `
+                    <td class="border border-gray-300 p-2 align-top text-xs">${labelCella}</td>
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic">${doc.materia}</textarea></td>
+                    <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" oninput="aggiornaOpzioniSegretario();">${doc.nome}</textarea></td>
+                    <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                    <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                        <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+
+                // Auto-resize
+                newRow.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.removeEventListener('input', onTextareaInput);
+                    textarea.addEventListener('input', onTextareaInput);
+                });
+            });
+
+            // Aggiornamenti finali
+            aggiornaPresidente();
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+            aggiornaOpzioniPresidenteDelegato();
+            sincronizzaCoordinatoreEdCivica();
+
+            setTimeout(() => {
+                document.querySelectorAll('#docenti-tbody .form-input-table-dynamic').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+            }, 0);
+        }
+
+        // Funzione per aggiungere MANUALE una riga docente (SEMPLIFICATA)
+        function addDocenteManuale() { 
+            const tbody = document.getElementById('docenti-tbody');
+            // Conta quante righe docenti ci sono già (escluso coordinatore)
+            const righeDocenti = tbody.querySelectorAll('tr:not(#coordinatore-row)');
+            
+            const newRow = document.createElement('tr');
+            
+            // Se è la prima riga aggiunta, metti l'etichetta
+            let labelCella = (righeDocenti.length === 0) ? '<strong>DOCENTI C.D.C</strong>' : '';
+
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-2 align-top text-xs">${labelCella}</td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..."></textarea></td>
+                <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." oninput="aggiornaOpzioniSegretario();"></textarea></td>
+                <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
+                <td class="border border-gray-300 p-1 text-center no-print align-middle">
+                    <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+
+            newRow.querySelectorAll('textarea').forEach(textarea => {
+                 textarea.removeEventListener('input', onTextareaInput); 
+                 textarea.addEventListener('input', onTextareaInput);
+            });
+
+            aggiornaOpzioniSegretario();
+        }
+
+        // Funzione per rimuovere una riga docente (SEMPLIFICATA)
+        function removeDocente(button) {
+            const rowToRemove = button.closest('tr');
+            const tbody = document.getElementById('docenti-tbody');
+            
+            // Controlla se stiamo rimuovendo la PRIMA riga che contiene l'etichetta
+            const primaCella = rowToRemove.cells[0];
+            const haEtichetta = primaCella.innerHTML.includes('DOCENTI C.D.C');
+            
+            const nextRow = rowToRemove.nextElementSibling;
+            
+            // Rimuovi la riga
+            rowToRemove.remove();
+
+            // Se abbiamo rimosso la riga con l'etichetta, e c'è una riga successiva,
+            // spostiamo l'etichetta su quella successiva
+            if (haEtichetta && nextRow && nextRow.id !== 'coordinatore-row') {
+                nextRow.cells[0].innerHTML = '<strong>DOCENTI C.D.C</strong>';
+            }
+
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+            aggiornaOpzioniPresidenteDelegato();
+        }
+        // --- FINE NUOVA LOGICA POPOLAMENTO DOCENTI ---
+
+        // LOGICA FIRME E NOMI
+        function aggiornaPresidente() {
+            const select = document.getElementById('selectPresidente');
+            const menuDelegato = document.getElementById('selectPresidenteDelegato');
+            const campoAltro = document.getElementById('presidenteAltroNome');
+            const oldInput = document.getElementById('presidenteNomeInput');
+
+            if (select.value.includes("delegato")) {
+                menuDelegato.style.display = 'inline-block';
+                oldInput.style.display = 'none';
+                if(menuDelegato.value === '_altro_') campoAltro.style.display = 'inline-block';
+                else campoAltro.style.display = 'none';
+            } else {
+                menuDelegato.style.display = 'none';
+                campoAltro.style.display = 'none';
+                oldInput.style.display = 'none';
+            }
+            aggiornaFirmaPresidente();
+        }
+
+        function aggiornaOpzioniSegretario() {
+            const select = document.getElementById('selectSegretario');
+            const selectedValue = select.value;
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                if (opzioni[i].value !== "" && opzioni[i].value !== "_altro_") opzioni[i].remove();
+            }
+            const nomiDocenti = document.querySelectorAll('.docente-nome');
+            const altroOption = select.querySelector('option[value="_altro_"]');
+            const nomiUnici = new Set();
+            nomiDocenti.forEach(t => {
+                const nome = t.value.trim();
+                if (nome && !nomiUnici.has(nome)) {
+                    nomiUnici.add(nome);
+                    const opt = document.createElement('option');
+                    opt.value = nome; opt.textContent = nome;
+                    select.insertBefore(opt, altroOption);
+                }
+            });
+            select.value = selectedValue || "";
+            checkSegretarioAltro();
+        }
+
+        function checkSegretarioAltro() {
+            const select = document.getElementById('selectSegretario');
+            const input = document.getElementById('segretarioAltroNome');
+            input.style.display = select.value === '_altro_' ? 'inline-block' : 'none';
+            aggiornaFirmaSegretario();
+        }
+
+        function aggiornaFirmaSegretario() {
+            const select = document.getElementById('selectSegretario');
+            const input = document.getElementById('segretarioAltroNome');
+            const firma = document.getElementById('firmaSegretario');
+            let nome = select.value === '_altro_' ? input.value : select.value;
+            firma.textContent = nome.trim() || '...................................';
+        }
+
+        function aggiornaOpzioniPresidenteDelegato() {
+            const select = document.getElementById('selectPresidenteDelegato');
+            const selectedValue = select.value;
+            const opzioni = select.querySelectorAll('option');
+            for (let i = opzioni.length - 1; i >= 0; i--) {
+                if (opzioni[i].value !== "" && opzioni[i].value !== "_altro_") opzioni[i].remove();
+            }
+            const nomiDocenti = document.querySelectorAll('.docente-nome');
+            const altroOption = select.querySelector('option[value="_altro_"]');
+            const nomiUnici = new Set();
+            nomiDocenti.forEach(t => {
+                const nome = t.value.trim();
+                if (nome && !nomiUnici.has(nome)) {
+                    nomiUnici.add(nome);
+                    const opt = document.createElement('option');
+                    opt.value = nome; opt.textContent = nome;
+                    select.insertBefore(opt, altroOption);
+                }
+            });
+            select.value = selectedValue || "";
+        }
+
+        function checkPresidenteDelegatoAltro() {
+             const select = document.getElementById('selectPresidenteDelegato');
+             const input = document.getElementById('presidenteAltroNome');
+             input.style.display = select.value === '_altro_' ? 'inline-block' : 'none';
+             aggiornaFirmaPresidente();
+        }
+
+        function aggiornaFirmaPresidente() {
+            const selectP = document.getElementById('selectPresidente');
+            const selectD = document.getElementById('selectPresidenteDelegato');
+            const input = document.getElementById('presidenteAltroNome');
+            const firma = document.getElementById('firmaPresidente');
+
+            if (selectP.value.includes("Castellana")) {
+                firma.textContent = "Prof.ssa Laura Castellana";
+            } else {
+                let nome = selectD.value === '_altro_' ? input.value : selectD.value;
+                firma.textContent = nome.trim() || '...................................';
+            }
+        }
+
+        function aggiornaCodiceRiunione() {
+             const classeSeleziona = document.getElementById('selectClasse');
+            if (!classeSeleziona) return; // Controllo di sicurezza
+            const classeSelezionata = classeSeleziona.value;
+            // Se la classe è '-', non mostrare un codice
+            const codice = (classeSelezionata === '-') ? '---' : 'cdc' + classeSelezionata;
+            const codiceRiunioneInput = document.getElementById('codiceRiunione');
+            if (codiceRiunioneInput) {
+                 codiceRiunioneInput.value = codice;
+            }
+        }
+
+        
+
+        function aggiornaOrarioChiusura() {
+            document.getElementById('orarioChiusura').value = document.getElementById('orarioFine').value;
+        }
+
+       function resetForm() {
+    document.querySelectorAll('input:not([type="button"]), textarea, select:not(#selectClasse)').forEach(el => {
+        if(el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+    });
+    
+    // Svuota le tabelle standard
+    document.getElementById('libri-tbody').innerHTML = '';
+    document.getElementById('pdp-tbody').innerHTML = '';
+    document.getElementById('edcivica-tbody').innerHTML = '';
+    document.getElementById('disciplinari-tbody').innerHTML = '';
+    
+    // FIX: Svuota correttamente la tabella recupero (che ora usa tbody multipli)
+    const tableRecupero = document.getElementById('main-recupero-table');
+    if (tableRecupero) {
+        tableRecupero.querySelectorAll('tbody').forEach(tbody => tbody.remove());
+    }
+    
+    // Reinizializza righe vuote
+    //addLibroRow();
+	addAssenzeStudente();
+    addStudenteBlock(); // FIX: Prima c'era addRecuperoRow() che non esiste più!
+    addPDPRow();
+    addEdCivicaRow();
+    //addDisciplinareRow();
+    
+    popolaTabellaDocenti();
+    popolaRappresentanti();
+}
+function addAssenzeStudente() {
+    const tbody = document.getElementById('assenze-tbody');
+    const newRow = document.createElement('tr');
+    
+    // Recupera il menu a tendina degli alunni in base alla classe selezionata
+    const campoAlunno = getSelectAlunniHTML();
+
+    newRow.innerHTML = `
+        <td class="border border-gray-300 p-2 align-top">
+            <div class="flex flex-col space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Nome Studente</label>
+                    <div class="w-full">${campoAlunno}</div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Giorni/ore di assenza:</label>
+    <div class="flex items-center space-x-2">
+        <input type="number" class="form-input w-24 text-center" value="0" min="0">
+            </div>
+</div>
+                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-2">
+                    <label class="text-sm font-semibold text-gray-700 mb-1 sm:mb-0 sm:w-40 sm:shrink-0 sm:mt-1">Motivi/Certificati:</label>
+                    <textarea class="form-input-table-dynamic" placeholder="Motivazioni..."></textarea>
+                </div>
+            </div>
+        </td>
+        
+        <td class="border border-gray-300 p-2 align-top">
+            <div class="space-y-2">
+                <div class="flex items-start"> 
+                    <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                    <label class="text-sm whitespace-nowrap">Contattare la famiglia</label>
+                </div>
+                <div class="flex items-start">
+                    <input type="checkbox" class="form-checkbox mr-2 mt-1"> 
+                    <label class="text-sm">Segnalazione ufficiale</label>
+                </div>
+                <div> 
+                    <div class="flex items-center">
+                        <input type="checkbox" class="form-checkbox mr-2">
+                        <label class="text-sm mr-1">Altro:</label>
+                    </div>
+                    <textarea class="form-input-table-dynamic w-full mt-1" placeholder="Specificare..." style="min-height: 30px;"></textarea>
+                </div>
+            </div>
+        </td>
+
+        <td class="border border-gray-300 p-1 text-center no-print align-middle">
+            <button onclick="removeDynamicRow(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+
+    // Attiva il ridimensionamento automatico delle textarea
+    newRow.querySelectorAll('textarea').forEach(textarea => {
+         textarea.addEventListener('input', onTextareaInput);
+         autoResizeTextarea(textarea);
+    });
+}
+
+
+   // 1. FUNZIONE DI SALVATAGGIO POTENZIATA
+        function downloadHTML() {
+            const cloneDoc = document.documentElement.cloneNode(true);
+
+            // Sincronizza INPUT e CHECKBOX nel clone
+            const originalInputs = document.querySelectorAll('input');
+            const clonedInputs = cloneDoc.querySelectorAll('input');
+            originalInputs.forEach((orig, i) => {
+                if (orig.type === 'checkbox') {
+                    if (orig.checked) clonedInputs[i].setAttribute('checked', 'checked');
+                    else clonedInputs[i].removeAttribute('checked');
+                } else {
+                    clonedInputs[i].setAttribute('value', orig.value);
+                }
+            });
+
+            // Sincronizza TEXTAREA
+            const originalTextareas = document.querySelectorAll('textarea');
+            const clonedTextareas = cloneDoc.querySelectorAll('textarea');
+            originalTextareas.forEach((orig, i) => {
+                clonedTextareas[i].textContent = orig.value;
+            });
+
+            // Sincronizza SELECT
+            const originalSelects = document.querySelectorAll('select');
+            const clonedSelects = cloneDoc.querySelectorAll('select');
+            originalSelects.forEach((orig, i) => {
+                const selectedIndex = orig.selectedIndex;
+                const options = clonedSelects[i].querySelectorAll('option');
+                options.forEach((opt, j) => {
+                    if (j === selectedIndex) opt.setAttribute('selected', 'selected');
+                    else opt.removeAttribute('selected');
+                });
+            });
+
+            const htmlContent = '<!DOCTYPE html>\n' + cloneDoc.outerHTML;
+            const now = new Date();
+            const classeVal = document.getElementById('selectClasse').value || "Classe";
+            const fileName = `Verbale_Aprile_${classeVal}_${now.toISOString().slice(0, 10)}.html`;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            
+            setTimeout(() => URL.revokeObjectURL(link.href), 100);
+        }
+
+        // 2. INIT INTELLIGENTE (FIXATO)
+       window.addEventListener('DOMContentLoaded', () => {
+    const corpoDocenti = document.getElementById('docenti-tbody');
+    
+    // Popolamento Docenti e Rappresentanti
+    if (corpoDocenti && corpoDocenti.querySelectorAll('tr').length <= 1) {
+        popolaTabellaDocenti();
+        popolaRappresentanti();
+    }
+
+    // INIZIALIZZAZIONE TABELLE (Ora messa in sicurezza con i controlli null)
+    const pdpTbody = document.getElementById('pdp-tbody');
+    if (pdpTbody && pdpTbody.rows.length === 0) addPDPRow();
+
+    const edcivicaTbody = document.getElementById('edcivica-tbody');
+    if (edcivicaTbody && edcivicaTbody.rows.length === 0) addEdCivicaRow();
+
+    // Queste tabelle non esistono più nel tuo HTML, le commentiamo per evitare crash futuri
+    // const corpoLibri = document.getElementById('libri-tbody');
+    // if (corpoLibri && corpoLibri.querySelectorAll('tr').length === 0) addLibroRow();
+    
+    // const disciplinariTbody = document.getElementById('disciplinari-tbody');
+    // if (disciplinariTbody && disciplinariTbody.rows.length === 0) addDisciplinareRow();
+    
+    // Forza l'apparizione della riga iniziale della Ratifica
+    const tabellaRecupero = document.getElementById('main-recupero-table');
+    if (tabellaRecupero && tabellaRecupero.querySelectorAll('tbody').length === 0) {
+        addStudenteBlock();
+    }
+    
+    const assenzeTbody = document.getElementById('assenze-tbody');
+    if (assenzeTbody && assenzeTbody.rows.length === 0) {
+        addAssenzeStudente();
+    }
+
+    // ORA QUESTO CODICE VERRÀ ESEGUITO CORRETTAMENTE!
+    document.querySelectorAll('textarea').forEach(t => t.addEventListener('input', onTextareaInput));
+    
+    // Questo pezzo serve a far allungare TUTTE le caselle, anche quelle nuove
+    document.body.addEventListener('input', function(e) {
+        if (e.target.tagName.toLowerCase() === 'textarea' || 
+            e.target.classList.contains('form-input-table-dynamic') || 
+            e.target.classList.contains('form-textarea')) {
+            autoResizeTextarea(e.target);
+        }
+    });    
+    
+    initAutoResize();
+    
+    const selectClasseMenu = document.getElementById('selectClasse');
+    if (selectClasseMenu) {
+        selectClasseMenu.addEventListener('change', popolaTutorOrientamento);
+    }
+});
+        
+        // 3. PRINT HANDLERS
+        window.addEventListener("beforeprint", () => {
+            document.querySelectorAll("textarea").forEach(el => {
+                let clone = el.nextElementSibling;
+                if (!clone || !clone.classList.contains("textarea-print")) {
+                    clone = document.createElement("div");
+                    clone.className = "textarea-print";
+                    el.insertAdjacentElement("afterend", clone);
+                }
+                clone.textContent = el.value || "";
+            });
+
+            document.querySelectorAll("select").forEach(el => {
+                let clone = el.nextElementSibling;
+                if (!clone || !clone.classList.contains("select-print")) {
+                    clone = document.createElement("div");
+                    clone.className = "select-print";
+                    el.insertAdjacentElement("afterend", clone);
+                }
+                const testoSelezionato = el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
+                clone.textContent = (testoSelezionato === "-" || testoSelezionato.includes("Seleziona")) ? "" : testoSelezionato;
+            });
+        });
+
+        window.addEventListener("afterprint", () => {
+            document.querySelectorAll(".textarea-print").forEach(el => el.remove());
+            document.querySelectorAll(".select-print").forEach(el => el.remove());
+        });
+    </script>
+</body>
+</html>
