@@ -462,7 +462,7 @@ thead {
         </div>
 
         <div class="mb-6 text-sm text-gray-600 space-y-1 italic">
-             <p>La convocazione, inviata a tutti i docenti con modalità mail il giorno XXX del mese di Marzo c.a, comunicato n. XXX, risulta essere consegnata a tutti, considerato che nessuno ha presentato reclamo relativamente alla mancata ricezione dello stesso. Contestualmente il nickname alla videoconferenza è stato allegato alla stessa.</p>
+             <p>La convocazione, inviata a tutti i docenti con modalità mail il giorno 2 del mese di Aprile c.a, comunicato n. 468, risulta essere consegnata a tutti, considerato che nessuno ha presentato reclamo relativamente alla mancata ricezione dello stesso. Contestualmente il nickname alla videoconferenza è stato allegato alla stessa.</p>
 		<p>Il codice riunione è il seguente: <input type="text" id="codiceRiunione" class="form-input w-32" placeholder="Codice..." value="cdc"></p>
             <p>La stabilità di connessione e le misure di tutela dei dati personali sono garantite dal dominio “panettipitagora.edu.it"</p>
 
@@ -512,7 +512,7 @@ thead {
         <tr class="bg-gray-100 border-b border-gray-300">
             <th class="border-r border-gray-300 p-2 text-left w-[25%]">Studente</th>
             <th class="border-r border-gray-300 p-2 text-left w-[35%]">Disciplina da recuperare</th>
-            <th class="border-r border-gray-300 p-2 text-center w-[15%]">Recuperato<br>(SI/NO)</th>
+            <th class="border-r border-gray-300 p-2 text-center w-[15%]">Recuperato</th>
             <th class="border-r border-gray-300 p-2 text-center w-[10%]">Voto</th>
             <th class="p-2 text-center no-print w-[15%]">Azioni</th>
         </tr>
@@ -2177,6 +2177,7 @@ function addStudenteBlock() {
                     <option value="">-</option>
                     <option value="SI">SI</option>
                     <option value="NO">NO</option>
+		    <option value="Parzialmente">Parzialmente</option>
                 </select>
             </td>
             
@@ -2225,6 +2226,8 @@ function addMateriaToStudente(btn) {
                 <option value="">-</option>
                 <option value="SI">SI</option>
                 <option value="NO">NO</option>
+		<option value="Parzialmente">Parzialmente</option>
+
             </select>
         </td>
         
