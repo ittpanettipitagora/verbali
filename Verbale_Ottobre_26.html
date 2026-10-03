@@ -462,7 +462,7 @@
             <p class="mb-2">La progettazione di classe terrà conto di quanto individuato durante le riunioni dei Dipartimenti in merito a obiettivi e contenuti delle singole discipline e attività di recupero e sostegno.</p>
 
             <p class="mb-2">Nella progettazione di classe saranno, inoltre, recepiti i criteri di valutazione (Valutazione degli studenti, la valutazione degli alunni diversamente abili, la valutazione dei DSA, la valutazione dei BES) previsti dal PTOF 2025-28 e secondo le griglie di valutazione indicate nei Criteri per la valutazione degli apprendimenti (delibera n.3 del 19/12/2024 e successivi aggiornamenti) e in corso di revisione annuale.</p>
-            <p class="mb-2">Per le attività di recupero, tenuto conto del Progetto “Officina per ripartire” all’interno del Piano Estate 2026-2027 e quelli di eventuale futura attivazione, il consiglio di classe propone i seguenti criteri per individuare gli alunni destinatari delle attività proposte:</p>
+            <p class="mb-2">Per le attività di recupero, tenuto conto del Progetto “Officina per ripartire” all’interno del Piano Estate 2026-2027 (solo per CdC con studenti/esse che hanno seguito il progetto) e quelli di eventuale futura attivazione, il consiglio di classe propone i seguenti criteri per individuare gli alunni destinatari delle attività proposte:</p>
             <textarea class="form-textarea mb-3" placeholder="Criteri per l'individuazione degli alunni destinatari delle attività di recupero..."></textarea>
             <p class="mb-1">Eventuali osservazioni:</p>
             <textarea class="form-textarea" placeholder="Eventuali osservazioni..."></textarea>
@@ -1688,11 +1688,17 @@
             const item = document.createElement('span');
             item.className = 'accomp-item';
             item.innerHTML = `
-                <select class="form-input-table sel-docente" onchange="onSelDocente(this); aggiornaSostegno();">
+                <select class="form-input-table sel-docente" onchange="onSelDocente(this); aggiornaSostegno(); aggiornaAccompagnatori();">
                     <option value="">Seleziona un docente...</option>
                     <option value="_altro_">Altro...</option>
                 </select><input type="text" class="form-input-table altro-input" placeholder="Cognome e Nome..." style="display:none;">
-                <button type="button" onclick="this.closest('.accomp-item').remove(); aggiornaSostegno();" class="no-print bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg" title="Rimuovi">✕</button>`;
+                <button type="button" onclick="this.closest('.accomp-item').remove(); aggiornaSostegno(); aggiornaAccompagnatori();" class="no-print bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg" title="Rimuovi">✕</button>`;
+            if (idLista.startsWith('accomp-')) {
+                const sel = item.querySelector('select');
+                const opt = document.createElement('option');
+                opt.value = '_nessuno_'; opt.textContent = 'Nessun accompagnatore';
+                sel.insertBefore(opt, sel.querySelector('option[value="_altro_"]').nextSibling);
+            }
             document.getElementById(idLista).appendChild(item);
             popolaSelectDocenti();
             if (nome) {
@@ -1808,6 +1814,19 @@
             t.textContent = n > 1 ? 'I PFP così elaborati saranno di seguito inviati' : 'Il PFP così elaborato sarà di seguito inviato';
         }
 
+        // Accompagnatori: con "Nessun accompagnatore" la frase diventa negativa
+        function aggiornaAccompagnatori() {
+            ['accomp-uscite', 'accomp-viaggio'].forEach(id => {
+                const lista = document.getElementById(id);
+                if (!lista) return;
+                const etichetta = lista.closest('.riga-campo').querySelector(':scope > span');
+                const nessuno = [...lista.querySelectorAll('select')].some(s => s.value === '_nessuno_');
+                etichetta.textContent = nessuno
+                    ? 'Non si raccolgono disponibilità di accompagnatori.'
+                    : 'Si raccolgono le disponibilità dei seguenti accompagnatori:';
+            });
+        }
+
         // Punto 8: docenti di sostegno (dalla tabella: materia "sostegno")
         function caricaSostegnoDaTabella() {
             const lista = document.getElementById('sostegno-list');
@@ -1836,7 +1855,7 @@
             document.querySelectorAll('select.sel-docente').forEach(sel => {
                 const valore = sel.value;
                 sel.querySelectorAll('option').forEach(o => {
-                    if (o.value !== '' && o.value !== '_altro_') o.remove();
+                    if (o.value !== '' && !o.value.startsWith('_')) o.remove();
                 });
                 const altro = sel.querySelector('option[value="_altro_"]');
                 nomi.forEach(n => {
@@ -1845,7 +1864,7 @@
                     sel.insertBefore(opt, altro);
                 });
                 // Se il nome selezionato non esiste più, torna a vuoto
-                sel.value = (valore === '_altro_' || nomi.includes(valore)) ? valore : '';
+                sel.value = (valore.startsWith('_') || nomi.includes(valore)) ? valore : '';
                 toggleAltroInput(sel);
             });
         }
@@ -2014,6 +2033,7 @@
             document.querySelectorAll('select.sel-docente').forEach(s => { s.value = ''; if (s.hasAttribute('data-auto')) s.dataset.auto = '1'; });
             document.querySelectorAll('.accomp-list').forEach(l => l.innerHTML = '');
             document.getElementById('atleti-lista').innerHTML = '';
+            aggiornaAccompagnatori();
             addAtleta();
             aggiornaSostegno();
             ['sceltaP2', 'sceltaP4'].forEach(id => { const t = document.getElementById(id); if (t) t.value = 'A'; });
@@ -2101,6 +2121,7 @@
             const atl = document.getElementById('atleti-lista');
             if (atl && atl.children.length === 0) addAtleta();
             aggiornaPFP();
+            aggiornaAccompagnatori();
             const edTb = document.getElementById('edciv-altri-tbody');
             if (edTb && edTb.rows.length === 0) addArgomentoEdCiv();
 
@@ -2154,7 +2175,7 @@
                         const altro = item.querySelector('.altro-input');
                         return altro ? altro.value.trim() : '';
                     }
-                    return sel.value;
+                    return sel.value === '_nessuno_' ? '' : sel.value;
                 }).filter(n => n);
                 let clone = lista.nextElementSibling;
                 if (!clone || !clone.classList.contains('lista-print')) {
