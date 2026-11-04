@@ -2913,45 +2913,25 @@ gw-radio label.gw-radio__input-label u {
                 r.querySelectorAll('textarea').forEach(t => t.addEventListener('input', onTextareaInput));
             });
 
-            // Popola le righe degli altri docenti
-            let primaRigaDocente = true;
-            altriDocenti.forEach((doc, index) => {
+            // Popola le righe degli altri docenti (senza celle unite: in stampa la tabella può andare a pagina nuova riga per riga)
+            altriDocenti.forEach(doc => {
                 const newRow = document.createElement('tr');
-                let htmlRiga = '';
-
-                if (primaRigaDocente) {
-                    // Aggiungi la cella "DOCENTI C.D.C" con rowspan
-                    htmlRiga += `<td id="docenti-cdc-label" class="border border-gray-300 p-2 font-semibold align-top" rowspan="${altriDocenti.length}">DOCENTI C.D.C</td>`;
-                }
-
-                htmlRiga += `
+                newRow.className = 'riga-docente';
+                newRow.innerHTML = `
+                    <td class="border border-gray-300 p-2 font-semibold align-top cella-etichetta"></td>
                     <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic">${doc.materia}</textarea></td>
                     <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" oninput="aggiornaOpzioniSegretario();">${doc.nome}</textarea></td>
                     <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
                     <td class="border border-gray-300 p-1 text-center no-print align-middle">
-                        <button onclick="removeDocente(this, ${primaRigaDocente})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
-                    </td>
-                `;
-                newRow.innerHTML = htmlRiga;
+                        <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                    </td>`;
                 tbody.appendChild(newRow);
-
-                 // FIX: Applica auto-resize alla nuova riga popolata
                 newRow.querySelectorAll('textarea').forEach(textarea => {
                     textarea.removeEventListener('input', onTextareaInput);
                     textarea.addEventListener('input', onTextareaInput);
-                    // autoResizeTextarea(textarea); // MODIFICA: Rimosso
                 });
-
-                primaRigaDocente = false;
             });
-
-             // Se non ci sono 'altriDocenti' dopo il popolamento, rimuovi eventuale label orfana
-             if (altriDocenti.length === 0) {
-                 const labelCella = document.getElementById('docenti-cdc-label');
-                 if (labelCella) {
-                      labelCella.closest('tr')?.remove(); // Rimuove la riga se esiste ed è rimasta sola
-                 }
-             }
+            rietichettaDocenti();
 
 
             // Aggiorna presidente, segretario e firme
@@ -2975,46 +2955,45 @@ gw-radio label.gw-radio__input-label u {
         }
 
         // Funzione per aggiungere MANUALE una riga docente (MODIFICATA)
-        function addDocenteManuale(isFirst = false) { // Aggiunto parametro opzionale
+        function addDocenteManuale() {
             const tbody = document.getElementById('docenti-tbody');
-            const righeDocenti = tbody.querySelectorAll('tr:not(#coordinatore-row)'); // Tutte le righe tranne quella del coordinatore
-
             const newRow = document.createElement('tr');
-            let htmlRiga = '';
-            let labelPresente = document.getElementById('docenti-cdc-label');
-            let isPrimaRigaManuale = !labelPresente && righeDocenti.length === 0; // Vera se non c'è label e non ci sono altre righe docenti
-
-            // Gestisci l'etichetta "DOCENTI C.D.C" e il rowspan
-            if (isPrimaRigaManuale || isFirst) { // Se è la prima riga in assoluto dei docenti C.d.C
-                 htmlRiga += `<td id="docenti-cdc-label" class="border border-gray-300 p-2 font-semibold align-top" rowspan="1">DOCENTI C.D.C</td>`;
-            } else if (labelPresente) {
-                 // Assicura che rowspan sia un numero prima di incrementare
-                 let currentSpan = parseInt(labelPresente.getAttribute('rowspan') || '1', 10);
-                 labelPresente.setAttribute('rowspan', currentSpan + 1);
-            }
-
-            htmlRiga += `
+            newRow.className = 'riga-docente';
+            newRow.innerHTML = `
+                <td class="border border-gray-300 p-2 font-semibold align-top cella-etichetta"></td>
                 <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic" placeholder="Disciplina..."></textarea></td>
                 <td class="border border-gray-300 p-1"><textarea class="form-input-table-dynamic docente-nome" placeholder="Cognome e Nome..." oninput="aggiornaOpzioniSegretario();"></textarea></td>
                 <td class="border border-gray-300 p-1 text-center align-middle"><input type="checkbox" class="form-checkbox"></td>
                 <td class="border border-gray-300 p-1 text-center no-print align-middle">
-                    <button onclick="removeDocente(this, ${isPrimaRigaManuale || isFirst})" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
-                </td>
-            `;
-            newRow.innerHTML = htmlRiga;
-            tbody.appendChild(newRow); // Aggiunge sempre in fondo
-
-             // FIX: Applica auto-resize alla nuova riga
+                    <button onclick="removeDocente(this)" class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded-lg">Rimuovi</button>
+                </td>`;
+            tbody.appendChild(newRow);
             newRow.querySelectorAll('textarea').forEach(textarea => {
-                 textarea.removeEventListener('input', onTextareaInput); // Rimuovi vecchio
-                 textarea.addEventListener('input', onTextareaInput);
-                 // autoResizeTextarea(textarea); // MODIFICA: Rimosso
+                textarea.removeEventListener('input', onTextareaInput);
+                textarea.addEventListener('input', onTextareaInput);
             });
-
-
-            // Aggiorna menu segretario
+            rietichettaDocenti();
             aggiornaOpzioniSegretario();
-aggiornaOpzioniPresidenteDelegato();
+        }
+
+        function removeDocente(button) {
+            const row = button.closest('tr');
+            if (row) row.remove();
+            rietichettaDocenti();
+            aggiornaOpzioniSegretario();
+            aggiornaFirmaSegretario();
+            aggiornaOpzioniPresidenteDelegato();
+        }
+
+        // "DOCENTI C.D.C" solo nella prima riga; i bordi interni della colonna
+        // vengono nascosti così sembra un'unica cella, ma la tabella si spezza bene in stampa
+        function rietichettaDocenti() {
+            const celle = [...document.querySelectorAll('#docenti-tbody tr.riga-docente .cella-etichetta')];
+            celle.forEach((c, i) => {
+                c.textContent = i === 0 ? 'DOCENTI C.D.C' : '';
+                c.style.borderTopColor = i === 0 ? '' : 'transparent';
+                c.style.borderBottomColor = i === celle.length - 1 ? '' : 'transparent';
+            });
         }
 // Funzione per gestire la visibilità della modalità riunione
 function gestisciModalita() {
@@ -3050,52 +3029,27 @@ function gestisciModalita() {
 }
 
         // Funzione per rimuovere una riga docente (leggermente modificata per sicurezza)
-        function removeDocente(button, isFirstDocenteRow) {
-            const rowToRemove = button.closest('tr');
-            if (!rowToRemove) return; // Sicurezza aggiuntiva
-
-            const label = document.getElementById('docenti-cdc-label');
-            let currentSpan = label ? parseInt(label.getAttribute('rowspan') || '1', 10) : 0;
-
-
-            if (isFirstDocenteRow && label) {
-                // Questa è la riga che contiene l'etichetta "DOCENTI C.D.C"
-                const nextRow = rowToRemove.nextElementSibling;
-
-                // Controlla che nextRow esista e sia una riga valida di docente (non la riga coordinatore o altro)
-                 if (nextRow && nextRow.cells.length > 2 && !nextRow.querySelector('#coordinatoreNome')) {
-                     // Se c'è una riga successiva valida, sposta l'etichetta lì
-                    const newLabel = label.cloneNode(true);
-                    newLabel.setAttribute('rowspan', Math.max(1, currentSpan - 1)); // Non scendere sotto 1
-                    nextRow.prepend(newLabel); // Aggiungi la label clonata all'inizio della riga successiva
-
-                    // Aggiorna il pulsante "Rimuovi" della riga successiva per marcarlo come "first"
-                    const nextButton = nextRow.querySelector('button');
-                    if (nextButton) {
-                        // Ricostruisci l'attributo onclick
-                         nextButton.setAttribute('onclick', `removeDocente(this, true)`);
-
-                    }
+        // Converte un verbale salvato con la vecchia cella unita "DOCENTI C.D.C"
+        window.addEventListener('DOMContentLoaded', () => {
+            const vecchia = document.getElementById('docenti-cdc-label');
+            if (!vecchia) return;
+            const primaRiga = vecchia.closest('tr');
+            vecchia.removeAttribute('rowspan');
+            vecchia.removeAttribute('id');
+            vecchia.classList.add('cella-etichetta');
+            let r = primaRiga;
+            while (r) {
+                if (r.cells.length === 4) {
+                    const td = document.createElement('td');
+                    td.className = 'border border-gray-300 p-2 font-semibold align-top cella-etichetta';
+                    r.prepend(td);
                 }
-                // Rimuovi la riga corrente (che conteneva l'etichetta originale)
-                 rowToRemove.remove();
-
-            } else {
-                 // Questa è una riga normale (non la prima o l'etichetta non esiste più)
-                 // Basta decrementare il rowspan e rimuoverla
-                if (label && currentSpan > 1) { // Decrementa solo se rowspan > 1
-                    label.setAttribute('rowspan', currentSpan - 1);
-                }
-                rowToRemove.remove();
+                r.classList.add('riga-docente');
+                r.querySelectorAll('button[onclick^="removeDocente"]').forEach(b => b.setAttribute('onclick', 'removeDocente(this)'));
+                r = r.nextElementSibling;
             }
-
-            // Aggiorna menu segretario
-            aggiornaOpzioniSegretario();
-            // Aggiorna la firma se il segretario rimosso era selezionato
-            aggiornaFirmaSegretario();
-		aggiornaOpzioniPresidenteDelegato();
-
-        }
+            rietichettaDocenti();
+        });
         // --- FINE NUOVA LOGICA POPOLAMENTO DOCENTI ---
 
 
